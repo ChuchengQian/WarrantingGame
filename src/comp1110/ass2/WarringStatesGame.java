@@ -17,6 +17,66 @@ public class WarringStatesGame {
      */
     static boolean isCardPlacementWellFormed(String cardPlacement) {
         // FIXME Task 2: determine whether a card placement is well-formed
+        int count = 0;
+        char  character1 = cardPlacement.charAt(0);
+        char character2 = cardPlacement.charAt(1);
+        char character3 = cardPlacement.charAt(2);
+        //rules for test
+        String kingdom = "abcdefgz";
+        String validNum = "901234567";
+        String location = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+        //Test for character1
+        for (int i = 0; i< kingdom.length(); i++) {
+            if(character1 == kingdom.charAt(i)) {
+                count++;
+            }
+        }
+        //Test for character2
+        for (int i = 0; i< validNum.length(); i++) {
+            if((character1 == 'a' || character1 == 'A' || character1 == 'z' || character1 == 'Z') && character2 == validNum.charAt(i)) {
+                count++;
+            }
+        }
+        for (int i = 0; i< validNum.length() - 1; i++) {
+            if((character1 == 'b' || character1 == 'B') && character2 == validNum.charAt(i)) {
+                count++;
+            }
+        }
+        for (int i = 0; i< validNum.length() - 2; i++) {
+            if((character1 == 'c' || character1 == 'C') && character2 == validNum.charAt(i)) {
+                count++;
+            }
+        }
+        for (int i = 0; i< validNum.length() - 3; i++) {
+            if((character1 == 'd' || character1 == 'D') && character2 == validNum.charAt(i)) {
+                count++;
+            }
+        }
+        for (int i = 0; i< validNum.length() - 4; i++) {
+            if((character1 == 'e' || character1 == 'E') && character2 == validNum.charAt(i)) {
+                count++;
+            }
+        }
+        for (int i = 0; i< validNum.length() - 5; i++) {
+            if((character1 == 'f' || character1 == 'F') && character2 == validNum.charAt(i)) {
+                count++;
+            }
+        }
+        for (int i = 0; i< validNum.length() - 6; i++) {
+            if((character1 == 'g' || character1 == 'G') && character2 == validNum.charAt(i)) {
+                count++;
+            }
+        }
+        //Test for character3
+        for (int i = 0; i < location.length(); i++) {
+            if (character3 == location.charAt(i)) {
+                count++;
+            }
+        }
+        if (count == 3)
+            {
+                return true;
+            }
         return false;
     }
 
