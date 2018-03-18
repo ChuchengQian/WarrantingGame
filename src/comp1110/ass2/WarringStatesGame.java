@@ -33,7 +33,7 @@ public class WarringStatesGame {
         }
         //Test for character2
         for (int i = 0; i< validNum.length(); i++) {
-            if((character1 == 'a' || character1 == 'A' || character1 == 'z' || character1 == 'Z') && character2 == validNum.charAt(i)) {
+            if((character1 == 'a' || character1 == 'A') && character2 == validNum.charAt(i)) {
                 count++;
             }
         }
@@ -67,6 +67,9 @@ public class WarringStatesGame {
                 count++;
             }
         }
+        if((character1 == 'z' || character1 == 'Z') && character2 == '9') {
+               count++;
+           }
         //Test for character3
         for (int i = 0; i < location.length(); i++) {
             if (character3 == location.charAt(i)) {
@@ -92,7 +95,48 @@ public class WarringStatesGame {
      */
     static boolean isPlacementWellFormed(String placement) {
         // FIXME Task 3: determine whether a placement is well-formed
-        return false;
+        int count = 0;
+        boolean check = true;
+        if (placement == null || placement.length() <= 0) { //testEmpty
+            return false;
+        } else if (placement.length() % 3 != 0 ) { //testIncomplete
+            return false;
+        } else { //testGood
+            System.out.println(placement+" test");
+            System.out.println(placement.length()/3+" length");
+
+            for (int i = 0; i < placement.length(); i = i + 3) {
+                if (isCardPlacementWellFormed(placement.substring(i, i+3))) {
+                    count++;
+                }
+            }
+        }
+        if (count != placement.length()/3) {
+            check = false;
+        }
+        System.out.println("!!!!!!!!!!!"+check);
+        //testDuplicate
+        int count2 = 0;
+        int locationCheck = 0;
+        for(int i = 0; i < placement.length(); i = i + 3) {
+            for (int j = 0; j < placement.length(); j = j + 3) {
+                if (placement.substring(i, i + 2).equals(placement.substring(j, j + 2))) {
+                    count2++;
+                }
+            }
+        }
+        for (int i = 2; i< placement.length(); i = i + 3) {
+            for (int j = 2; j < placement.length(); j = j + 3) {
+                if (placement.charAt(i) == placement.charAt(j)) {
+                    locationCheck++;
+                }
+            }
+        }
+        if(count2 > placement.length() / 3 || locationCheck > placement.length() / 3) {
+            check = false;
+        }
+
+        return check;
     }
 
     /**
