@@ -17,69 +17,21 @@ public class WarringStatesGame {
      */
     static boolean isCardPlacementWellFormed(String cardPlacement) {
         // FIXME Task 2: determine whether a card placement is well-formed
-        int count = 0;
         char character1 = cardPlacement.charAt(0);
         char character2 = cardPlacement.charAt(1);
         char character3 = cardPlacement.charAt(2);
-        //rules for test
-        String kingdom = "abcdefgz";
-        String validNum = "901234567";
-        String location = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
-        //Test for character1
-        for (int i = 0; i< kingdom.length(); i++) {
-            if(character1 == kingdom.charAt(i)) {
-                count++;
-            }
-        }
-        //Test for character2
-        for (int i = 0; i< validNum.length(); i++) {
-            if((character1 == 'a') && character2 == validNum.charAt(i)) {
-                count++;
-            }
-        }
-        for (int i = 0; i< validNum.length() - 1; i++) {
-            if((character1 == 'b') && character2 == validNum.charAt(i)) {
-                count++;
-            }
-        }
-        for (int i = 0; i< validNum.length() - 2; i++) {
-            if((character1 == 'c') && character2 == validNum.charAt(i)) {
-                count++;
-            }
-        }
-        for (int i = 0; i< validNum.length() - 3; i++) {
-            if((character1 == 'd') && character2 == validNum.charAt(i)) {
-                count++;
-            }
-        }
-        for (int i = 0; i< validNum.length() - 4; i++) {
-            if((character1 == 'e') && character2 == validNum.charAt(i)) {
-                count++;
-            }
-        }
-        for (int i = 0; i< validNum.length() - 5; i++) {
-            if((character1 == 'f') && character2 == validNum.charAt(i)) {
-                count++;
-            }
-        }
-        for (int i = 0; i< validNum.length() - 6; i++) {
-            if((character1 == 'g') && character2 == validNum.charAt(i)) {
-                count++;
-            }
-        }
-        if((character1 == 'z') && character2 == '9') {
-               count++;
-           }
-        //Test for character3
-        for (int i = 0; i < location.length(); i++) {
-            if (character3 == location.charAt(i)) {
-                count++;
-            }
-        }
-        if (count == 3)
-            {
+        if (character1 == 'z'){
+            if (character2 == '9'){
                 return true;
             }
+        }
+        if (character1 >= 'a' && character1 <= 'g'){
+            if (character2 >= '0' && character2 <= '9'){
+                if ((character3 >= 'A' && character3 <= 'Z') || (character3 >= '0' && character3 <= '9')) {
+                    return true;
+                }
+            }
+        }
         return false;
     }
 
