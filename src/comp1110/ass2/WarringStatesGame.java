@@ -105,6 +105,11 @@ public class WarringStatesGame {
      */
     public static boolean isMoveLegal(String placement, char locationChar) {
         // FIXME Task 5: determine whether a given move is legal
+        /** if the location is in the same row of Zhang Yi,
+         * then for (the location + 6 and -6).cardPlacement.charAt(2), if location.charAt(0) == location +- 6.charAt(0), true
+         * or if the location is in the same column of Zhang Yi,
+         * then for (the location + 1 and -1).cardPlacement.charAt(2), if location.charAt(0) == location +- 6.charAt(0), true
+         */
         return false;
     }
 
@@ -121,6 +126,16 @@ public class WarringStatesGame {
      */
     static boolean isMoveSequenceValid(String setup, String moveSequence) {
         // FIXME Task 6: determine whether a placement sequence is valid
+        /**
+         * use if...then
+         * At first ,take the first character of the moveSequence string,
+         * call the method 'isMoveLegal' to check whether it is legal(the parameter placement will be 'setup'.
+         * If ture,continue call the isMoveSequenceValid method inside a nested if...then statement
+         * with updated 'setup' and the second character of 'moveSequence'.
+         * Then continue the loop.
+         * if get any 'false',jump out the loop.
+         * (if 'if..then'  cannot work ,change the condition and try 'for' or 'whhile'
+         */
         return false;
     }
 
