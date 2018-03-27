@@ -6,4 +6,4 @@ We declare that the work we have submitted for Stage C of this assignment and al
 
 *  ....
 
-Signed: Mary Jones (u2345678), Bob Smith (u3456789), and Sue Black (u0123456)
+Signed: Chucheng Qian (u6451847), Chunxiang Song (u6302158), and Jiayang Li (u6360655)
