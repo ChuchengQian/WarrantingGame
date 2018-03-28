@@ -22,14 +22,12 @@ public class WarringStatesGame {
         char character3 = cardPlacement.charAt(2);
         if (character1 == 'z'){
             if (character2 == '9'){
-                return true;
+                return ((character3 >= 'A' && character3 <= 'Z') || (character3 >= '0' && character3 <= '9'));
             }
         }
         if (character1 >= 'a' && character1 <= 'g'){
             if (character2 >= '0' && character2 <= '9'){
-                if ((character3 >= 'A' && character3 <= 'Z') || (character3 >= '0' && character3 <= '9')) {
-                    return true;
-                }
+                return (character3 >= 'A' && character3 <= 'Z') || (character3 >= '0' && character3 <= '9');
             }
         }
         return false;
