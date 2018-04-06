@@ -1,5 +1,9 @@
 package comp1110.ass2;
 
+import comp1110.util.DataUtil;
+
+import java.util.ArrayList;
+
 /**
  * This class provides the text interface for the Warring States game
  */
@@ -103,7 +107,90 @@ public class WarringStatesGame {
      */
     public static boolean isMoveLegal(String placement, char locationChar) {
         // FIXME Task 5: determine whether a given move is legal
-        
+        ArrayList<String> cardLocalList;
+        DataUtil util = new DataUtil();
+        // placement as a card string that is not placed in a positional order.
+        cardLocalList = util.placementSortToList(placement);
+        if (cardLocalList == null) {
+            return false;
+        }
+        // target position is converted to a position number.
+        int target;
+        if (locationChar <= 'Z' && locationChar >= 'A') {
+            target = locationChar - 'A';
+        }
+        else if (locationChar <= '9' && locationChar >= '0') {
+            target = locationChar - '0';
+            target = target + 26;
+        }
+        else
+            return false;
+        // no card in the target position.
+        if (cardLocalList.get(target).equals(" ")) {
+            return false;
+        }
+        // find ZhangYi
+        int ZYlocal = -1;
+        for (int i = 0; i < 36; i++) {
+            if (cardLocalList.get(i).equals("z9")) {
+                ZYlocal = i;
+            }
+        }
+
+        if (ZYlocal != -1) {
+            // The number of the target location card.
+            String tarCode = cardLocalList.get(target);
+            // The relative position of ZhangYi.
+            int coltmp = ZYlocal / 6;
+            // column
+            if (target >= coltmp * 6 && target < (coltmp + 1) * 6) {
+                // upper part of ZhangYi
+                if (target < ZYlocal) {
+                    // there is a same country card in the same direction
+                    for (int i = target - 1; i >= coltmp * 6; i--){
+                        if (cardLocalList.get(i).charAt(0) == tarCode.charAt(0)) {
+                            return false;
+                        }
+                    }
+                    return true;
+                }
+                // below part of ZhangYi
+                if (target > ZYlocal) {
+                    for (int i = target + 1; i < (coltmp + 1) * 6; i++){
+                        if (cardLocalList.get(i).charAt(0) == tarCode.charAt(0)) {
+                            return false;
+                        }
+                    }
+                    return true;
+                }
+
+            }
+            int rowtmp = ZYlocal % 6;
+            // row
+            if (target % 6 == rowtmp) {
+                // left part of ZhangYi
+                if (target > ZYlocal) {
+                    for (int i = target + 6; i <= (rowtmp + 30); i+=6){
+                        if (cardLocalList.get(i).charAt(0) == tarCode.charAt(0)) {
+                            return false;
+                        }
+                    }
+                    return true;
+                }
+                // right part of ZhangYi
+                if (target < ZYlocal) {
+                    for (int i = target - 6; i >= rowtmp; i-=6){
+                        if (cardLocalList.get(i).charAt(0) == tarCode.charAt(0)) {
+                            return false;
+                        }
+                    }
+                    return true;
+                }
+
+            }
+            return false;
+        }
+
         return false;
     }
 
