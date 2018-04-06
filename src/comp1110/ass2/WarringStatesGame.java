@@ -103,11 +103,7 @@ public class WarringStatesGame {
      */
     public static boolean isMoveLegal(String placement, char locationChar) {
         // FIXME Task 5: determine whether a given move is legal
-        /** if the location is in the same row of Zhang Yi,
-         * then for (the location + 6 and -6).cardPlacement.charAt(2), if location.charAt(0) == location +- 6.charAt(0), true
-         * or if the location is in the same column of Zhang Yi,
-         * then for (the location + 1 and -1).cardPlacement.charAt(2), if location.charAt(0) == location +- 6.charAt(0), true
-         */
+        
         return false;
     }
 
