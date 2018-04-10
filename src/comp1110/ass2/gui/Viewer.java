@@ -1,8 +1,11 @@
 package comp1110.ass2.gui;
 
+import comp1110.util.DataUtil;
+import gittest.A;
 import javafx.application.Application;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
+import javafx.geometry.Insets;
 import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.canvas.GraphicsContext;
@@ -12,10 +15,12 @@ import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
+import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.stage.Stage;
 
 import java.awt.*;
+import java.util.ArrayList;
 
 /**
  * A very simple viewer for card layouts in the Warring States game.
@@ -30,8 +35,11 @@ public class Viewer extends Application {
 
     private static final String URI_BASE = "assets/";
 
+    private static ArrayList<CardInfo> cardInit = new ArrayList<>();
+
     private final Group root = new Group();
     private final Group controls = new Group();
+    GridPane grid = new GridPane();
     TextField textField;
 
     /**
@@ -41,26 +49,19 @@ public class Viewer extends Application {
      */
     void makePlacement(String placement) {
         // FIXME Task 4: implement the simple placement viewer
-        //setup the rectangle which represent each country;
-        Rectangle r = new Rectangle();
-        r.setSize(50,50);
-        //Create 36 rectangle
-        for(int i = 0; i < 36; i++){
+        ArrayList<String> cardLocalList = new ArrayList<>();
+        DataUtil util = new DataUtil();
+        cardLocalList = util.placementSortToList(placement);
 
+        grid.getChildren().clear();
+        int flag = 0;
+        for (int i = 5; i >= 0; i--){
+            for (int j = 0; j < 6; j++){
+                Button text = new Button(cardLocalList.get(flag));
+                grid.add(text, i, j);
+                flag ++;
+            }
         }
-        //split placement into 12 pieces and add  them into rectangle which represent the unique rectangle
-        for(int i = 0; i < 36; i = i + 3) {
-            placement.substring(i, i + 2);
-        }
-
-
-        /*TextArea t = new TextArea();
-        ScrollPane scrollArea = new ScrollPane(t);
-        t.setWrapText(true);
-        t.setEditable(false);
-        t.setText(placement);
-        root.getChildren().add(t);*/
-
     }
 
     /**
@@ -75,9 +76,20 @@ public class Viewer extends Application {
             @Override
             public void handle(ActionEvent e) {
                 makePlacement(textField.getText());
+                controls.getChildren().clear();
+                HBox hb = new HBox();
+                hb.getChildren().addAll(label1, textField, button);
+                hb.setSpacing(10);
+                hb.setLayoutX(130);
+                hb.setLayoutY(VIEWER_HEIGHT - 50);
+                controls.getChildren().add(hb);
                 textField.clear();
+
             }
         });
+        grid.setHgap(6);
+        grid.setHgap(6);
+        grid.setPadding(new Insets(0,10,0,10));
         HBox hb = new HBox();
         hb.getChildren().addAll(label1, textField, button);
         hb.setSpacing(10);
@@ -99,5 +111,9 @@ public class Viewer extends Application {
 
         primaryStage.setScene(scene);
         primaryStage.show();
+    }
+
+    public static void main(String[] args) {
+        launch(args);
     }
 }
