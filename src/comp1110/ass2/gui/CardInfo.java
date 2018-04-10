@@ -5,12 +5,14 @@ public class CardInfo {
     private String peopleName;
     private String nameInEnglish;
     private String color;
+    private String code;
 
     public CardInfo(String countryName, String peopleName, String nameInEnglish, String color) {
         this.countryName = countryName;
         this.peopleName = peopleName;
         this.nameInEnglish = nameInEnglish;
         this.color = nameInEnglish;
+        this.code = code;
     }
 
     public String getCountryName() {
@@ -44,4 +46,10 @@ public class CardInfo {
     public void setColor(String color) {
         this.color = color;
     }
+
+    public String getCode() {
+        return code; }
+
+    public void setCode(String code) {
+        this.code = code; }
 }
