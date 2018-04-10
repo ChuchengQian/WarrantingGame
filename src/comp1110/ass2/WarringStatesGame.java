@@ -206,19 +206,142 @@ public class WarringStatesGame {
      * @return True if the placement sequence is valid
      */
     static boolean isMoveSequenceValid(String setup, String moveSequence) {
+        //check whether all moves from the 'moveSequence' string are valid
+        if(CountMoveSequenceValid(setup,moveSequence,0)== moveSequence.length()){
+            return true;
+        }
+
         // FIXME Task 6: determine whether a placement sequence is valid
-        /**
-         * use if...then
-         * At first ,take the first character of the moveSequence string,
-         * call the method 'isMoveLegal' to check whether it is legal(the parameter placement will be 'setup'.
-         * If ture,continue call the isMoveSequenceValid method inside a nested if...then statement
-         * with updated 'setup' and the second character of 'moveSequence'.
-         * Then continue the loop.
-         * if get any 'false',jump out the loop.
-         * (if 'if..then'  cannot work ,change the condition and try 'for' or 'whhile'
-         */
+
         return false;
     }
+
+
+    public static int CountMoveSequenceValid(String setup, String moveSequence,int checkTheValidMove) {
+        ArrayList<String> cardLocalList;
+        DataUtil util = new DataUtil();
+        cardLocalList = util.placementSortToList(setup);
+
+        char locationChar = moveSequence.charAt(0);
+
+        if (isMoveLegal(setup, locationChar)) {
+            //if it is a valid move,update the checkTheValidMove to be 1
+            checkTheValidMove=1;
+
+            int target;
+            if (locationChar <= 'Z' && locationChar >= 'A') {
+                target = locationChar - 'A';
+            } else if (locationChar <= '9' && locationChar >= '0') {
+                target = locationChar - '0';
+                target = target + 26;
+            } else {
+                checkTheValidMove = 0;
+                target = 5000;
+
+            }
+
+            // find ZhangYi
+            int ZYlocal = -1;
+            for (int i = 0; i < 36; i++) {
+                if (cardLocalList.get(i).equals("z9")) {
+                    ZYlocal = i;
+                }
+            }
+
+
+            if (ZYlocal != -1) {
+                // The number of the target location card.
+                String tarCode = cardLocalList.get(target);
+                // The relative position of ZhangYi.
+                int coltmp = ZYlocal / 6;
+                // column
+                if (target >= coltmp * 6 && target < (coltmp + 1) * 6) {
+                    // upper part of ZhangYi
+                    if (target < ZYlocal) {
+                        // there is a same country card in the same direction
+                        for (int i = ZYlocal; i >= coltmp * 6; i--) {
+                            if (cardLocalList.get(i).charAt(0) == tarCode.charAt(0)) {
+                                cardLocalList.set(i, " ");
+                            }
+                        }
+                        cardLocalList.set(target, "z9");
+                        cardLocalList.set(ZYlocal, " ");
+                    }
+                    // below part of ZhangYi
+                    if (target > ZYlocal) {
+                        for (int i = ZYlocal; i < (coltmp + 1) * 6; i++) {
+                            if (cardLocalList.get(i).charAt(0) == tarCode.charAt(0)) {
+                                cardLocalList.set(i, " ");
+                            }
+                        }
+                        cardLocalList.set(target, "z9");
+                        cardLocalList.set(ZYlocal, " ");
+                    }
+
+                }
+                int rowtmp = ZYlocal % 6;
+                // row
+                if (target % 6 == rowtmp) {
+                    // left part of ZhangYi
+                    if (target > ZYlocal) {
+                        for (int i = ZYlocal; i <= (ZYlocal + (6 - coltmp - 1) * 6); i += 6) {
+                            if (cardLocalList.get(i).charAt(0) == tarCode.charAt(0)) {
+                                cardLocalList.set(i, " ");
+                            }
+                        }
+                        cardLocalList.set(target, "z9");
+                        cardLocalList.set(ZYlocal, " ");
+                    }
+                    // right part of ZhangYi
+                    if (target < ZYlocal) {
+                        for (int i = ZYlocal; i >= rowtmp; i -= 6) {
+                            if (cardLocalList.get(i).charAt(0) == tarCode.charAt(0)) {
+                                cardLocalList.set(i, " ");
+                            }
+                        }
+                        cardLocalList.set(target, "z9");
+                        cardLocalList.set(ZYlocal, " ");
+                    }
+
+                }
+            }
+        }
+
+        String NewSetup = GetNewSetup(cardLocalList);//update setup
+        String NewmoveSequence = moveSequence.substring(1);//update moveSequence
+        //base case
+        if (checkTheValidMove == 0) {
+            return 0;
+        }
+        //base case
+        if (NewmoveSequence.length() == 0) {
+            return 1;
+        }
+        //accumulate the total number of valid moves
+        return checkTheValidMove + CountMoveSequenceValid(NewSetup, NewmoveSequence,0);
+
+
+    }
+
+    //update the current board
+    public static String GetNewSetup(ArrayList<String> presentboard){
+        String NewSetup = new String();
+        for(int i=0;i<presentboard.size();i++){
+            if(presentboard.get(i).equals(" ")) {
+                NewSetup=NewSetup+"";
+            }else{
+                char p1= presentboard.get(i).charAt(0);
+                char p2= presentboard.get(i).charAt(1);
+                char p3;
+                if(i<=25 && i>=0){
+                    p3= (char)(i+65);
+                }else{p3= (char)(i-26+48);}
+                NewSetup = NewSetup+p1+""+p2+""+p3+"";
+            }
+        }
+        return NewSetup;
+    }
+
 
     /**
      * Get the list of supporters for the chosen player, given the provided
