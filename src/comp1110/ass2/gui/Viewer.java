@@ -75,8 +75,9 @@ public class Viewer extends Application {
         button.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent e) {
-                makePlacement(textField.getText());
                 controls.getChildren().clear();
+                makePlacement(textField.getText());
+                controls.getChildren().add(grid);
                 HBox hb = new HBox();
                 hb.getChildren().addAll(label1, textField, button);
                 hb.setSpacing(10);
