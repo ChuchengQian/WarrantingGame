@@ -362,15 +362,45 @@ public class WarringStatesGame {
         paceCount = moveSequence.length();
         String supporters = "";
         System.out.println("paceCount "+paceCount);
-        for (int i = 0; i < paceCount; i = i + 4) {
+        for (int i = playerId; i < paceCount; i = i + 4) {
             for (int j = 2; j < setup.length(); j = j + 3) {
-                if (moveSequence.charAt(i) == setup.charAt(j)) {
-                    //System.out.println(" setup "+setup.charAt(j));
+                if (moveSequence.charAt(i) == setup.charAt(j)) {//match the card in sequence with setup
                     supporters = supporters + setup.substring(j-2, j);
-                    //System.out.println(" supporters "+supporters);
                 }
             }
         }
+        StringBuffer[] orderSupporters = new StringBuffer[1];
+        orderSupporters[0] = new StringBuffer(supporters);
+        //sort the supporters in a alphabet order
+        for(int i = 0; i < supporters.length() - 2; i = i + 2) {
+            for (int j = i + 2; j < supporters.length(); j = j + 2) {
+                if ((int)orderSupporters[0].charAt(i) > (int)orderSupporters[0].charAt(j)) {
+                    char temp = orderSupporters[0].charAt(i);
+                    orderSupporters[0].setCharAt(i, orderSupporters[0].charAt(j));
+                    orderSupporters[0].setCharAt(j, temp);
+
+                    char num = orderSupporters[0].charAt(i+1);
+                    orderSupporters[0].setCharAt(i+1, orderSupporters[0].charAt(j+1));
+                    orderSupporters[0].setCharAt(j+1, num);
+
+                }
+            }
+        }
+
+        for(int i = 0; i < supporters.length() - 2; i = i + 2) {
+            for (int j = i + 2; j < supporters.length(); j = j + 2) {
+                if (orderSupporters[0].charAt(i) == orderSupporters[0].charAt(j)) {
+                    if ((int)orderSupporters[0].charAt(i + 1) > (int)orderSupporters[0].charAt(j + 1)) {
+                        char temp = orderSupporters[0].charAt(i + 1);
+                        orderSupporters[0].setCharAt(i + 1, orderSupporters[0].charAt(j + 1));
+                        orderSupporters[0].setCharAt(j + 1, temp);
+                    }
+                }
+
+            }
+        }
+        supporters = orderSupporters[0].toString();
+        System.out.println(supporters);
         return supporters;
     }
 
