@@ -2,6 +2,7 @@ package comp1110.ass2;
 
 import comp1110.util.DataUtil;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 
 /**
@@ -68,7 +69,6 @@ public class WarringStatesGame {
         if (count != placement.length()/3) {
             check = false;
         }
-        System.out.println("!!!!!!!!!!!"+check);
         //testDuplicate
         int count2 = 0;
         int locationCheck = 0;
@@ -107,6 +107,7 @@ public class WarringStatesGame {
      */
     public static boolean isMoveLegal(String placement, char locationChar) {
         // FIXME Task 5: determine whether a given move is legal
+        //System.out.println(placement+" placement "+locationChar+" locationChar");
         ArrayList<String> cardLocalList;
         DataUtil util = new DataUtil();
         // placement as a card string that is not placed in a positional order.
@@ -206,6 +207,7 @@ public class WarringStatesGame {
      * @return True if the placement sequence is valid
      */
     static boolean isMoveSequenceValid(String setup, String moveSequence) {
+        System.out.println(moveSequence);
         //check whether all moves from the 'moveSequence' string are valid
         if(CountMoveSequenceValid(setup,moveSequence,0)== moveSequence.length()){
             return true;
@@ -358,49 +360,130 @@ public class WarringStatesGame {
     public static String getSupporters(String setup, String moveSequence, int numPlayers, int playerId) {
         // FIXME Task 7: get the list of supporters for a given player after a sequence of moves
         System.out.println("setup "+setup+" \nmoveSequence " + moveSequence+ " \nnumPlayers "+ numPlayers+"\nplayerId "+playerId);
-        int paceCount = 0;
-        paceCount = moveSequence.length();
+        int paceCount = moveSequence.length();
         String supporters = "";
         System.out.println("paceCount "+paceCount);
+
+        ArrayList<String> cardLocalList;
+        DataUtil util = new DataUtil();
+        cardLocalList = util.placementSortToList(setup);
+        int target = 0;
+        int ZYLocation = -1;
+        int colTmp;
+        int rowTmp;
+        int lastLocation = 0;
         for (int i = playerId; i < paceCount; i = i + 4) {
-            for (int j = 2; j < setup.length(); j = j + 3) {
-                if (moveSequence.charAt(i) == setup.charAt(j)) {//match the card in sequence with setup
-                    supporters = supporters + setup.substring(j-2, j);
-                }
+            if (moveSequence.charAt(i) <= 'Z' && moveSequence.charAt(i) >= 'A') {
+                target = moveSequence.charAt(i) - 'A';
+                System.out.println("A~Z " + target);
+            } else if (moveSequence.charAt(i) <= '9' && moveSequence.charAt(i) >= '0') {
+                target = moveSequence.charAt(i) - '0';
+                target = target + 26;
+                System.out.println("0~9 "+target);
             }
-        }
-        StringBuffer[] orderSupporters = new StringBuffer[1];
-        orderSupporters[0] = new StringBuffer(supporters);
-        //sort the supporters in a alphabet order
-        for(int i = 0; i < supporters.length() - 2; i = i + 2) {
-            for (int j = i + 2; j < supporters.length(); j = j + 2) {
-                if ((int)orderSupporters[0].charAt(i) > (int)orderSupporters[0].charAt(j)) {
-                    char temp = orderSupporters[0].charAt(i);
-                    orderSupporters[0].setCharAt(i, orderSupporters[0].charAt(j));
-                    orderSupporters[0].setCharAt(j, temp);
-
-                    char num = orderSupporters[0].charAt(i+1);
-                    orderSupporters[0].setCharAt(i+1, orderSupporters[0].charAt(j+1));
-                    orderSupporters[0].setCharAt(j+1, num);
-
-                }
-            }
-        }
-
-        for(int i = 0; i < supporters.length() - 2; i = i + 2) {
-            for (int j = i + 2; j < supporters.length(); j = j + 2) {
-                if (orderSupporters[0].charAt(i) == orderSupporters[0].charAt(j)) {
-                    if ((int)orderSupporters[0].charAt(i + 1) > (int)orderSupporters[0].charAt(j + 1)) {
-                        char temp = orderSupporters[0].charAt(i + 1);
-                        orderSupporters[0].setCharAt(i + 1, orderSupporters[0].charAt(j + 1));
-                        orderSupporters[0].setCharAt(j + 1, temp);
+            if (i == 0) {
+                for (int j = 0; j < 36; j++) {
+                    if (cardLocalList.get(j).equals("z9")) {
+                        ZYLocation = j;
+                        System.out.println(ZYLocation+" ZYLocation");
                     }
                 }
-
+                colTmp = ZYLocation / 6;
+                rowTmp = ZYLocation % 6;
+                System.out.println("colTmp "+colTmp+" rowTmp "+rowTmp);
+            } else {
+                if (moveSequence.charAt(i - 1) <= 'Z' && moveSequence.charAt(i -1) >= 'A') {
+                    ZYLocation = moveSequence.charAt(i) - 'A';
+                } else if (moveSequence.charAt(i - 1) <= '9' && moveSequence.charAt(i - 1) >= '0') {
+                    ZYLocation = moveSequence.charAt(i - 1) - '0';
+                    ZYLocation = ZYLocation + 26;
+                }
+                colTmp = ZYLocation / 6;
+                rowTmp = ZYLocation % 6;
+                System.out.println("colTmp "+colTmp+" rowTmp "+rowTmp+" LastLocation "+ZYLocation);
             }
+            if (target >= colTmp * 6 && target < (colTmp + 1) * 6) {
+                if (target < ZYLocation) {//upper part of ZY
+                    for (int k = target; k < ZYLocation; k++) {
+                        if (cardLocalList.get(target).charAt(0) == cardLocalList.get(k).charAt(0)) {
+                            supporters = supporters + cardLocalList.get(k);
+                            cardLocalList.set(k, "!!");
+                        }
+                    }
+                }
+                if (target > ZYLocation) {// below ZY
+                    for (int k = target; k > ZYLocation; k--) {
+                        if (cardLocalList.get(target).charAt(0) == cardLocalList.get(k).charAt(0)) {
+                            supporters = supporters + cardLocalList.get(k);
+                            cardLocalList.set(k, "!!");
+                        }
+                    }
+                }
+            }
+            if (target % 6 == rowTmp) {
+                if (target > ZYLocation) {//left part of ZY
+                    for (int k = target; k > ZYLocation; k = k - 6) {
+                        if (cardLocalList.get(target).charAt(0) == cardLocalList.get(k).charAt(0)) {
+                            supporters = supporters + cardLocalList.get(k);
+                            cardLocalList.set(k, "!!");
+                        }
+                    }
+                }
+                if (target < ZYLocation) {//right part of ZY
+                    for (int k = target; k < ZYLocation; k = k + 6) {
+                        if (cardLocalList.get(target).charAt(0) == cardLocalList.get(k).charAt(0)) {
+                            supporters = supporters + cardLocalList.get(k);
+                            cardLocalList.set(k, "!!");
+                        }
+                    }
+                }
+            }
+            lastLocation = target;
+            System.out.println(lastLocation+"next");
         }
-        supporters = orderSupporters[0].toString();
-        System.out.println(supporters);
+        System.out.println(supporters+"!!!\n"+cardLocalList);
+
+
+//
+//        for (int i = playerId; i < paceCount; i = i + 4) {
+//            for (int j = 2; j < setup.length(); j = j + 3) {
+//                if (moveSequence.charAt(i) == setup.charAt(j)) {//match the card in sequence with setup
+//                    supporters = supporters + setup.substring(j-2, j);
+//                }
+//            }
+//        }
+//
+//        // Sorting the supporters in a right order
+//        StringBuffer[] orderSupporters = new StringBuffer[1];
+//        orderSupporters[0] = new StringBuffer(supporters);
+//        //sorting the supporters in a alphabet order
+//        for(int i = 0; i < supporters.length() - 2; i = i + 2) {
+//            for (int j = i + 2; j < supporters.length(); j = j + 2) {
+//                if ((int)orderSupporters[0].charAt(i) > (int)orderSupporters[0].charAt(j)) {
+//                    char temp = orderSupporters[0].charAt(i);
+//                    orderSupporters[0].setCharAt(i, orderSupporters[0].charAt(j));
+//                    orderSupporters[0].setCharAt(j, temp);
+//                    //sort the following number
+//                    char num = orderSupporters[0].charAt(i+1);
+//                    orderSupporters[0].setCharAt(i+1, orderSupporters[0].charAt(j+1));
+//                    orderSupporters[0].setCharAt(j+1, num);
+//                }
+//            }
+//        }
+//        //sorting the number from the same country.
+//        for(int i = 0; i < supporters.length() - 2; i = i + 2) {
+//            for (int j = i + 2; j < supporters.length(); j = j + 2) {
+//                if (orderSupporters[0].charAt(i) == orderSupporters[0].charAt(j)) {
+//                    if ((int)orderSupporters[0].charAt(i + 1) > (int)orderSupporters[0].charAt(j + 1)) {
+//                        char temp = orderSupporters[0].charAt(i + 1);
+//                        orderSupporters[0].setCharAt(i + 1, orderSupporters[0].charAt(j + 1));
+//                        orderSupporters[0].setCharAt(j + 1, temp);
+//                    }
+//                }
+//
+//            }
+//        }
+//        supporters = orderSupporters[0].toString();
         return supporters;
     }
 
