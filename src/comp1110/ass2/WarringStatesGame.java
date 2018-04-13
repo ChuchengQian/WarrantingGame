@@ -361,7 +361,11 @@ public class WarringStatesGame {
         // FIXME Task 7: get the list of supporters for a given player after a sequence of moves
         System.out.println("setup "+setup+" \nmoveSequence " + moveSequence+ " \nnumPlayers "+ numPlayers+"\nplayerId "+playerId);
         int paceCount = moveSequence.length();
-        String supporters = "";
+        String supporters1 = "";
+        String supporters2 = "";
+        String supporters3 = "";
+        String supporters4 = "";
+
         System.out.println("paceCount "+paceCount);
 
         ArrayList<String> cardLocalList;
@@ -371,8 +375,7 @@ public class WarringStatesGame {
         int ZYLocation = -1;
         int colTmp;
         int rowTmp;
-        int lastLocation;
-        for (int i = playerId; i < paceCount; i = i + 4) {
+        for (int i = 0; i < paceCount; i++) {
             if (moveSequence.charAt(i) <= 'Z' && moveSequence.charAt(i) >= 'A') {
                 target = moveSequence.charAt(i) - 'A';
                 System.out.println("A~Z " + target+" chart "+moveSequence.charAt(i));
@@ -394,27 +397,49 @@ public class WarringStatesGame {
             } else {
                 if (moveSequence.charAt(i - 1) <= 'Z' && moveSequence.charAt(i -1) >= 'A') {
                     ZYLocation = moveSequence.charAt(i-1) - 'A';
+                    System.out.println("ZYLocation "+ZYLocation+" "+moveSequence.charAt(i-1));
                 } else if (moveSequence.charAt(i - 1) <= '9' && moveSequence.charAt(i - 1) >= '0') {
                     ZYLocation = moveSequence.charAt(i - 1) - '0';
                     ZYLocation = ZYLocation + 26;
+                    System.out.println("ZYLocation "+ZYLocation+" "+moveSequence.charAt(i-1));
                 }
                 colTmp = ZYLocation / 6;
                 rowTmp = ZYLocation % 6;
-                System.out.println("colTmp "+colTmp+" rowTmp "+rowTmp+" LastLocation "+ZYLocation);
+                System.out.println("colTmp "+colTmp+" rowTmp "+rowTmp);
             }
             if (target >= colTmp * 6 && target < (colTmp + 1) * 6) {
                 if (target < ZYLocation) {//upper part of ZY
+                    char targetTmp = cardLocalList.get(target).charAt(0);
                     for (int k = target; k < ZYLocation; k++) {
-                        if (cardLocalList.get(target).charAt(0) == cardLocalList.get(k).charAt(0)) {
-                            supporters = supporters + cardLocalList.get(k);
+                        if (targetTmp == cardLocalList.get(k).charAt(0)) {
+                            System.out.println(targetTmp+" target "+ cardLocalList.get(k).substring(0, 2));
+                            if(i % 4 == 0) {
+                                supporters1 = supporters1 + cardLocalList.get(k);
+                            } else if (i % 4 == 1) {
+                                supporters2 = supporters2 + cardLocalList.get(k);
+                            } else if (i % 4 == 2) {
+                                supporters3 = supporters3 + cardLocalList.get(k);
+                            } else if (i % 4 == 3) {
+                                supporters4 = supporters4 + cardLocalList.get(k);
+                            }
                             cardLocalList.set(k, "!!");
                         }
                     }
                 }
                 if (target > ZYLocation) {// below ZY
+                    char targetTmp = cardLocalList.get(target).charAt(0);
                     for (int k = target; k > ZYLocation; k--) {
-                        if (cardLocalList.get(target).charAt(0) == cardLocalList.get(k).charAt(0)) {
-                            supporters = supporters + cardLocalList.get(k);
+                        if (targetTmp == cardLocalList.get(k).charAt(0)) {
+                            System.out.println(targetTmp+" target "+ cardLocalList.get(k).substring(0, 2));
+                            if(i % 4 == 0) {
+                                supporters1 = supporters1 + cardLocalList.get(k);
+                            } else if (i % 4 == 1) {
+                                supporters2 = supporters2 + cardLocalList.get(k);
+                            } else if (i % 4 == 2) {
+                                supporters3 = supporters3 + cardLocalList.get(k);
+                            } else if (i % 4 == 3) {
+                                supporters4 = supporters4 + cardLocalList.get(k);
+                            }
                             cardLocalList.set(k, "!!");
                         }
                     }
@@ -422,38 +447,59 @@ public class WarringStatesGame {
             }
             if (target % 6 == rowTmp) {
                 if (target > ZYLocation) {//left part of ZY
+                    char targetTmp = cardLocalList.get(target).charAt(0);
                     for (int k = target; k > ZYLocation; k = k - 6) {
-                        if (cardLocalList.get(target).charAt(0) == cardLocalList.get(k).charAt(0)) {
-                            supporters = supporters + cardLocalList.get(k);
+                        if (targetTmp == cardLocalList.get(k).charAt(0)) {
+                            System.out.println(targetTmp+" target "+ cardLocalList.get(k).substring(0, 2));
+                            if(i % 4 == 0) {
+                                supporters1 = supporters1 + cardLocalList.get(k);
+                            } else if (i % 4 == 1) {
+                                supporters2 = supporters2 + cardLocalList.get(k);
+                            } else if (i % 4 == 2) {
+                                supporters3 = supporters3 + cardLocalList.get(k);
+                            } else if (i % 4 == 3) {
+                                supporters4 = supporters4 + cardLocalList.get(k);
+                            }
                             cardLocalList.set(k, "!!");
                         }
                     }
                 }
                 if (target < ZYLocation) {//right part of ZY
+                    char targetTmp = cardLocalList.get(target).charAt(0);
                     for (int k = target; k < ZYLocation; k = k + 6) {
-                        if (cardLocalList.get(target).charAt(0) == cardLocalList.get(k).charAt(0)) {
-                            supporters = supporters + cardLocalList.get(k);
+                        if (targetTmp == cardLocalList.get(k).charAt(0)) {
+                            System.out.println(targetTmp+" target "+ cardLocalList.get(k).substring(0, 2));
+                            if(i % 4 == 0) {
+                                supporters1 = supporters1 + cardLocalList.get(k);
+                            } else if (i % 4 == 1) {
+                                supporters2 = supporters2 + cardLocalList.get(k);
+                            } else if (i % 4 == 2) {
+                                supporters3 = supporters3 + cardLocalList.get(k);
+                            } else if (i % 4 == 3) {
+                                supporters4 = supporters4 + cardLocalList.get(k);
+                            }
                             cardLocalList.set(k, "!!");
                         }
                     }
                 }
             }
-            lastLocation = target;
-            System.out.println(lastLocation+"next");
+            System.out.println("next");
         }
-//        System.out.println(supporters+"!!!\n"+cardLocalList);
+        String supporters = "";
+        if (playerId == 0) {
+            supporters =  sortSupporters(supporters1);
+        } else if (playerId == 1) {
+            supporters =  sortSupporters(supporters2);
+        } else if (playerId == 2) {
+            supporters =  sortSupporters(supporters3);
+        } else if (playerId == 3) {
+            supporters =  sortSupporters(supporters4);
+        }
 
 
-
-//        for (int i = playerId; i < paceCount; i = i + 4) {
-//            for (int j = 2; j < setup.length(); j = j + 3) {
-//                if (moveSequence.charAt(i) == setup.charAt(j)) {//match the card in sequence with setup
-//                    supporters = supporters + setup.substring(j-2, j);
-//                }
-//            }
-//        }
-//        System.out.println(supporters);
-
+        return supporters;
+    }
+    public static String sortSupporters (String supporters) {
         // Sorting the supporters in a right order
         StringBuffer[] orderSupporters = new StringBuffer[1];
         orderSupporters[0] = new StringBuffer(supporters);
@@ -481,7 +527,6 @@ public class WarringStatesGame {
                         orderSupporters[0].setCharAt(j + 1, temp);
                     }
                 }
-
             }
         }
         supporters = orderSupporters[0].toString();
