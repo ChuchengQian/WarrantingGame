@@ -365,54 +365,54 @@ public class WarringStatesGame {
         String supporters2 = "";
         String supporters3 = "";
         String supporters4 = "";
-
-        System.out.println("paceCount "+paceCount);
+//        System.out.println("paceCount "+paceCount);
 
         ArrayList<String> cardLocalList;
         DataUtil util = new DataUtil();
         cardLocalList = util.placementSortToList(setup);
-        int target = -1;
+        int target = -1;//nextMoveSequence
         int ZYLocation = -1;
         int colTmp;
         int rowTmp;
         for (int i = 0; i < paceCount; i++) {
             if (moveSequence.charAt(i) <= 'Z' && moveSequence.charAt(i) >= 'A') {
                 target = moveSequence.charAt(i) - 'A';
-                System.out.println("A~Z " + target+" chart "+moveSequence.charAt(i));
+//                System.out.println("A~Z " + target+" chart "+moveSequence.charAt(i));
             } else if (moveSequence.charAt(i) <= '9' && moveSequence.charAt(i) >= '0') {
                 target = moveSequence.charAt(i) - '0';
                 target = target + 26;
-                System.out.println("0~9 "+target+" chart "+moveSequence.charAt(i));
+//                System.out.println("0~9 "+target+" chart "+moveSequence.charAt(i));
             }
-            if (i == 0) {
+            if (i == 0) { // searching the location of ZY at the first time
                 for (int j = 0; j < 36; j++) {
                     if (cardLocalList.get(j).equals("z9")) {
                         ZYLocation = j;
-                        System.out.println(ZYLocation+" ZYLocation");
+//                        System.out.println(ZYLocation+" ZYLocation");
                     }
                 }
                 colTmp = ZYLocation / 6;
                 rowTmp = ZYLocation % 6;
-                System.out.println("colTmp "+colTmp+" rowTmp "+rowTmp);
-            } else {
+//                System.out.println("colTmp "+colTmp+" rowTmp "+rowTmp);
+            } else {//put lastMoveSequence into ZYLocation
                 if (moveSequence.charAt(i - 1) <= 'Z' && moveSequence.charAt(i -1) >= 'A') {
                     ZYLocation = moveSequence.charAt(i-1) - 'A';
-                    System.out.println("ZYLocation "+ZYLocation+" "+moveSequence.charAt(i-1));
+//                    System.out.println("ZYLocation "+ZYLocation+" "+moveSequence.charAt(i-1));
                 } else if (moveSequence.charAt(i - 1) <= '9' && moveSequence.charAt(i - 1) >= '0') {
                     ZYLocation = moveSequence.charAt(i - 1) - '0';
                     ZYLocation = ZYLocation + 26;
-                    System.out.println("ZYLocation "+ZYLocation+" "+moveSequence.charAt(i-1));
+//                    System.out.println("ZYLocation "+ZYLocation+" "+moveSequence.charAt(i-1));
                 }
                 colTmp = ZYLocation / 6;
                 rowTmp = ZYLocation % 6;
                 System.out.println("colTmp "+colTmp+" rowTmp "+rowTmp);
             }
+            //judge the direction of the target to ZYLocation
             if (target >= colTmp * 6 && target < (colTmp + 1) * 6) {
                 if (target < ZYLocation) {//upper part of ZY
                     char targetTmp = cardLocalList.get(target).charAt(0);
                     for (int k = target; k < ZYLocation; k++) {
                         if (targetTmp == cardLocalList.get(k).charAt(0)) {
-                            System.out.println(targetTmp+" target "+ cardLocalList.get(k).substring(0, 2));
+//                            System.out.println(targetTmp+" target "+ cardLocalList.get(k).substring(0, 2));
                             if(i % 4 == 0) {
                                 supporters1 = supporters1 + cardLocalList.get(k);
                             } else if (i % 4 == 1) {
@@ -422,7 +422,7 @@ public class WarringStatesGame {
                             } else if (i % 4 == 3) {
                                 supporters4 = supporters4 + cardLocalList.get(k);
                             }
-                            cardLocalList.set(k, "!!");
+                            cardLocalList.set(k, "!!");//fill out the missing elements to represent it is empty
                         }
                     }
                 }
@@ -430,7 +430,7 @@ public class WarringStatesGame {
                     char targetTmp = cardLocalList.get(target).charAt(0);
                     for (int k = target; k > ZYLocation; k--) {
                         if (targetTmp == cardLocalList.get(k).charAt(0)) {
-                            System.out.println(targetTmp+" target "+ cardLocalList.get(k).substring(0, 2));
+//                            System.out.println(targetTmp+" target "+ cardLocalList.get(k).substring(0, 2));
                             if(i % 4 == 0) {
                                 supporters1 = supporters1 + cardLocalList.get(k);
                             } else if (i % 4 == 1) {
@@ -440,7 +440,7 @@ public class WarringStatesGame {
                             } else if (i % 4 == 3) {
                                 supporters4 = supporters4 + cardLocalList.get(k);
                             }
-                            cardLocalList.set(k, "!!");
+                            cardLocalList.set(k, "!!");//fill out the missing elements to represent it is empty
                         }
                     }
                 }
@@ -450,7 +450,7 @@ public class WarringStatesGame {
                     char targetTmp = cardLocalList.get(target).charAt(0);
                     for (int k = target; k > ZYLocation; k = k - 6) {
                         if (targetTmp == cardLocalList.get(k).charAt(0)) {
-                            System.out.println(targetTmp+" target "+ cardLocalList.get(k).substring(0, 2));
+//                            System.out.println(targetTmp+" target "+ cardLocalList.get(k).substring(0, 2));
                             if(i % 4 == 0) {
                                 supporters1 = supporters1 + cardLocalList.get(k);
                             } else if (i % 4 == 1) {
@@ -460,7 +460,7 @@ public class WarringStatesGame {
                             } else if (i % 4 == 3) {
                                 supporters4 = supporters4 + cardLocalList.get(k);
                             }
-                            cardLocalList.set(k, "!!");
+                            cardLocalList.set(k, "!!");//fill out the missing elements to represent it is empty
                         }
                     }
                 }
@@ -468,7 +468,7 @@ public class WarringStatesGame {
                     char targetTmp = cardLocalList.get(target).charAt(0);
                     for (int k = target; k < ZYLocation; k = k + 6) {
                         if (targetTmp == cardLocalList.get(k).charAt(0)) {
-                            System.out.println(targetTmp+" target "+ cardLocalList.get(k).substring(0, 2));
+//                            System.out.println(targetTmp+" target "+ cardLocalList.get(k).substring(0, 2));
                             if(i % 4 == 0) {
                                 supporters1 = supporters1 + cardLocalList.get(k);
                             } else if (i % 4 == 1) {
@@ -483,8 +483,9 @@ public class WarringStatesGame {
                     }
                 }
             }
-            System.out.println("next");
+//            System.out.println("next");
         }
+        //output the supporters based on the playerId
         String supporters = "";
         if (playerId == 0) {
             supporters =  sortSupporters(supporters1);
@@ -495,12 +496,16 @@ public class WarringStatesGame {
         } else if (playerId == 3) {
             supporters =  sortSupporters(supporters4);
         }
-
-
         return supporters;
     }
+    /**
+     * Sorting the supporters in a right order
+     * @param supporters
+     * @return
+     * @author Jiayang Li
+     */
     public static String sortSupporters (String supporters) {
-        // Sorting the supporters in a right order
+
         StringBuffer[] orderSupporters = new StringBuffer[1];
         orderSupporters[0] = new StringBuffer(supporters);
         //sorting the supporters in a alphabet order
