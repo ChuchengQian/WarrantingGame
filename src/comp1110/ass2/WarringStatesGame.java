@@ -359,7 +359,7 @@ public class WarringStatesGame {
      */
     public static String getSupporters(String setup, String moveSequence, int numPlayers, int playerId) {
         // FIXME Task 7: get the list of supporters for a given player after a sequence of moves
-        System.out.println("setup "+setup+" \nmoveSequence " + moveSequence+ " \nnumPlayers "+ numPlayers+"\nplayerId "+playerId);
+//        System.out.println("setup "+setup+" \nmoveSequence " + moveSequence+ " \nnumPlayers "+ numPlayers+"\nplayerId "+playerId);
         int paceCount = moveSequence.length();
         String supporters1 = "";
         String supporters2 = "";
@@ -404,7 +404,7 @@ public class WarringStatesGame {
                 }
                 colTmp = ZYLocation / 6;
                 rowTmp = ZYLocation % 6;
-                System.out.println("colTmp "+colTmp+" rowTmp "+rowTmp);
+//                System.out.println("colTmp "+colTmp+" rowTmp "+rowTmp);
             }
             //judge the direction of the target to ZYLocation
             if (target >= colTmp * 6 && target < (colTmp + 1) * 6) {
