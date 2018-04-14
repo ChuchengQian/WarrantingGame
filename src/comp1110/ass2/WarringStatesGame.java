@@ -556,8 +556,41 @@ public class WarringStatesGame {
      * If no player controls a particular house, the element for that house will have the value -1.
      */
     public static int[] getFlags(String setup, String moveSequence, int numPlayers) {
+        char my[]= {0000000000000};
+        for(int i=0;i<=numPlayers;i++){
+            String supports=getSupporters(setup,moveSequence,numPlayers,i);
+            int index = 0;
+            for(int ii=97;ii<=103;ii++){
+                char guo = (char) ii;
+                int count = 0;
+                for(int iii=0;iii<supports.length();iii+=2){
+                    if(supports.charAt(iii)==guo){
+                        count++;
+                    }
+                }
+                if(count >= my[index+1]){
+                    my[index]=(char)(i+48);
+
+                    char count1 = (char)count;
+                    my[index+1]=count1;
+
+                    index+=2;
+                }
+
+            }
+        }
+        int ouput[] = {-1,-1,-1,-1,-1,-1,-1};
+        int oo=0;
+        for(int iiii=0;iiii<=ouput.length;iiii++){
+            ouput[iiii]=my[oo];
+            oo+=2;
+        }
+
+
+
+
         // FIXME Task 8: determine which player controls the flag of each kingdom after a given sequence of moves
-        return null;
+        return ouput;
     }
 
     /**
