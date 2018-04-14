@@ -4,6 +4,7 @@ import comp1110.util.DataUtil;
 
 import java.lang.reflect.Array;
 import java.util.ArrayList;
+import java.util.Arrays;
 
 /**
  * This class provides the text interface for the Warring States game
@@ -556,34 +557,44 @@ public class WarringStatesGame {
      * If no player controls a particular house, the element for that house will have the value -1.
      */
     public static int[] getFlags(String setup, String moveSequence, int numPlayers) {
-        char my[]= {0000000000000};
-        for(int i=0;i<=numPlayers;i++){
+        char my[]= {'0','0','0','0','0','0','0','0','0','0','0','0','0','0'};
+        for(int i=0;i<numPlayers;i++){
             String supports=getSupporters(setup,moveSequence,numPlayers,i);
+            System.out.println(supports);
             int index = 0;
             for(int ii=97;ii<=103;ii++){
                 char guo = (char) ii;
+                System.out.println(guo);
                 int count = 0;
                 for(int iii=0;iii<supports.length();iii+=2){
                     if(supports.charAt(iii)==guo){
                         count++;
                     }
                 }
-                if(count >= my[index+1]){
-                    my[index]=(char)(i+48);
+                char count1 = (char)(count+48);
 
-                    char count1 = (char)count;
+                if(count1 >= my[index+1]){
+                   my[index]=(char)(i+48);
+
                     my[index+1]=count1;
 
-                    index+=2;
+                    System.out.println(my);
                 }
+                index+=2;
+
 
             }
+            System.out.println(my);
         }
+        System.out.println(my);
         int ouput[] = {-1,-1,-1,-1,-1,-1,-1};
         int oo=0;
-        for(int iiii=0;iiii<=ouput.length;iiii++){
-            ouput[iiii]=my[oo];
+        for(int iiii=0;iiii<ouput.length;iiii++){
+            if(my[oo+1]>48){
+                ouput[iiii]=my[oo]-48;
+            }
             oo+=2;
+            System.out.println(Arrays.toString(ouput));
         }
 
 
@@ -592,6 +603,11 @@ public class WarringStatesGame {
         // FIXME Task 8: determine which player controls the flag of each kingdom after a given sequence of moves
         return ouput;
     }
+
+    //public static void main(String[] args) {
+      //  System.out.println(getSupporters("d3Ad4Be1Ca0Dc1Ed0Fa3Gc0Hc3Ia1Jb5Kb1Lc5Mg1Nf1Oa7Pb3Qe2Ra4Sd2Tb6Ua6Vb2Wd1Xf2Yb0Ze00b41a22a53e34c45z96c27g08f09","ICAY0", 2,0));
+        //getFlags("d3Ad4Be1Ca0Dc1Ed0Fa3Gc0Hc3Ia1Jb5Kb1Lc5Mg1Nf1Oa7Pb3Qe2Ra4Sd2Tb6Ua6Vb2Wd1Xf2Yb0Ze00b41a22a53e34c45z96c27g08f09","ICAY0", 2);
+      // }
 
     /**
      * Generate a legal move, given the provided placement string.
