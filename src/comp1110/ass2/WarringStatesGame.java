@@ -620,6 +620,88 @@ public class WarringStatesGame {
     }
 
     /**
+     * Get supporters in each pace
+     * @author Jiayang Li
+     * @param setup
+     * @param moveSequence
+     * @param paceNum
+     * @return
+     */
+    public static String getEachPace (String setup, String moveSequence, int paceNum) {
+        String supporters = "";
+        ArrayList<String> cardLocalList;
+        DataUtil util = new DataUtil();
+        cardLocalList = util.placementSortToList(setup);
+        int target = -1;//nextMoveSequence
+        int ZYLocation = -1;
+        int colTmp;
+        int rowTmp;
+        int i = paceNum;
+        if (moveSequence.charAt(i) <= 'Z' && moveSequence.charAt(i) >= 'A') {
+            target = moveSequence.charAt(i) - 'A';
+        } else if (moveSequence.charAt(i) <= '9' && moveSequence.charAt(i) >= '0') {
+            target = moveSequence.charAt(i) - '0';
+            target = target + 26;
+        }
+        if (i == 0) { // searching the location of ZY at the first time
+            for (int j = 0; j < 36; j++) {
+                if (cardLocalList.get(j).equals("z9")) {
+                    ZYLocation = j;
+                }
+            }
+            colTmp = ZYLocation / 6;
+            rowTmp = ZYLocation % 6;
+        } else {//put lastMoveSequence into ZYLocation
+            if (moveSequence.charAt(i - 1) <= 'Z' && moveSequence.charAt(i -1) >= 'A') {
+                ZYLocation = moveSequence.charAt(i-1) - 'A';
+            } else if (moveSequence.charAt(i - 1) <= '9' && moveSequence.charAt(i - 1) >= '0') {
+                ZYLocation = moveSequence.charAt(i - 1) - '0';
+                ZYLocation = ZYLocation + 26;
+            }
+            colTmp = ZYLocation / 6;
+            rowTmp = ZYLocation % 6;
+        }
+        //judge the direction of the target to ZYLocation
+        if (target >= colTmp * 6 && target < (colTmp + 1) * 6) {
+            if (target < ZYLocation) {//upper part of ZY
+                char targetTmp = cardLocalList.get(target).charAt(0);
+                for (int k = target; k < ZYLocation; k++) {
+                    if (targetTmp == cardLocalList.get(k).charAt(0)) {
+                        supporters = supporters + cardLocalList.get(k);
+                    }
+                }
+            }
+            if (target > ZYLocation) {// below ZY
+                char targetTmp = cardLocalList.get(target).charAt(0);
+                for (int k = target; k > ZYLocation; k--) {
+                    if (targetTmp == cardLocalList.get(k).charAt(0)) {
+                        supporters = supporters + cardLocalList.get(k);
+                    }
+                }
+            }
+        }
+        if (target % 6 == rowTmp) {
+            if (target > ZYLocation) {//left part of ZY
+                char targetTmp = cardLocalList.get(target).charAt(0);
+                for (int k = target; k > ZYLocation; k = k - 6) {
+                    if (targetTmp == cardLocalList.get(k).charAt(0)) {
+                        supporters = supporters + cardLocalList.get(k);
+                    }
+                }
+            }
+            if (target < ZYLocation) {//right part of ZY
+                char targetTmp = cardLocalList.get(target).charAt(0);
+                for (int k = target; k < ZYLocation; k = k + 6) {
+                    if (targetTmp == cardLocalList.get(k).charAt(0)) {
+                        supporters = supporters + cardLocalList.get(k);
+                    }
+                }
+            }
+        }
+        return supporters;
+    }
+
+    /**
      * Given a setup and move sequence, determine which player controls the flag of each kingdom
      * after all the moves in the sequence have been played.
      *
