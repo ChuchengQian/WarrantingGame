@@ -414,14 +414,30 @@ public class WarringStatesGame {
                     for (int k = target; k < ZYLocation; k++) {
                         if (targetTmp == cardLocalList.get(k).charAt(0)) {
 //                            System.out.println(targetTmp+" target "+ cardLocalList.get(k).substring(0, 2));
-                            if(i % 4 == 0) {
-                                supporters1 = supporters1 + cardLocalList.get(k);
-                            } else if (i % 4 == 1) {
-                                supporters2 = supporters2 + cardLocalList.get(k);
-                            } else if (i % 4 == 2) {
-                                supporters3 = supporters3 + cardLocalList.get(k);
-                            } else if (i % 4 == 3) {
-                                supporters4 = supporters4 + cardLocalList.get(k);
+                            if (numPlayers == 4) { //different situations to different numPlayers
+                                if(i % 4 == 0) {
+                                    supporters1 = supporters1 + cardLocalList.get(k);
+                                } else if (i % 4 == 1) {
+                                    supporters2 = supporters2 + cardLocalList.get(k);
+                                } else if (i % 4 == 2) {
+                                    supporters3 = supporters3 + cardLocalList.get(k);
+                                } else if (i % 4 == 3) {
+                                    supporters4 = supporters4 + cardLocalList.get(k);
+                                }
+                            } else if (numPlayers == 3) {
+                                if (i % 3 == 0) {
+                                    supporters1 = supporters1 + cardLocalList.get(k);
+                                } else if (i % 3 == 1) {
+                                    supporters2 = supporters2 + cardLocalList.get(k);
+                                } else if (i % 3 == 2) {
+                                    supporters3 = supporters3 + cardLocalList.get(k);
+                                }
+                            } else if (numPlayers == 2) {
+                                if (i % 2 == 0) {
+                                    supporters1 = supporters1 + cardLocalList.get(k);
+                                } else if (i % 2 == 1) {
+                                    supporters2 = supporters2 + cardLocalList.get(k);
+                                }
                             }
                             cardLocalList.set(k, "!!");//fill out the missing elements to represent it is empty
                         }
@@ -432,14 +448,30 @@ public class WarringStatesGame {
                     for (int k = target; k > ZYLocation; k--) {
                         if (targetTmp == cardLocalList.get(k).charAt(0)) {
 //                            System.out.println(targetTmp+" target "+ cardLocalList.get(k).substring(0, 2));
-                            if(i % 4 == 0) {
-                                supporters1 = supporters1 + cardLocalList.get(k);
-                            } else if (i % 4 == 1) {
-                                supporters2 = supporters2 + cardLocalList.get(k);
-                            } else if (i % 4 == 2) {
-                                supporters3 = supporters3 + cardLocalList.get(k);
-                            } else if (i % 4 == 3) {
-                                supporters4 = supporters4 + cardLocalList.get(k);
+                            if (numPlayers == 4) { //different situations to different numPlayers
+                                if(i % 4 == 0) {
+                                    supporters1 = supporters1 + cardLocalList.get(k);
+                                } else if (i % 4 == 1) {
+                                    supporters2 = supporters2 + cardLocalList.get(k);
+                                } else if (i % 4 == 2) {
+                                    supporters3 = supporters3 + cardLocalList.get(k);
+                                } else if (i % 4 == 3) {
+                                    supporters4 = supporters4 + cardLocalList.get(k);
+                                }
+                            } else if (numPlayers == 3) {
+                                if (i % 3 == 0) {
+                                    supporters1 = supporters1 + cardLocalList.get(k);
+                                } else if (i % 3 == 1) {
+                                    supporters2 = supporters2 + cardLocalList.get(k);
+                                } else if (i % 3 == 2) {
+                                    supporters3 = supporters3 + cardLocalList.get(k);
+                                }
+                            } else if (numPlayers == 2) {
+                                if (i % 2 == 0) {
+                                    supporters1 = supporters1 + cardLocalList.get(k);
+                                } else if (i % 2 == 1) {
+                                    supporters2 = supporters2 + cardLocalList.get(k);
+                                }
                             }
                             cardLocalList.set(k, "!!");//fill out the missing elements to represent it is empty
                         }
@@ -452,14 +484,30 @@ public class WarringStatesGame {
                     for (int k = target; k > ZYLocation; k = k - 6) {
                         if (targetTmp == cardLocalList.get(k).charAt(0)) {
 //                            System.out.println(targetTmp+" target "+ cardLocalList.get(k).substring(0, 2));
-                            if(i % 4 == 0) {
-                                supporters1 = supporters1 + cardLocalList.get(k);
-                            } else if (i % 4 == 1) {
-                                supporters2 = supporters2 + cardLocalList.get(k);
-                            } else if (i % 4 == 2) {
-                                supporters3 = supporters3 + cardLocalList.get(k);
-                            } else if (i % 4 == 3) {
-                                supporters4 = supporters4 + cardLocalList.get(k);
+                            if (numPlayers == 4) { //different situations to different numPlayers
+                                if(i % 4 == 0) {
+                                    supporters1 = supporters1 + cardLocalList.get(k);
+                                } else if (i % 4 == 1) {
+                                    supporters2 = supporters2 + cardLocalList.get(k);
+                                } else if (i % 4 == 2) {
+                                    supporters3 = supporters3 + cardLocalList.get(k);
+                                } else if (i % 4 == 3) {
+                                    supporters4 = supporters4 + cardLocalList.get(k);
+                                }
+                            } else if (numPlayers == 3) {
+                                if (i % 3 == 0) {
+                                    supporters1 = supporters1 + cardLocalList.get(k);
+                                } else if (i % 3 == 1) {
+                                    supporters2 = supporters2 + cardLocalList.get(k);
+                                } else if (i % 3 == 2) {
+                                    supporters3 = supporters3 + cardLocalList.get(k);
+                                }
+                            } else if (numPlayers == 2) {
+                                if (i % 2 == 0) {
+                                    supporters1 = supporters1 + cardLocalList.get(k);
+                                } else if (i % 2 == 1) {
+                                    supporters2 = supporters2 + cardLocalList.get(k);
+                                }
                             }
                             cardLocalList.set(k, "!!");//fill out the missing elements to represent it is empty
                         }
@@ -470,14 +518,30 @@ public class WarringStatesGame {
                     for (int k = target; k < ZYLocation; k = k + 6) {
                         if (targetTmp == cardLocalList.get(k).charAt(0)) {
 //                            System.out.println(targetTmp+" target "+ cardLocalList.get(k).substring(0, 2));
-                            if(i % 4 == 0) {
-                                supporters1 = supporters1 + cardLocalList.get(k);
-                            } else if (i % 4 == 1) {
-                                supporters2 = supporters2 + cardLocalList.get(k);
-                            } else if (i % 4 == 2) {
-                                supporters3 = supporters3 + cardLocalList.get(k);
-                            } else if (i % 4 == 3) {
-                                supporters4 = supporters4 + cardLocalList.get(k);
+                            if (numPlayers == 4) { //different situations to different numPlayers
+                                if(i % 4 == 0) {
+                                    supporters1 = supporters1 + cardLocalList.get(k);
+                                } else if (i % 4 == 1) {
+                                    supporters2 = supporters2 + cardLocalList.get(k);
+                                } else if (i % 4 == 2) {
+                                    supporters3 = supporters3 + cardLocalList.get(k);
+                                } else if (i % 4 == 3) {
+                                    supporters4 = supporters4 + cardLocalList.get(k);
+                                }
+                            } else if (numPlayers == 3) {
+                                if (i % 3 == 0) {
+                                    supporters1 = supporters1 + cardLocalList.get(k);
+                                } else if (i % 3 == 1) {
+                                    supporters2 = supporters2 + cardLocalList.get(k);
+                                } else if (i % 3 == 2) {
+                                    supporters3 = supporters3 + cardLocalList.get(k);
+                                }
+                            } else if (numPlayers == 2) {
+                                if (i % 2 == 0) {
+                                    supporters1 = supporters1 + cardLocalList.get(k);
+                                } else if (i % 2 == 1) {
+                                    supporters2 = supporters2 + cardLocalList.get(k);
+                                }
                             }
                             cardLocalList.set(k, "!!");
                         }
@@ -486,16 +550,32 @@ public class WarringStatesGame {
             }
 //            System.out.println("next");
         }
-        //output the supporters based on the playerId
+        //output the supporters based on the playerId & numPlayers
         String supporters = "";
-        if (playerId == 0) {
-            supporters =  sortSupporters(supporters1);
-        } else if (playerId == 1) {
-            supporters =  sortSupporters(supporters2);
-        } else if (playerId == 2) {
-            supporters =  sortSupporters(supporters3);
-        } else if (playerId == 3) {
-            supporters =  sortSupporters(supporters4);
+        if (numPlayers == 4) {
+            if (playerId == 0) {
+                supporters =  sortSupporters(supporters1);
+            } else if (playerId == 1) {
+                supporters =  sortSupporters(supporters2);
+            } else if (playerId == 2) {
+                supporters =  sortSupporters(supporters3);
+            } else if (playerId == 3) {
+                supporters =  sortSupporters(supporters4);
+            }
+        } else if (numPlayers == 3) {
+            if (playerId == 0) {
+                supporters = sortSupporters(supporters1);
+            } else if (playerId == 1) {
+                supporters = sortSupporters(supporters2);
+            } else if (playerId == 2) {
+                supporters = sortSupporters(supporters3);
+            }
+        } else if (numPlayers == 2) {
+            if (playerId == 0) {
+                supporters = sortSupporters(supporters1);
+            } else if (playerId == 1) {
+                supporters = sortSupporters(supporters2);
+            }
         }
         return supporters;
     }
