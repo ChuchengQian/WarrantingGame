@@ -637,36 +637,176 @@ public class WarringStatesGame {
      * If no player controls a particular house, the element for that house will have the value -1.
      */
     public static int[] getFlags(String setup, String moveSequence, int numPlayers) {
+        ArrayList<String> cardLocalList1;
+        DataUtil util = new DataUtil();
+        cardLocalList1 = util.placementSortToList(setup);
         char my[]= {'0','0','0','0','0','0','0','0','0','0','0','0','0','0'};
-        for(int i=0;i<numPlayers;i++){
-            String supports=getSupporters(setup,moveSequence,numPlayers,i);
-            System.out.println(supports);
-            int index = 0;
-            for(int ii=97;ii<=103;ii++){
-                char guo = (char) ii;
-                System.out.println(guo);
-                int count = 0;
-                for(int iii=0;iii<supports.length();iii+=2){
-                    if(supports.charAt(iii)==guo){
-                        count++;
+        String newSetup = setup;
+
+        String supporterof0="";
+        String supporterof1="";
+        String supporterof2="";
+        String supporterof3="";
+
+        for(int a=0;a<moveSequence.length();a++) {
+
+            char locationChar = moveSequence.charAt(a);
+
+            String singleMove = moveSequence.substring(a,a+1);
+
+            for (int i = 0; i < numPlayers; i++) {
+                String supports="";
+                System.out.println(i);
+
+                if(i==0 && (a%numPlayers==i)) {
+                    if (getSupporters(newSetup, singleMove, numPlayers, i).equals("")) {
+                        supports = supporterof0;
+                    } else {
+                        supports = supporterof0 + getSupporters(newSetup, singleMove, numPlayers, i);
                     }
                 }
-                char count1 = (char)(count+48);
-
-                if(count1 >= my[index+1]){
-                   my[index]=(char)(i+48);
-
-                    my[index+1]=count1;
-
-                    System.out.println(my);
+                if(i==1 && (a%numPlayers==i)){
+                    System.out.println(newSetup);
+                    System.out.println(singleMove);
+                    if(getSupporters(newSetup,singleMove, numPlayers, i).equals("")){
+                        supports=supporterof1;
+                    }else{supports=supporterof1 + getSupporters(newSetup,singleMove, numPlayers, i);
+                    }
+                    System.out.println(supports);
                 }
-                index+=2;
+                if(i==2&& (a%numPlayers==i)){
+                    if(getSupporters(newSetup,singleMove, numPlayers, i).equals("")){
+                        supports=supporterof2;
+                    }else
+                    {supports=supporterof2 + getSupporters(newSetup,singleMove, numPlayers, i);}
+                }
+                if(i==3&& (a%numPlayers==i)){
+                    if(getSupporters(newSetup,singleMove, numPlayers, i).equals("")){
+                        supports=supporterof3;
+                    }else
+                    {supports=supporterof3 + getSupporters(newSetup,singleMove, numPlayers, i);}
+                }
+
+                int index = 0;
+                for (int ii = 97; ii <= 103; ii++) {
+                    char guo = (char) ii;
+                    //System.out.println(guo);
+                    int count = 0;
+                    for (int iii = 0; iii < supports.length(); iii += 2) {
+                        if (supports.charAt(iii) == guo) {
+                            count++;
+                        }
+                    }
+                    char count1 = (char) (count + 48);
+
+                    if (count1 >= my[index + 1]) {
+                        my[index] = (char) (i + 48);
+
+                        my[index + 1] = count1;
+
+                        //System.out.println(my);
+                    }
+                    index += 2;
 
 
+                }
+                //System.out.println(my);
+                if(i==0){
+                supporterof0=supports;
+                }
+                if(i==1){
+                    supporterof1=supports;
+                }
+                if(i==2){
+                    supporterof2=supports;
+                }
+                if(i==3){
+                    supporterof3=supports;
+                }
             }
-            System.out.println(my);
+            if (isMoveLegal(newSetup, locationChar)) {
+                //if it is a valid move,update the checkTheValidMove to be 1
+                int target;
+                if (locationChar <= 'Z' && locationChar >= 'A') {
+                    target = locationChar - 'A';
+                } else if (locationChar <= '9' && locationChar >= '0') {
+                    target = locationChar - '0';
+                    target = target + 26;
+                } else {
+                    target = 5000;
+
+                }
+
+                // find ZhangYi
+                int ZYlocal = -1;
+                for (int i = 0; i < 36; i++) {
+                    if (cardLocalList1.get(i).equals("z9")) {
+                        ZYlocal = i;
+                    }
+                }
+
+
+                if (ZYlocal != -1) {
+                    // The number of the target location card.
+                    String tarCode = cardLocalList1.get(target);
+                    // The relative position of ZhangYi.
+                    int coltmp = ZYlocal / 6;
+                    // column
+                    if (target >= coltmp * 6 && target < (coltmp + 1) * 6) {
+                        // upper part of ZhangYi
+                        if (target < ZYlocal) {
+                            // there is a same country card in the same direction
+                            for (int i = ZYlocal; i >= coltmp * 6; i--) {
+                                if (cardLocalList1.get(i).charAt(0) == tarCode.charAt(0)) {
+                                    cardLocalList1.set(i, " ");
+                                }
+                            }
+                            cardLocalList1.set(target, "z9");
+                            cardLocalList1.set(ZYlocal, " ");
+                        }
+                        // below part of ZhangYi
+                        if (target > ZYlocal) {
+                            for (int i = ZYlocal; i < (coltmp + 1) * 6; i++) {
+                                if (cardLocalList1.get(i).charAt(0) == tarCode.charAt(0)) {
+                                    cardLocalList1.set(i, " ");
+                                }
+                            }
+                            cardLocalList1.set(target, "z9");
+                            cardLocalList1.set(ZYlocal, " ");
+                        }
+
+                    }
+                    int rowtmp = ZYlocal % 6;
+                    // row
+                    if (target % 6 == rowtmp) {
+                        // left part of ZhangYi
+                        if (target > ZYlocal) {
+                            for (int i = ZYlocal; i <= (ZYlocal + (6 - coltmp - 1) * 6); i += 6) {
+                                if (cardLocalList1.get(i).charAt(0) == tarCode.charAt(0)) {
+                                    cardLocalList1.set(i, " ");
+                                }
+                            }
+                            cardLocalList1.set(target, "z9");
+                            cardLocalList1.set(ZYlocal, " ");
+                        }
+                        // right part of ZhangYi
+                        if (target < ZYlocal) {
+                            for (int i = ZYlocal; i >= rowtmp; i -= 6) {
+                                if (cardLocalList1.get(i).charAt(0) == tarCode.charAt(0)) {
+                                    cardLocalList1.set(i, " ");
+                                }
+                            }
+                            cardLocalList1.set(target, "z9");
+                            cardLocalList1.set(ZYlocal, " ");
+                        }
+
+                    }
+                }
+            }
+            newSetup  = GetNewSetup(cardLocalList1);
+            System.out.println(newSetup);
         }
-        System.out.println(my);
+        //System.out.println(my);
         int ouput[] = {-1,-1,-1,-1,-1,-1,-1};
         int oo=0;
         for(int iiii=0;iiii<ouput.length;iiii++){
@@ -674,20 +814,21 @@ public class WarringStatesGame {
                 ouput[iiii]=my[oo]-48;
             }
             oo+=2;
-            System.out.println(Arrays.toString(ouput));
+            //System.out.println(Arrays.toString(ouput));
         }
 
 
 
 
         // FIXME Task 8: determine which player controls the flag of each kingdom after a given sequence of moves
+        System.out.println(Arrays.toString(ouput));
         return ouput;
     }
 
-    //public static void main(String[] args) {
-      //  System.out.println(getSupporters("d3Ad4Be1Ca0Dc1Ed0Fa3Gc0Hc3Ia1Jb5Kb1Lc5Mg1Nf1Oa7Pb3Qe2Ra4Sd2Tb6Ua6Vb2Wd1Xf2Yb0Ze00b41a22a53e34c45z96c27g08f09","ICAY0", 2,0));
+    public static void main(String[] args) {
+        System.out.println(getSupporters("d3Ad4Be1Ca0Dc1Ed0Fa3Gc0Hc3Ia1Jb5Kb1Lc5Mg1Nf1Oa7Pb3Qe2Ra4Sd2Tb6Ua6Vb2Wd1Xf2Yb0Ze00b41a22a53e34c45z96c27g08f09","ICAY0", 2,0));
         //getFlags("d3Ad4Be1Ca0Dc1Ed0Fa3Gc0Hc3Ia1Jb5Kb1Lc5Mg1Nf1Oa7Pb3Qe2Ra4Sd2Tb6Ua6Vb2Wd1Xf2Yb0Ze00b41a22a53e34c45z96c27g08f09","ICAY0", 2);
-      // }
+       }
 
     /**
      * Generate a legal move, given the provided placement string.
