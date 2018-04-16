@@ -2,7 +2,9 @@ package comp1110.ass2;
 
 import comp1110.util.DataUtil;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
+import java.util.Arrays;
 
 /**
  * This class provides the text interface for the Warring States game
@@ -68,7 +70,6 @@ public class WarringStatesGame {
         if (count != placement.length()/3) {
             check = false;
         }
-        System.out.println("!!!!!!!!!!!"+check);
         //testDuplicate
         int count2 = 0;
         int locationCheck = 0;
@@ -107,6 +108,7 @@ public class WarringStatesGame {
      */
     public static boolean isMoveLegal(String placement, char locationChar) {
         // FIXME Task 5: determine whether a given move is legal
+        //System.out.println(placement+" placement "+locationChar+" locationChar");
         ArrayList<String> cardLocalList;
         DataUtil util = new DataUtil();
         // placement as a card string that is not placed in a positional order.
@@ -206,6 +208,7 @@ public class WarringStatesGame {
      * @return True if the placement sequence is valid
      */
     static boolean isMoveSequenceValid(String setup, String moveSequence) {
+        System.out.println(moveSequence);
         //check whether all moves from the 'moveSequence' string are valid
         if(CountMoveSequenceValid(setup,moveSequence,0)== moveSequence.length()){
             return true;
@@ -357,7 +360,345 @@ public class WarringStatesGame {
      */
     public static String getSupporters(String setup, String moveSequence, int numPlayers, int playerId) {
         // FIXME Task 7: get the list of supporters for a given player after a sequence of moves
-        return null;
+//        System.out.println("setup "+setup+" \nmoveSequence " + moveSequence+ " \nnumPlayers "+ numPlayers+"\nplayerId "+playerId);
+        int paceCount = moveSequence.length();
+        String supporters1 = "";
+        String supporters2 = "";
+        String supporters3 = "";
+        String supporters4 = "";
+//        System.out.println("paceCount "+paceCount);
+
+        ArrayList<String> cardLocalList;
+        DataUtil util = new DataUtil();
+        cardLocalList = util.placementSortToList(setup);
+        int target = -1;//nextMoveSequence
+        int ZYLocation = -1;
+        int colTmp;
+        int rowTmp;
+        for (int i = 0; i < paceCount; i++) {
+            if (moveSequence.charAt(i) <= 'Z' && moveSequence.charAt(i) >= 'A') {
+                target = moveSequence.charAt(i) - 'A';
+//                System.out.println("A~Z " + target+" chart "+moveSequence.charAt(i));
+            } else if (moveSequence.charAt(i) <= '9' && moveSequence.charAt(i) >= '0') {
+                target = moveSequence.charAt(i) - '0';
+                target = target + 26;
+//                System.out.println("0~9 "+target+" chart "+moveSequence.charAt(i));
+            }
+            if (i == 0) { // searching the location of ZY at the first time
+                for (int j = 0; j < 36; j++) {
+                    if (cardLocalList.get(j).equals("z9")) {
+                        ZYLocation = j;
+//                        System.out.println(ZYLocation+" ZYLocation");
+                    }
+                }
+                colTmp = ZYLocation / 6;
+                rowTmp = ZYLocation % 6;
+//                System.out.println("colTmp "+colTmp+" rowTmp "+rowTmp);
+            } else {//put lastMoveSequence into ZYLocation
+                if (moveSequence.charAt(i - 1) <= 'Z' && moveSequence.charAt(i -1) >= 'A') {
+                    ZYLocation = moveSequence.charAt(i-1) - 'A';
+//                    System.out.println("ZYLocation "+ZYLocation+" "+moveSequence.charAt(i-1));
+                } else if (moveSequence.charAt(i - 1) <= '9' && moveSequence.charAt(i - 1) >= '0') {
+                    ZYLocation = moveSequence.charAt(i - 1) - '0';
+                    ZYLocation = ZYLocation + 26;
+//                    System.out.println("ZYLocation "+ZYLocation+" "+moveSequence.charAt(i-1));
+                }
+                colTmp = ZYLocation / 6;
+                rowTmp = ZYLocation % 6;
+//                System.out.println("colTmp "+colTmp+" rowTmp "+rowTmp);
+            }
+            //judge the direction of the target to ZYLocation
+            if (target >= colTmp * 6 && target < (colTmp + 1) * 6) {
+                if (target < ZYLocation) {//upper part of ZY
+                    char targetTmp = cardLocalList.get(target).charAt(0);
+                    for (int k = target; k < ZYLocation; k++) {
+                        if (targetTmp == cardLocalList.get(k).charAt(0)) {
+//                            System.out.println(targetTmp+" target "+ cardLocalList.get(k).substring(0, 2));
+                            if (numPlayers == 4) { //different situations to different numPlayers
+                                if(i % 4 == 0) {
+                                    supporters1 = supporters1 + cardLocalList.get(k);
+                                } else if (i % 4 == 1) {
+                                    supporters2 = supporters2 + cardLocalList.get(k);
+                                } else if (i % 4 == 2) {
+                                    supporters3 = supporters3 + cardLocalList.get(k);
+                                } else if (i % 4 == 3) {
+                                    supporters4 = supporters4 + cardLocalList.get(k);
+                                }
+                            } else if (numPlayers == 3) {
+                                if (i % 3 == 0) {
+                                    supporters1 = supporters1 + cardLocalList.get(k);
+                                } else if (i % 3 == 1) {
+                                    supporters2 = supporters2 + cardLocalList.get(k);
+                                } else if (i % 3 == 2) {
+                                    supporters3 = supporters3 + cardLocalList.get(k);
+                                }
+                            } else if (numPlayers == 2) {
+                                if (i % 2 == 0) {
+                                    supporters1 = supporters1 + cardLocalList.get(k);
+                                } else if (i % 2 == 1) {
+                                    supporters2 = supporters2 + cardLocalList.get(k);
+                                }
+                            }
+                            cardLocalList.set(k, "!!");//fill out the missing elements to represent it is empty
+                        }
+                    }
+                }
+                if (target > ZYLocation) {// below ZY
+                    char targetTmp = cardLocalList.get(target).charAt(0);
+                    for (int k = target; k > ZYLocation; k--) {
+                        if (targetTmp == cardLocalList.get(k).charAt(0)) {
+//                            System.out.println(targetTmp+" target "+ cardLocalList.get(k).substring(0, 2));
+                            if (numPlayers == 4) { //different situations to different numPlayers
+                                if(i % 4 == 0) {
+                                    supporters1 = supporters1 + cardLocalList.get(k);
+                                } else if (i % 4 == 1) {
+                                    supporters2 = supporters2 + cardLocalList.get(k);
+                                } else if (i % 4 == 2) {
+                                    supporters3 = supporters3 + cardLocalList.get(k);
+                                } else if (i % 4 == 3) {
+                                    supporters4 = supporters4 + cardLocalList.get(k);
+                                }
+                            } else if (numPlayers == 3) {
+                                if (i % 3 == 0) {
+                                    supporters1 = supporters1 + cardLocalList.get(k);
+                                } else if (i % 3 == 1) {
+                                    supporters2 = supporters2 + cardLocalList.get(k);
+                                } else if (i % 3 == 2) {
+                                    supporters3 = supporters3 + cardLocalList.get(k);
+                                }
+                            } else if (numPlayers == 2) {
+                                if (i % 2 == 0) {
+                                    supporters1 = supporters1 + cardLocalList.get(k);
+                                } else if (i % 2 == 1) {
+                                    supporters2 = supporters2 + cardLocalList.get(k);
+                                }
+                            }
+                            cardLocalList.set(k, "!!");//fill out the missing elements to represent it is empty
+                        }
+                    }
+                }
+            }
+            if (target % 6 == rowTmp) {
+                if (target > ZYLocation) {//left part of ZY
+                    char targetTmp = cardLocalList.get(target).charAt(0);
+                    for (int k = target; k > ZYLocation; k = k - 6) {
+                        if (targetTmp == cardLocalList.get(k).charAt(0)) {
+//                            System.out.println(targetTmp+" target "+ cardLocalList.get(k).substring(0, 2));
+                            if (numPlayers == 4) { //different situations to different numPlayers
+                                if(i % 4 == 0) {
+                                    supporters1 = supporters1 + cardLocalList.get(k);
+                                } else if (i % 4 == 1) {
+                                    supporters2 = supporters2 + cardLocalList.get(k);
+                                } else if (i % 4 == 2) {
+                                    supporters3 = supporters3 + cardLocalList.get(k);
+                                } else if (i % 4 == 3) {
+                                    supporters4 = supporters4 + cardLocalList.get(k);
+                                }
+                            } else if (numPlayers == 3) {
+                                if (i % 3 == 0) {
+                                    supporters1 = supporters1 + cardLocalList.get(k);
+                                } else if (i % 3 == 1) {
+                                    supporters2 = supporters2 + cardLocalList.get(k);
+                                } else if (i % 3 == 2) {
+                                    supporters3 = supporters3 + cardLocalList.get(k);
+                                }
+                            } else if (numPlayers == 2) {
+                                if (i % 2 == 0) {
+                                    supporters1 = supporters1 + cardLocalList.get(k);
+                                } else if (i % 2 == 1) {
+                                    supporters2 = supporters2 + cardLocalList.get(k);
+                                }
+                            }
+                            cardLocalList.set(k, "!!");//fill out the missing elements to represent it is empty
+                        }
+                    }
+                }
+                if (target < ZYLocation) {//right part of ZY
+                    char targetTmp = cardLocalList.get(target).charAt(0);
+                    for (int k = target; k < ZYLocation; k = k + 6) {
+                        if (targetTmp == cardLocalList.get(k).charAt(0)) {
+//                            System.out.println(targetTmp+" target "+ cardLocalList.get(k).substring(0, 2));
+                            if (numPlayers == 4) { //different situations to different numPlayers
+                                if(i % 4 == 0) {
+                                    supporters1 = supporters1 + cardLocalList.get(k);
+                                } else if (i % 4 == 1) {
+                                    supporters2 = supporters2 + cardLocalList.get(k);
+                                } else if (i % 4 == 2) {
+                                    supporters3 = supporters3 + cardLocalList.get(k);
+                                } else if (i % 4 == 3) {
+                                    supporters4 = supporters4 + cardLocalList.get(k);
+                                }
+                            } else if (numPlayers == 3) {
+                                if (i % 3 == 0) {
+                                    supporters1 = supporters1 + cardLocalList.get(k);
+                                } else if (i % 3 == 1) {
+                                    supporters2 = supporters2 + cardLocalList.get(k);
+                                } else if (i % 3 == 2) {
+                                    supporters3 = supporters3 + cardLocalList.get(k);
+                                }
+                            } else if (numPlayers == 2) {
+                                if (i % 2 == 0) {
+                                    supporters1 = supporters1 + cardLocalList.get(k);
+                                } else if (i % 2 == 1) {
+                                    supporters2 = supporters2 + cardLocalList.get(k);
+                                }
+                            }
+                            cardLocalList.set(k, "!!");
+                        }
+                    }
+                }
+            }
+//            System.out.println("next");
+        }
+        //output the supporters based on the playerId & numPlayers
+        String supporters = "";
+        if (numPlayers == 4) {
+            if (playerId == 0) {
+                supporters =  sortSupporters(supporters1);
+            } else if (playerId == 1) {
+                supporters =  sortSupporters(supporters2);
+            } else if (playerId == 2) {
+                supporters =  sortSupporters(supporters3);
+            } else if (playerId == 3) {
+                supporters =  sortSupporters(supporters4);
+            }
+        } else if (numPlayers == 3) {
+            if (playerId == 0) {
+                supporters = sortSupporters(supporters1);
+            } else if (playerId == 1) {
+                supporters = sortSupporters(supporters2);
+            } else if (playerId == 2) {
+                supporters = sortSupporters(supporters3);
+            }
+        } else if (numPlayers == 2) {
+            if (playerId == 0) {
+                supporters = sortSupporters(supporters1);
+            } else if (playerId == 1) {
+                supporters = sortSupporters(supporters2);
+            }
+        }
+        return supporters;
+    }
+    /**
+     * Sorting the supporters in a right order
+     * @param supporters
+     * @return
+     * @author Jiayang Li
+     */
+    public static String sortSupporters (String supporters) {
+
+        StringBuffer[] orderSupporters = new StringBuffer[1];
+        orderSupporters[0] = new StringBuffer(supporters);
+        //sorting the supporters in a alphabet order
+        for(int i = 0; i < supporters.length() - 2; i = i + 2) {
+            for (int j = i + 2; j < supporters.length(); j = j + 2) {
+                if ((int)orderSupporters[0].charAt(i) > (int)orderSupporters[0].charAt(j)) {
+                    char temp = orderSupporters[0].charAt(i);
+                    orderSupporters[0].setCharAt(i, orderSupporters[0].charAt(j));
+                    orderSupporters[0].setCharAt(j, temp);
+                    //sort the following number
+                    char num = orderSupporters[0].charAt(i+1);
+                    orderSupporters[0].setCharAt(i+1, orderSupporters[0].charAt(j+1));
+                    orderSupporters[0].setCharAt(j+1, num);
+                }
+            }
+        }
+        //sorting the number from the same country.
+        for(int i = 0; i < supporters.length() - 2; i = i + 2) {
+            for (int j = i + 2; j < supporters.length(); j = j + 2) {
+                if (orderSupporters[0].charAt(i) == orderSupporters[0].charAt(j)) {
+                    if ((int)orderSupporters[0].charAt(i + 1) > (int)orderSupporters[0].charAt(j + 1)) {
+                        char temp = orderSupporters[0].charAt(i + 1);
+                        orderSupporters[0].setCharAt(i + 1, orderSupporters[0].charAt(j + 1));
+                        orderSupporters[0].setCharAt(j + 1, temp);
+                    }
+                }
+            }
+        }
+        supporters = orderSupporters[0].toString();
+        return supporters;
+    }
+
+    /**
+     * Get supporters in each pace
+     * @author Jiayang Li
+     * @param setup
+     * @param moveSequence
+     * @param paceNum
+     * @return
+     */
+    public static String getEachPace (String setup, String moveSequence, int paceNum) {
+        String supporters = "";
+        ArrayList<String> cardLocalList;
+        DataUtil util = new DataUtil();
+        cardLocalList = util.placementSortToList(setup);
+        int target = -1;//nextMoveSequence
+        int ZYLocation = -1;
+        int colTmp;
+        int rowTmp;
+        int i = paceNum;
+        if (moveSequence.charAt(i) <= 'Z' && moveSequence.charAt(i) >= 'A') {
+            target = moveSequence.charAt(i) - 'A';
+        } else if (moveSequence.charAt(i) <= '9' && moveSequence.charAt(i) >= '0') {
+            target = moveSequence.charAt(i) - '0';
+            target = target + 26;
+        }
+        if (i == 0) { // searching the location of ZY at the first time
+            for (int j = 0; j < 36; j++) {
+                if (cardLocalList.get(j).equals("z9")) {
+                    ZYLocation = j;
+                }
+            }
+            colTmp = ZYLocation / 6;
+            rowTmp = ZYLocation % 6;
+        } else {//put lastMoveSequence into ZYLocation
+            if (moveSequence.charAt(i - 1) <= 'Z' && moveSequence.charAt(i -1) >= 'A') {
+                ZYLocation = moveSequence.charAt(i-1) - 'A';
+            } else if (moveSequence.charAt(i - 1) <= '9' && moveSequence.charAt(i - 1) >= '0') {
+                ZYLocation = moveSequence.charAt(i - 1) - '0';
+                ZYLocation = ZYLocation + 26;
+            }
+            colTmp = ZYLocation / 6;
+            rowTmp = ZYLocation % 6;
+        }
+        //judge the direction of the target to ZYLocation
+        if (target >= colTmp * 6 && target < (colTmp + 1) * 6) {
+            if (target < ZYLocation) {//upper part of ZY
+                char targetTmp = cardLocalList.get(target).charAt(0);
+                for (int k = target; k < ZYLocation; k++) {
+                    if (targetTmp == cardLocalList.get(k).charAt(0)) {
+                        supporters = supporters + cardLocalList.get(k);
+                    }
+                }
+            }
+            if (target > ZYLocation) {// below ZY
+                char targetTmp = cardLocalList.get(target).charAt(0);
+                for (int k = target; k > ZYLocation; k--) {
+                    if (targetTmp == cardLocalList.get(k).charAt(0)) {
+                        supporters = supporters + cardLocalList.get(k);
+                    }
+                }
+            }
+        }
+        if (target % 6 == rowTmp) {
+            if (target > ZYLocation) {//left part of ZY
+                char targetTmp = cardLocalList.get(target).charAt(0);
+                for (int k = target; k > ZYLocation; k = k - 6) {
+                    if (targetTmp == cardLocalList.get(k).charAt(0)) {
+                        supporters = supporters + cardLocalList.get(k);
+                    }
+                }
+            }
+            if (target < ZYLocation) {//right part of ZY
+                char targetTmp = cardLocalList.get(target).charAt(0);
+                for (int k = target; k < ZYLocation; k = k + 6) {
+                    if (targetTmp == cardLocalList.get(k).charAt(0)) {
+                        supporters = supporters + cardLocalList.get(k);
+                    }
+                }
+            }
+        }
+        return supporters;
     }
 
     /**
@@ -378,9 +719,179 @@ public class WarringStatesGame {
      * If no player controls a particular house, the element for that house will have the value -1.
      */
     public static int[] getFlags(String setup, String moveSequence, int numPlayers) {
+        ArrayList<String> cardLocalList1;
+        DataUtil util = new DataUtil();
+        cardLocalList1 = util.placementSortToList(setup);
+
+        char record[]= {'0','0','0','0','0','0','0','0','0','0','0','0','0','0'};
+
+        String supporterof0="";
+        String supporterof1="";
+        String supporterof2="";
+        String supporterof3="";
+
+        String newSetup = setup;
+        for(int paceNum1=0;paceNum1<moveSequence.length();paceNum1++) {
+            char locationChar = moveSequence.charAt(paceNum1);
+            //i represents the id of current player
+            for (int i = 0; i < numPlayers; i++) {
+                String supporters="";
+                String newSupporters = getEachPace(newSetup,moveSequence,paceNum1);
+
+                if(i==0) {
+                    if(paceNum1%numPlayers==i){
+                    supporters = supporterof0 + newSupporters;}
+                    else{
+                        continue;}
+                }
+
+                if(i==1) {
+                    if(paceNum1%numPlayers==i){
+                        supporters = supporterof1 + newSupporters;}
+                    else{
+                        continue;}
+                }
+
+                if(i==2) {
+                    if(paceNum1%numPlayers==i){
+                        supporters = supporterof2 + newSupporters;}
+                    else{
+                        continue;}
+                   }
+
+                if(i==3) {
+                    if(paceNum1%numPlayers==i){
+                        supporters = supporterof3 + newSupporters;}
+                    else{
+                        continue;}
+                }
+
+                for (int ii = 0; ii <newSupporters.length(); ii+=2) {
+                    char country = newSupporters.charAt(ii);
+
+                    int count = 0;
+                    for (int iii = 0; iii < supporters.length(); iii += 2) {
+                        if (supporters.charAt(iii) == country) {
+                            count++;
+                        }
+                    }
+
+                    char count1 = (char) (count + 48);
+                    int  index = (country-'a')*2;
+
+                    if (count1 >= record[index + 1]) {
+                        record[index] = (char) (i + 48);
+
+                        record[index + 1] = count1;
+                        }
+                    }
+                if(i==0){
+                supporterof0=supporters;
+                }
+                if(i==1){
+                    supporterof1=supporters;
+                   }
+                if(i==2){
+                    supporterof2=supporters;
+                    }
+                if(i==3){
+                    supporterof3=supporters;
+                }
+            }
+
+            //update the current board,achieve a new cardLocalList1
+            int target;
+            if (locationChar <= 'Z' && locationChar >= 'A') {
+                target = locationChar - 'A';
+            } else if (locationChar <= '9' && locationChar >= '0') {
+                target = locationChar - '0';
+                target = target + 26;
+            } else {
+                target = 5000; }
+
+            // find ZhangYi
+            int ZYlocal = -1;
+            for (int i = 0; i < 36; i++) {
+                if (cardLocalList1.get(i).equals("z9")) {
+                    ZYlocal = i;
+                }
+            }
+            if (ZYlocal != -1) {
+                // The number of the target location card.
+                String tarCode = cardLocalList1.get(target);
+                // The relative position of ZhangYi.
+                int coltmp = ZYlocal / 6;
+                // column
+                if (target >= coltmp * 6 && target < (coltmp + 1) * 6) {
+                    // upper part of ZhangYi
+                    if (target < ZYlocal) {
+                        // there is a same country card in the same direction
+                        for (int i = ZYlocal; i >= coltmp * 6; i--) {
+                            if (cardLocalList1.get(i).charAt(0) == tarCode.charAt(0)) {
+                                cardLocalList1.set(i, " ");
+                            }
+                        }
+                        cardLocalList1.set(target, "z9");
+                        cardLocalList1.set(ZYlocal, " ");
+                    }
+                    // below part of ZhangYi
+                    if (target > ZYlocal) {
+                        for (int i = ZYlocal; i < (coltmp + 1) * 6; i++) {
+                            if (cardLocalList1.get(i).charAt(0) == tarCode.charAt(0)) {
+                                cardLocalList1.set(i, " ");
+                            }
+                        }
+                        cardLocalList1.set(target, "z9");
+                        cardLocalList1.set(ZYlocal, " ");
+                    }
+                }
+                int rowtmp = ZYlocal % 6;
+                // row
+                if (target % 6 == rowtmp) {
+                    // left part of ZhangYi
+                    if (target > ZYlocal) {
+                        for (int i = ZYlocal; i <= (ZYlocal + (6 - coltmp - 1) * 6); i += 6) {
+                            if (cardLocalList1.get(i).charAt(0) == tarCode.charAt(0)) {
+                                cardLocalList1.set(i, " ");
+                            }
+                        }
+                        cardLocalList1.set(target, "z9");
+                        cardLocalList1.set(ZYlocal, " ");
+                    }
+                    // right part of ZhangYi
+                    if (target < ZYlocal) {
+                        for (int i = ZYlocal; i >= rowtmp; i -= 6) {
+                            if (cardLocalList1.get(i).charAt(0) == tarCode.charAt(0)) {
+                                cardLocalList1.set(i, " ");
+                            }
+                        }
+                        cardLocalList1.set(target, "z9");
+                        cardLocalList1.set(ZYlocal, " ");
+                    }
+                }
+            }
+
+            newSetup  = GetNewSetup(cardLocalList1);
+
+        }
+
+        int output[] = {-1,-1,-1,-1,-1,-1,-1};
+        int o=0;
+        for(int iiii=0;iiii<output.length;iiii++){
+            if(record[o+1]>48){
+                output[iiii]=record[o]-48;
+            }
+            o+=2;
+            //System.out.println(Arrays.toString(ouput));
+        }
+
+
+
+
         // FIXME Task 8: determine which player controls the flag of each kingdom after a given sequence of moves
-        return null;
+        return output;
     }
+
 
     /**
      * Generate a legal move, given the provided placement string.
