@@ -909,6 +909,9 @@ public class WarringStatesGame {
      */
     public static char generateMove(String placement) {
         // FIXME Task 10: generate a legal move
+        //placement location
+        DataUtil util = new DataUtil();
+        ArrayList<String> cardCodeList = util.placementSortToList(placement);
         return '\0';
     }
 }
