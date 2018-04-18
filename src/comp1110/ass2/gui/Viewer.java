@@ -49,7 +49,7 @@ public class Viewer extends Application {
      */
     void makePlacement(String placement) {
         // FIXME Task 4: implement the simple placement viewer
-        ArrayList<String> cardLocalList = new ArrayList<>();
+        ArrayList<String> cardLocalList;
         DataUtil util = new DataUtil();
         cardLocalList = util.placementSortToList(placement);
 
@@ -97,7 +97,7 @@ public class Viewer extends Application {
     }
 
     @Override
-    public void start(Stage primaryStage) throws Exception {
+    public void start(Stage primaryStage) {
         primaryStage.setTitle("Warring States Viewer");
         Scene scene = new Scene(root, VIEWER_WIDTH, VIEWER_HEIGHT);
 
