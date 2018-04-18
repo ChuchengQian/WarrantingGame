@@ -72,21 +72,18 @@ public class Viewer extends Application {
         textField = new TextField();
         textField.setPrefWidth(300);
         Button button = new Button("Refresh");
-        button.setOnAction(new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent e) {
-                controls.getChildren().clear();
-                makePlacement(textField.getText());
-                controls.getChildren().add(grid);
-                HBox hb = new HBox();
-                hb.getChildren().addAll(label1, textField, button);
-                hb.setSpacing(10);
-                hb.setLayoutX(130);
-                hb.setLayoutY(VIEWER_HEIGHT - 50);
-                controls.getChildren().add(hb);
-                textField.clear();
+        button.setOnAction(e -> {
+            controls.getChildren().clear();
+            makePlacement(textField.getText());
+            controls.getChildren().add(grid);
+            HBox hb = new HBox();
+            hb.getChildren().addAll(label1, textField, button);
+            hb.setSpacing(10);
+            hb.setLayoutX(130);
+            hb.setLayoutY(VIEWER_HEIGHT - 50);
+            controls.getChildren().add(hb);
+            textField.clear();
 
-            }
         });
         grid.setHgap(6);
         grid.setHgap(6);
