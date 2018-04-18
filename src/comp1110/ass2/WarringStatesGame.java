@@ -912,6 +912,14 @@ public class WarringStatesGame {
         //placement location
         DataUtil util = new DataUtil();
         ArrayList<String> cardCodeList = util.placementSortToList(placement);
+        //find Z9
+        int ZY = -1;
+        for(int j=0;j<cardCodeList.size();j++){
+            if(cardCodeList.get(j).equals("z9")){
+                ZY = j;
+                break;
+            }
+        }
         return '\0';
     }
 }
