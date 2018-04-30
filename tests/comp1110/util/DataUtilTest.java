@@ -21,5 +21,11 @@ public class DataUtilTest {
         ArrayList<String> arrayList = new ArrayList<>(Arrays.asList(str.split(",")));
         assertEquals(arrayList, util.placementSortToList("A0Y"));
     }
-    
+
+    @Test
+    public void testTwo(){
+        String str = " , , , ,f0, , , , , , , , , , , , , , , , , , , ,A0, , , , , , , , , , , ";
+        ArrayList<String> arrayList = new ArrayList<>(Arrays.asList(str.split(",")));
+        assertEquals(arrayList, util.placementSortToList("f0EA0Y"));
+    }
 }
