@@ -21,4 +21,5 @@ public class DataUtilTest {
         ArrayList<String> arrayList = new ArrayList<>(Arrays.asList(str.split(",")));
         assertEquals(arrayList, util.placementSortToList("A0Y"));
     }
+    
 }
