@@ -8,10 +8,17 @@ import java.util.Arrays;
 import static org.junit.Assert.*;
 
 public class DataUtilTest {
-    DataUtil util = new DataUtil();
+    private DataUtil util = new DataUtil();
 
     @Test
     public void testNull(){
         assertEquals(null, util.placementSortToList(""));
+    }
+
+    @Test
+    public void testOne(){
+        String str = " , , , , , , , , , , , , , , , , , , , , , , , ,A0, , , , , , , , , , , ";
+        ArrayList<String> arrayList = new ArrayList<>(Arrays.asList(str.split(",")));
+        assertEquals(arrayList, util.placementSortToList("A0Y"));
     }
 }
