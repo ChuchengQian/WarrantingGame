@@ -218,7 +218,14 @@ public class WarringStatesGame {
         return false;
     }
 
-
+    /**
+     * Count the number of valid moves from the move sequence
+     * @param setup        A placement string representing the board setup
+     * @param moveSequence a string of location characters representing moves
+     * @param checkTheValidMove a int variable which can be 0 or 1 ,used in counting
+     * @return int Number of valid moves from the move sequence
+     * @author Chucheng Qian
+     */
     public static int CountMoveSequenceValid(String setup, String moveSequence,int checkTheValidMove) {
         ArrayList<String> cardLocalList;
         DataUtil util = new DataUtil();
@@ -324,20 +331,12 @@ public class WarringStatesGame {
 
     }
 
-    public static void main(String[] args) {
-        System.out.println(isMoveSequenceValid("g0Aa0Bf1Ca1Dc5Ee1Fa4Ge3He2Ia2Jc2Kd0Lf0Mb4Nd4Oa6Pc3Qe0Ra5Sc1Td1Uc4Vb5Wb0Xa7Yf2Zb10a31z92b33b64d35g16b27d28c09", "G4STBZ1D7PNO6IUW2QE859X3Y0CAFR"));
-        int i = (int)(Math.random()*(10-0+1));
-        System.out.println(i);
-        String pp ="hhhhgggg";
-        System.out.println(pp.substring(3));
-        //CountMoveSequenceValid("b5Ae0Bc3Ca7Da1Ec1Fg1Gg0Ha0If0Jb2Kb1La3Ma2Nb0Oc5Pe2Qd0Rd2Sd4Td3Ua4Va5Wb6Xb3Yb4Zz90f11a62e33c04f25c46c27d18e19","YSG48QEABHICOP12WKJL95NMRXTVD76",0);
-        //String str3="b5,e0,c3,a7,a1,c1,g1,g0,a0,f0,b2,b1,a3,a2,b0,c5,e2,d0,d2,d4,d3,a4,a5,b6,z9, , ,f1,a6,e3,c0,f2,c4,c2,d1,e1";
-        //ArrayList<String> test =  new ArrayList(Arrays.asList(str3.split(",")));
-        //System.out.println(GetNewSetup(test));
-
-    }
-
-    //update the current board
+    /**
+     * update the current board
+     * @param presentboard
+     * @return Setup A placement string representing the new board setup
+     * @author Chucheng Qian
+     */
     public static String GetNewSetup(ArrayList<String> presentboard){
         String NewSetup = new String();
         if(presentboard==null){return "";}
