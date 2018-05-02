@@ -9,6 +9,11 @@ import static comp1110.ass2.TestUtility.*;
 
 import static org.junit.Assert.*;
 
+/**
+ * Test objective:
+ * <p>
+ * Determine whether a set up in its array list form  can  be onverted to the string list
+ */
 public class GetNewSetupTest {
     @Test
     public void TestEmptyandNull(){

@@ -6,6 +6,13 @@ import org.junit.Test;
 import static org.junit.Assert.*;
 import static comp1110.ass2.TestUtility.*;
 
+/**
+ * Test objective:
+ * <p>
+ * Determine whether a move sequence is valid.
+ * To be valid, the nubmber in the move sequence must be equal to the number of the all the moves in the movesequence.
+ */
+
 public class CountMoveSequenceValidTest {
     @Test
     public void ValidMovesTest() {
