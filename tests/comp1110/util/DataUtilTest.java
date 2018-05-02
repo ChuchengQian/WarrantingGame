@@ -7,6 +7,11 @@ import java.util.Arrays;
 
 import static org.junit.Assert.*;
 
+/**
+ * Test placementSortToList:
+ * @author Chunxiang Song
+ */
+
 public class DataUtilTest {
 
 
@@ -14,7 +19,7 @@ public class DataUtilTest {
 
     @Test
     public void testNull(){
-        assertEquals(null, util.placementSortToList(""));
+        assertNull(util.placementSortToList(""));
     }
 
     @Test
