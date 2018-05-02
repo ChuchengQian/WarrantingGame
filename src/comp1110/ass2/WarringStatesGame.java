@@ -23,6 +23,7 @@ public class WarringStatesGame {
      * @author Jiayang Li & chunxiang Song
      */
     static boolean isCardPlacementWellFormed(String cardPlacement) {
+        System.out.println("!!!"+cardPlacement);
         // FIXME Task 2: determine whether a card placement is well-formed
         char character1 = cardPlacement.charAt(0);
         char character2 = cardPlacement.charAt(1);
@@ -60,9 +61,6 @@ public class WarringStatesGame {
         } else if (placement.length() % 3 != 0 ) { //testIncomplete
             return false;
         } else { //testGood
-            System.out.println(placement+" test");
-            System.out.println(placement.length()/3+" length");
-
             for (int i = 0; i < placement.length(); i = i + 3) {
                 if (isCardPlacementWellFormed(placement.substring(i, i+3))) {
                     count++;
