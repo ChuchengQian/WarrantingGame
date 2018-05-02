@@ -20,6 +20,7 @@ public class WarringStatesGame {
      *
      * @param cardPlacement A string describing a card placement
      * @return true if the card placement is well-formed
+     * @author Jiayang Li & chunxiang Song
      */
     static boolean isCardPlacementWellFormed(String cardPlacement) {
         // FIXME Task 2: determine whether a card placement is well-formed
@@ -48,6 +49,7 @@ public class WarringStatesGame {
      *
      * @param placement A string describing a placement of one or more cards
      * @return true if the placement is well-formed
+     * @author Jiayang Li
      */
     static boolean isPlacementWellFormed(String placement) {
         // FIXME Task 3: determine whether a placement is well-formed
@@ -368,6 +370,9 @@ public class WarringStatesGame {
      * @param numPlayers   the number of players in the game, must be in the range [2..4]
      * @param playerId     the player number for which to get the list of supporters, [0..(numPlayers-1)]
      * @return the list of supporters for the given player
+     * @author Jiayang Li
+     * Finding out all the supporters at a time based on the moveSequence, and save them separately into different String
+     *  on the basis of the number of the players. Then return the supporters based on the playerId.
      */
     public static String getSupporters(String setup, String moveSequence, int numPlayers, int playerId) {
         // FIXME Task 7: get the list of supporters for a given player after a sequence of moves
@@ -631,7 +636,7 @@ public class WarringStatesGame {
     }
 
     /**
-     * Get supporters in each pace
+     * Get supporters in each pace for Task 8
      * @author Jiayang Li
      * @param setup
      * @param moveSequence
