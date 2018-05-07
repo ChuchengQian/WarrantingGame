@@ -5,6 +5,7 @@ import comp1110.util.DataUtil;
 import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Random;
 
 /**
  * This class provides the text interface for the Warring States game
@@ -921,6 +922,7 @@ public class WarringStatesGame {
      * If there is no legal move available, return the null character '\0'.
      * @param placement the current placement string
      * @return a location character representing Zhang Yi's destination for the move
+     * @author Chunxiang Song
      */
     public static char generateMove(String placement) {
         // FIXME Task 10: generate a legal move
@@ -932,6 +934,40 @@ public class WarringStatesGame {
         for(int j=0;j<cardCodeList.size();j++){
             if(cardCodeList.get(j).equals("z9")){
                 ZY = j;
+                break;
+            }
+        }
+        int[] canMove = new int[10];
+        int coltmp = ZY / 6;
+        int rowtmp = ZY % 6;
+        int t = 0;
+        for (int i = coltmp * 6; i < (coltmp + 1) * 6; i++){
+            if (i != ZY){
+                canMove[t++] = i;
+            }
+        }
+        for (int i = rowtmp; i<= rowtmp + 30; i += 6){
+            if (i != ZY) {
+                canMove[t++] = i;
+            }
+        }
+        Random rd = new Random();
+        int randomTar = rd.nextInt(10);
+        long startTime = System.currentTimeMillis();
+        while (true){
+            char tarCode;
+            if (canMove[randomTar] >= 26){
+                tarCode = (char) ((canMove[randomTar] - 26) + '0');
+            }else {
+                tarCode = (char) (canMove[randomTar] + 'A');
+            }
+            long endTime = System.currentTimeMillis();
+            if (isMoveLegal(placement, tarCode)){
+                return tarCode;
+            }else{
+                randomTar = rd.nextInt(10);
+            }
+            if ((endTime - startTime) >= 100){
                 break;
             }
         }
