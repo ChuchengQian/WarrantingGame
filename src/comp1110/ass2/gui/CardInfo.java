@@ -7,11 +7,11 @@ public class CardInfo {
     private String color;
     private String code;
 
-    public CardInfo(String countryName, String peopleName, String nameInEnglish, String color) {
+    public CardInfo(String countryName, String peopleName, String nameInEnglish, String color, String code) {
         this.countryName = countryName;
         this.peopleName = peopleName;
         this.nameInEnglish = nameInEnglish;
-        this.color = nameInEnglish;
+        this.color = color;
         this.code = code;
     }
 
