@@ -38,6 +38,12 @@ public class Game extends Application {
     private static final int BOARD_HEIGHT = 700;
 
 
+
+    /**
+     * generate  a random setup for the game
+     * @return a string of placement
+     * @author taken from the generateRandomSetup() from TestUtility.java，with little bit of change by Chucheng Qian
+     */
     public static String generateRandomSetup() {
         List<String> cards = new ArrayList<>();
         for (char k = 'a'; k < 'h'; k++) {
@@ -56,33 +62,28 @@ public class Game extends Application {
         return sb.toString();
     }
 
-    String stt = generateRandomSetup();
-
-
-
-
-
-
-
-
-
-
-
-
-    private static final String URI_BASE = "assets/";
-
-    private static ArrayList<CardInfo> cardInit = new ArrayList<>();
-
+    /* node groups */
     private final Group root = new Group();
     private final Group controls = new Group();
+    StackPane stackPane= new StackPane();
+
+
     GridPane grid = new GridPane();
-
     String moves="";
+    String randomSetup = generateRandomSetup();
 
+    TextField numberOfplayers;
+    String theNumberOfplayers;
+
+    /**
+     * find the winners when the game is finished
+     * @return a string which each element represents the id of winner,the length of string may be one or more.
+     * @author Chucheng Qian
+     */
     public String Winnners(){
-
-        int num = Integer.parseInt(tt);
-        int allFlags[]=WarringStatesGame.getFlags(stt,moves,num);
+        //num is the number of players involved
+        int num = Integer.parseInt(theNumberOfplayers);
+        int allFlags[]=WarringStatesGame.getFlags(randomSetup,moves,num);
         ArrayList<Integer> store = new ArrayList<>();
         String winners="";
 
@@ -96,6 +97,7 @@ public class Game extends Application {
                     store.set(ii,x);
         } }
         }
+        //the number of flags owned by a winner
         int maxFlag =Collections.max(store);
         for(int i=0;i<store.size();i++){
             if(store.get(i)==maxFlag){
@@ -105,9 +107,17 @@ public class Game extends Application {
         return winners;
     }
 
-
-    void makePlacement(String placement,int id) {
-        int num = Integer.parseInt(tt);
+    /**
+     * show the current board
+     * allow user to click on the button which represents the cards
+     * when the game is finished,show the winner
+     * when the move is invalid,notice the user
+     * @param placement  A placement string representing the board setup
+     * @param id the id of current player
+     * @author Chucheng Qian with some structures from Task4 by Chunxiang Song
+     */
+    private void putPlacement(String placement,int id) {
+        int num = Integer.parseInt(theNumberOfplayers);
         ArrayList<String> cardLocalList;
         DataUtil util = new DataUtil();
         cardLocalList = util.placementSortToList(placement);
@@ -120,26 +130,23 @@ public class Game extends Application {
             winMessage.setLayoutY(400);
             controls.getChildren().add(winMessage);}
         else{
-
-
-
-        grid.getChildren().clear();
-        int index = 0;
-        for (int i = 5; i >= 0; i--){
-            for (int j = 0; j < 6; j++){
-                int idd = id;
-                Button text = new Button(cardLocalList.get(index));
-                int indexx = index;
-                char location =indexx < 26 ? (char)(indexx + 'A') : (char)(indexx - 26 + '0');
-                text.setOnMousePressed(event -> {
-                    if(WarringStatesGame.isMoveLegal(placement,location)){
-                        moves =moves+location;
-                        controls.getChildren().clear();
-                        makePlacement(placement,id);
-                        SetupGrid();
-
-
-
+            //clear the previous board
+            grid.getChildren().clear();
+            int index = 0;
+            for (int i = 5; i >= 0; i--){
+                for (int j = 0; j < 6; j++){
+                    int idd = id;//as varrable should be final in the lambda expression
+                    //one button is one card
+                    Button card = new Button(cardLocalList.get(index));
+                    int indexx = index;//as varrable should be final in the lambda expression
+                    char location =indexx < 26 ? (char)(indexx + 'A') : (char)(indexx - 26 + '0');
+                    //event handler ,inited when user click the card button
+                    card.setOnMousePressed(event -> {
+                        if(WarringStatesGame.isMoveLegal(placement,location)){
+                            moves =moves+location;
+                            controls.getChildren().clear();
+                            putPlacement(placement,id);
+                            SetupGrid();
                             if(num==2){
                                 NumberofPlayerEqualto2(cardLocalList,indexx,idd);
                             }
@@ -149,39 +156,36 @@ public class Game extends Application {
                             if(num==4){
                                 NumberofPlayerEqualto4(cardLocalList,indexx,idd);
                             }
-
-
-                    }else {
-                        InvalidMoveNotice();
-                    }
-
-
-                });
-                grid.add(text, i, j);
-                index ++;
+                        }else { InvalidMoveNotice(); }
+                    });
+                    grid.add(card, i, j);
+                    index ++;
+                }
             }
-        }
         }
 
     }
 
-    TextField numbr;
-    String tt;
+
 
     /**
+     * allow user to type in the number of players
+     * allow user to click on the button "Start" to start the game
      * Ensure that the game can be played by 2-4 human players.
+     * when the number of players are invalid,notice the user
+     * @author Chucheng Qian
      */
-    void Number_of_player() {
+    private void Number_of_player() {
         Label label0 = new Label("Number of players:");
-        numbr = new TextField();
-        numbr.setPrefWidth(50);
+        numberOfplayers = new TextField();
+        numberOfplayers.setPrefWidth(50);
         Button button1 = new Button("Start");
         button1.setOnAction(event -> {
-            tt = numbr.getText();
-            int num = Integer.parseInt(tt);
+            theNumberOfplayers = numberOfplayers.getText();
+            int num = Integer.parseInt(theNumberOfplayers);
             if(num>=2 && num <=4){
                 controls.getChildren().clear();
-                makePlacement(stt,0);
+                putPlacement(randomSetup,0);
                 SetupGrid();
             }else{
                 Text notice = new Text("Invalid players ,try again!");
@@ -195,14 +199,19 @@ public class Game extends Application {
 
         });
         HBox hb1 = new HBox();
-        hb1.getChildren().addAll(label0, numbr, button1);
+        hb1.getChildren().addAll(label0, numberOfplayers, button1);
         hb1.setSpacing(10);
         hb1.setLayoutX(300);
         hb1.setLayoutY(500);
         controls.getChildren().add(hb1);
     }
 
-    void InvalidMoveNotice(){
+
+    /**
+     * add the notice message to the root when the move is invalid
+     * @author Chucheng Qian
+     */
+    private void InvalidMoveNotice(){
         Text notice = new Text("Invalid move ,try again!");
         notice.setFont(Font.font("Tahoma", FontWeight.BOLD,50));
         notice.setFill(Color.RED);
@@ -214,7 +223,10 @@ public class Game extends Application {
 
 
 
-
+    /**
+     * set up the card grid
+     * @author Chucheng Qian
+     */
     private void SetupGrid() {
         grid.setHgap(2);
         grid.setVgap(2);
@@ -228,11 +240,18 @@ public class Game extends Application {
 
 
 
-
-    ArrayList<Character> GetFlagofSepecificPlayer(int id){
+    /**
+     * get all the flags owned by one sepecific player
+     * @param id the id of current player
+     * @author Chucheng Qian
+     *
+     * *used when intended to show the flags of each player on the scene
+     *
+     */
+    private ArrayList<Character> GetFlagofSepecificPlayer(int id){
         ArrayList<Character> flags = new ArrayList<>();
-        int num = Integer.parseInt(tt);
-        int allFlags[]=WarringStatesGame.getFlags(stt,moves,num);
+        int num = Integer.parseInt(theNumberOfplayers);
+        int allFlags[]=WarringStatesGame.getFlags(randomSetup,moves,num);
         for(int i = 0;i < allFlags.length;i++){
             if(allFlags[i]==id){
                 flags.add((char)(i+'a'));
@@ -245,8 +264,15 @@ public class Game extends Application {
 
 
 
-
-    String updateBoard(ArrayList<String> cardLocalList1,int target){
+    /**
+     * update the current board accoroding to the target location
+     * @param cardLocalList1  an Arraylist of string representing the card placement
+     * @param target the index of target location
+     * @return a string of new card placement
+     *
+     * @author structures from Task5 by Chunxiang Song,some changes made by Chucheng Qian
+     */
+    private String updateBoard(ArrayList<String> cardLocalList1,int target){
         int ZYlocal = -1;
         for (int i = 0; i < 36; i++) {
             if (cardLocalList1.get(i).equals("z9")) {
@@ -311,67 +337,105 @@ public class Game extends Application {
         return newSetup;
     }
 
-
-    void NumberofPlayerEqualto2(ArrayList<String> pb,int index,int id){
+    /**
+     * update the scene accoroding to the player id when the number of players are 2
+     *
+     * show the flags owned bu each player
+     *
+     * * It is a draft ,upgrade required
+     *
+     * @param pb  an Arraylist of string representing the card placement
+     * @param id the id of current player
+     * @author Chucheng Qian
+     */
+    private void NumberofPlayerEqualto2(ArrayList<String> pb,int index,int id){
         if(id==0){
             //showFlags(GetFlagofSepecificPlayer(0),700.0,600.0);
 
-            makePlacement(updateBoard(pb,index),1);
+            putPlacement(updateBoard(pb,index),1);
 
         }else{
             //showFlags(GetFlagofSepecificPlayer(0),700.0,600.0);
-            makePlacement(updateBoard(pb,index),0);
+            putPlacement(updateBoard(pb,index),0);
         }
 
 
     }
 
 
-
-    void NumberofPlayerEqualto3(ArrayList<String> pb,int index,int id){
+    /**
+     * update the scene seperately accoroding to the player id when the number of players are 3
+     *
+     * show the flags owned bu each player
+     *
+     * * It is a draft ,upgrade required
+     *
+     * @param pb  an Arraylist of string representing the card placement
+     * @param id the id of current player
+     * @author Chucheng Qian
+     */
+    private void NumberofPlayerEqualto3(ArrayList<String> pb,int index,int id){
         if(id==0){
             //showFlags(GetFlagofSepecificPlayer(0),700.0,600.0);
 
-            makePlacement(updateBoard(pb,index),1);
+            putPlacement(updateBoard(pb,index),1);
 
         }
         if(id==1){
             //showFlags(GetFlagofSepecificPlayer(1),700.0,600.0);
 
-            makePlacement(updateBoard(pb,index),2);
+            putPlacement(updateBoard(pb,index),2);
         }
         if(id==2){
             //showFlags(GetFlagofSepecificPlayer(2),700.0,600.0);
-            makePlacement(updateBoard(pb,index),0);
+            putPlacement(updateBoard(pb,index),0);
         }
     }
 
-
+    /**
+     * update the scene seperately accoroding to the player id when the number of players are 4
+     *
+     * show the flags owned bu each player
+     *
+     * It is a draft ,upgrade required
+     *
+     * @param pb  an Arraylist of string representing the card placement
+     * @param id the id of current player
+     * @author Chucheng Qian
+     */
     void NumberofPlayerEqualto4(ArrayList<String> pb,int index,int id){
         if(id==0){
             //showFlags(GetFlagofSepecificPlayer(0),700.0,600.0);
-            makePlacement(updateBoard(pb,index),1);
+            putPlacement(updateBoard(pb,index),1);
 
         }
         if(id==1){
             //showFlags(GetFlagofSepecificPlayer(1),700.0,600.0);
 
-            makePlacement(updateBoard(pb,index),2);
+            putPlacement(updateBoard(pb,index),2);
         }
         if(id==2){
             //showFlags(GetFlagofSepecificPlayer(2),700.0,600.0);
 
-            makePlacement(updateBoard(pb,index),3);
+            putPlacement(updateBoard(pb,index),3);
         }
         if(id==3){
             //showFlags(GetFlagofSepecificPlayer(3),700.0,600.0);
-            makePlacement(updateBoard(pb,index),0);
+            putPlacement(updateBoard(pb,index),0);
         }
     }
-    StackPane stackPane= new StackPane();
 
-    void showFlags(ArrayList<Character> list,double x,double y){
-        System.out.println(list);
+    /**
+     * show flags owned one player on the scene
+     *
+     * It is a draft ,upgrade required
+     *
+     * @param list  an Arraylist of string representing all the flags owned by one user
+     * @param x the x-coodinate
+     * @param y the y-coodinate
+     * @author Chucheng Qian
+     */
+    private void showFlags(ArrayList<Character> list,double x,double y){
         for(int i = 0; i<list.size();i++){
             Polygon t = new Polygon();
             t.getPoints().addAll(new Double[]{
@@ -390,6 +454,13 @@ public class Game extends Application {
         }
     }
 
+    /**
+     * search the upper,lower,right and left side of Zhangyi to make sure the game is finished
+     * (no valid moves can be done)
+     * @param presentBoard  an Arraylist of string representing the card placement
+     * @return a boolean represents whether the game is finished
+     * @author Chucheng Qian
+     */
     Boolean WhetherFinished(ArrayList<String> presentBoard){
         int ZYlocal = -1;
         for (int i = 0; i < 36; i++) {
@@ -436,19 +507,13 @@ public class Game extends Application {
 
     @Override
     public void start(Stage primaryStage) throws Exception {
-        primaryStage.setTitle("Warring States Viewer");
+        primaryStage.setTitle("Warring States Game");
         Scene scene = new Scene(root, BOARD_WIDTH, BOARD_HEIGHT);
 
-
-
-
+        //add noeds to the root
         root.getChildren().add(controls);
-
         Number_of_player();
-
-
-
-
+        //show the scene
         primaryStage.setScene(scene);
         primaryStage.show();
 

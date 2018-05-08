@@ -208,6 +208,7 @@ public class WarringStatesGame {
      * @param setup        A placement string representing the board setup
      * @param moveSequence a string of location characters representing moves
      * @return True if the placement sequence is valid
+     * @author Chucheng Qian
      */
     static boolean isMoveSequenceValid(String setup, String moveSequence) {
         //check whether all moves from the 'moveSequence' string are valid
@@ -226,7 +227,7 @@ public class WarringStatesGame {
      * @param moveSequence a string of location characters representing moves
      * @param checkTheValidMove a int variable which can be 0 or 1 ,used in counting
      * @return int Number of valid moves from the move sequence
-     * @author Chucheng Qian
+     * @author Chucheng Qian with some structures from Task5 by Chunxiang Song
      */
     public static int CountMoveSequenceValid(String setup, String moveSequence,int checkTheValidMove) {
         ArrayList<String> cardLocalList;
@@ -734,11 +735,13 @@ public class WarringStatesGame {
      * - element 5 contains the player ID of the player who controls the flag of Wei
      * - element 6 contains the player ID of the player who controls the flag of Yan
      * If no player controls a particular house, the element for that house will have the value -1.
+     * @author Chucheng Qian with some structures from Task5 by Chunxiang Song
      */
     public static int[] getFlags(String setup, String moveSequence, int numPlayers) {
         ArrayList<String> cardLocalList1;
         DataUtil util = new DataUtil();
         cardLocalList1 = util.placementSortToList(setup);
+
 
         char record[]= {'0','0','0','0','0','0','0','0','0','0','0','0','0','0'};
 
