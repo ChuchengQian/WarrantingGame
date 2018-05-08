@@ -634,6 +634,7 @@ public class WarringStatesGame {
         return supporters;
     }
 
+
     /**
      * Get supporters in each pace for Task 8
      * @author Jiayang Li
@@ -897,7 +898,6 @@ public class WarringStatesGame {
                 output[iiii]=record[o]-48;
             }
             o+=2;
-            //System.out.println(Arrays.toString(ouput));
         }
 
 
