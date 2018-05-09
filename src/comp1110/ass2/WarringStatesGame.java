@@ -940,6 +940,7 @@ public class WarringStatesGame {
                 break;
             }
         }
+        // Get all positions in the same row and column
         int[] canMove = new int[10];
         int coltmp = ZY / 6;
         int rowtmp = ZY % 6;
@@ -954,6 +955,7 @@ public class WarringStatesGame {
                 canMove[t++] = i;
             }
         }
+        //Randomly acquire a number and convert the number to a position code
         Random rd = new Random();
         int randomTar = rd.nextInt(10);
         long startTime = System.currentTimeMillis();
@@ -966,6 +968,7 @@ public class WarringStatesGame {
             }
             long endTime = System.currentTimeMillis();
             if (isMoveLegal(placement, tarCode)){
+                //Random location is legal
                 return tarCode;
             }else{
                 randomTar = rd.nextInt(10);
