@@ -15,6 +15,7 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
+import javafx.scene.paint.ImagePattern;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.stage.Stage;
@@ -74,8 +75,12 @@ public class Game extends Application {
     String moves="";
     String randomSetup = generateRandomSetup();
 
-    TextField numberOfplayers;
+    TextField numberOfplayersforH;
+    TextField numberOfplayersforC;
     String theNumberOfplayers;
+
+    Image wel=new Image("comp1110/ass2/gui/pics/Welcome.JPG");
+    Image start=new Image("comp1110/ass2/gui/pics/Starting.JPG");
 
     Image aa0=new Image("comp1110/ass2/gui/pics/a0Duke Xiao.jpg");
     ImageView a0 = new ImageView(aa0);
@@ -476,20 +481,23 @@ public class Game extends Application {
 
 
 
-    /**
+    /**used when play with human
      * allow user to type in the number of players
      * allow user to click on the button "Start" to start the game
      * Ensure that the game can be played by 2-4 human players.
      * when the number of players are invalid,notice the user
      * @author Chucheng Qian
      */
-    private void Number_of_player() {
-        Label label0 = new Label("Number of players:");
-        numberOfplayers = new TextField();
-        numberOfplayers.setPrefWidth(50);
+    private void NumberOfPlayerWhenWithHuman() {
+        Label others = new Label("Play with Others:");
+        others.setFont(Font.font("Tahoma", FontWeight.BOLD,20));
+        Label label0 = new Label("Number of Players:");
+        label0.setFont(Font.font("Tahoma", FontWeight.BOLD,20));
+        numberOfplayersforH = new TextField();
+        numberOfplayersforH.setPrefWidth(50);
         Button button1 = new Button("Start");
         button1.setOnAction(event -> {
-            theNumberOfplayers = numberOfplayers.getText();
+            theNumberOfplayers = numberOfplayersforH.getText();
             int num = Integer.parseInt(theNumberOfplayers);
             if(num>=2 && num <=4){
                 controls.getChildren().clear();
@@ -507,10 +515,51 @@ public class Game extends Application {
 
         });
         HBox hb1 = new HBox();
-        hb1.getChildren().addAll(label0, numberOfplayers, button1);
+        hb1.getChildren().addAll(others,label0, numberOfplayersforH, button1);
         hb1.setSpacing(10);
-        hb1.setLayoutX(300);
-        hb1.setLayoutY(500);
+        hb1.setLayoutX(200);
+        hb1.setLayoutY(350);
+        controls.getChildren().add(hb1);
+    }
+    /**
+     * used when play with Computer
+     * allow user to type in the number of players
+     * allow user to click on the button "Start" to start the game
+     * Ensure that the game can be played by 2-4 human players.
+     * when the number of players are invalid,notice the user
+     * @author Chucheng Qian
+     */
+    private void NumberOfPlayerWhenWithComputer() {
+        Label computer = new Label("Play with Computer:");
+        computer.setFont(Font.font("Tahoma", FontWeight.BOLD,20));
+        Label label0 = new Label("Number of Players:");
+        label0.setFont(Font.font("Tahoma", FontWeight.BOLD,20));
+        numberOfplayersforC = new TextField();
+        numberOfplayersforC.setPrefWidth(50);
+        Button button1 = new Button("Start");
+        button1.setOnAction(event -> {
+            theNumberOfplayers = numberOfplayersforC.getText();
+            int num = Integer.parseInt(theNumberOfplayers);
+            if(num>=2 && num <=4){
+                controls.getChildren().clear();
+                putPlacement(randomSetup,0);
+                SetupGrid();
+            }else{
+                Text notice = new Text("Invalid players ,try again!");
+                notice.setFont(Font.font("Tahoma", FontWeight.BOLD,50));
+                notice.setFill(Color.RED);
+                notice.setLayoutX(130);
+                notice.setLayoutY(400);
+                controls.getChildren().add(notice);
+
+            }
+
+        });
+        HBox hb1 = new HBox();
+        hb1.getChildren().addAll(computer,label0, numberOfplayersforC, button1);
+        hb1.setSpacing(10);
+        hb1.setLayoutX(200);
+        hb1.setLayoutY(450);
         controls.getChildren().add(hb1);
     }
 
@@ -542,6 +591,37 @@ public class Game extends Application {
         controls.getChildren().add(grid);
     }
 
+
+    private void WelcomeView() {
+        Polygon rectangle=new Polygon();
+        rectangle.getPoints().addAll(
+                0.0,0.0,
+                0.0,700.0,
+                933.0,700.0,
+                933.0,0.0
+        );
+        rectangle.setFill(new ImagePattern(wel));
+        controls.getChildren().add(rectangle);
+        rectangle.setOnMouseClicked(event -> {
+            controls.getChildren().clear();
+            StartingView();
+        });
+
+    }
+
+    private void StartingView() {
+        Polygon rectangle=new Polygon();
+        rectangle.getPoints().addAll(
+                0.0,0.0,
+                0.0,700.0,
+                933.0,700.0,
+                933.0,0.0
+        );
+        rectangle.setFill(new ImagePattern(start));
+        controls.getChildren().add(rectangle);
+        NumberOfPlayerWhenWithHuman();
+        NumberOfPlayerWhenWithComputer();
+    }
 
 
 
@@ -818,7 +898,7 @@ public class Game extends Application {
 
         //add noeds to the root
         root.getChildren().add(controls);
-        Number_of_player();
+        WelcomeView();
         //show the scene
         primaryStage.setScene(scene);
         primaryStage.show();
