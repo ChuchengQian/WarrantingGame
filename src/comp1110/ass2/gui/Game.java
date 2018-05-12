@@ -1,6 +1,7 @@
 package comp1110.ass2.gui;
 
 import comp1110.ass2.WarringStatesGame;
+import comp1110.ass2.gui.CardImage;
 import comp1110.util.DataUtil;
 import javafx.application.Application;
 import javafx.geometry.Insets;
@@ -79,81 +80,14 @@ public class Game extends Application {
     TextField numberOfplayersforC;
     String theNumberOfplayers;
 
-    Image wel=new Image("comp1110/ass2/gui/pics/Welcome.JPG");
-    Image start=new Image("comp1110/ass2/gui/pics/Starting.JPG");
+    /* label used to specify player */
+    Label player0= new Label("Player0");
+    Label player1= new Label("Player1");
+    Label player2= new Label("Player2");
+    Label player3= new Label("Player3");
 
-    Image aa0=new Image("comp1110/ass2/gui/pics/a0Duke Xiao.jpg");
-    ImageView a0 = new ImageView(aa0);
-    Image aa1=new Image("comp1110/ass2/gui/pics/a1Shang Yang.jpg");
-    ImageView a1 = new ImageView(aa1);
-    Image aa2=new Image("comp1110/ass2/gui/pics/a2King Hui.jpg");
-    ImageView a2 = new ImageView(aa2);
-    Image aa3=new Image("comp1110/ass2/gui/pics/a3King Zhaoxiang.jpg");
-    ImageView a3 = new ImageView(aa3);
-    Image aa4=new Image("comp1110/ass2/gui/pics/a4Lady Mi.jpg");
-    ImageView a4 = new ImageView(aa4);
-    Image aa5=new Image("comp1110/ass2/gui/pics/a5Bai Qi.jpg");
-    ImageView a5 = new ImageView(aa5);
-    Image aa6=new Image("comp1110/ass2/gui/pics/a6Lady Zhao.jpg");
-    ImageView a6 = new ImageView(aa6);
-    Image aa7=new Image("comp1110/ass2/gui/pics/a7King Zheng.jpg");
-    ImageView a7 = new ImageView(aa7);
-    Image bb0=new Image("comp1110/ass2/gui/pics/b0King Xuan.jpg");
-    ImageView b0 = new ImageView(bb0);
-    Image bb1=new Image("comp1110/ass2/gui/pics/b1Zhong Wuyan.jpg");
-    ImageView b1 = new ImageView(bb1);
-    Image bb2=new Image("comp1110/ass2/gui/pics/b2Lord Mengchang.jpg");
-    ImageView b2 = new ImageView(bb2);
-    Image bb3=new Image("comp1110/ass2/gui/pics/b3King Xiang.jpg");
-    ImageView b3 = new ImageView(bb3);
-    Image bb4=new Image("comp1110/ass2/gui/pics/b4Queen Junwang.jpg");
-    ImageView b4 = new ImageView(bb4);
-    Image bb5=new Image("comp1110/ass2/gui/pics/b5King Jian.jpg");
-    ImageView b5 = new ImageView(bb5);
-    Image bb6=new Image("comp1110/ass2/gui/pics/b6Sun Bin.jpg");
-    ImageView b6 = new ImageView(bb6);
-    Image cc0=new Image("comp1110/ass2/gui/pics/c0Wu Qi.jpg");
-    ImageView c0 = new ImageView(cc0);
-    Image cc1=new Image("comp1110/ass2/gui/pics/c1King kaolie.jpg");
-    ImageView c1 = new ImageView(cc1);
-    Image cc2=new Image("comp1110/ass2/gui/pics/c2King You.jpg");
-    ImageView c2 = new ImageView(cc2);
-    Image cc3=new Image("comp1110/ass2/gui/pics/c3King Ai.jpg");
-    ImageView c3 = new ImageView(cc3);
-    Image cc4=new Image("comp1110/ass2/gui/pics/c4Fuchu.jpg");
-    ImageView c4 = new ImageView(cc4);
-    Image cc5=new Image("comp1110/ass2/gui/pics/c5Lord Chunshen.jpg");
-    ImageView c5 = new ImageView(cc5);
-    Image dd0=new Image("comp1110/ass2/gui/pics/d0King Wuling.jpg");
-    ImageView d0 = new ImageView(dd0);
-    Image dd1=new Image("comp1110/ass2/gui/pics/d1Lord Pingyuan.jpg");
-    ImageView d1 = new ImageView(dd1);
-    Image dd2=new Image("comp1110/ass2/gui/pics/d2King Xiaocheng.jpg");
-    ImageView d2 = new ImageView(dd2);
-    Image dd3=new Image("comp1110/ass2/gui/pics/d3Mu Li.jpg");
-    ImageView d3 = new ImageView(dd3);
-    Image dd4=new Image("comp1110/ass2/gui/pics/d4Lian Po.jpg");
-    ImageView d4 = new ImageView(dd4);
-    Image ee0=new Image("comp1110/ass2/gui/pics/e0Marquess Ai.jpg");
-    ImageView e0 = new ImageView(ee0);
-    Image ee1=new Image("comp1110/ass2/gui/pics/e1King Huanhui.jpg");
-    ImageView e1 = new ImageView(ee1);
-    Image ee2=new Image("comp1110/ass2/gui/pics/e2King An.jpg");
-    ImageView e2 = new ImageView(ee2);
-    Image ee3=new Image("comp1110/ass2/gui/pics/e3Han Fei.jpg");
-    ImageView e3 = new ImageView(ee3);
-    Image ff0=new Image("comp1110/ass2/gui/pics/f0Marquess Wen.jpg");
-    ImageView f0 = new ImageView(ff0);
-    Image ff1=new Image("comp1110/ass2/gui/pics/f1Lord Xinling.jpg");
-    ImageView f1 = new ImageView(ff1);
-    Image ff2=new Image("comp1110/ass2/gui/pics/f2King Anxi.jpg");
-    ImageView f2 = new ImageView(ff2);
-    Image gg0=new Image("comp1110/ass2/gui/pics/g0King Xi.jpg");
-    ImageView g0 = new ImageView(gg0);
-    Image gg1=new Image("comp1110/ass2/gui/pics/g1Prince Dan.jpg");
-    ImageView g1 = new ImageView(gg1);
-    Image zz9=new Image("comp1110/ass2/gui/pics/z9Zhang Yi.jpg");
-    ImageView z9 = new ImageView(zz9);
+
+
 
 
 
@@ -222,8 +156,8 @@ public class Game extends Application {
                     int idd = id;//as varrable should be final in the lambda expression
                     //one button is one card
                     Button card = new Button(cardLocalList.get(index));
-                    card.setMinSize(120,120);
-                    card.setMaxSize(120,120);
+                    card.setMinSize(80,80);
+                    card.setMaxSize(80,80);
                     int indexx = index;//as varrable should be final in the lambda expression
                     char location =indexx < 26 ? (char)(indexx + 'A') : (char)(indexx - 26 + '0');
                     //event handler ,inited when user click the card button
@@ -244,7 +178,7 @@ public class Game extends Application {
                             }
                         }else { InvalidMoveNotice(); }
                     });
-                    setImageToButton(card,cardLocalList.get(index));
+                    CardImage.setImageToButton(card,cardLocalList.get(index));
                     grid.add(card, i, j);
                     index ++;
                 }
@@ -253,230 +187,6 @@ public class Game extends Application {
 
     }
 
-    private void setImageToButton(Button card,String cardInfo) {
-
-        if(cardInfo.equals("a0")){
-            a0.setFitHeight(110);
-            a0.setFitWidth(110);
-            card.setStyle("-fx-background-color: #f5b9c2");
-            card.setGraphic(a0);
-        }
-        if(cardInfo.equals("a1")){
-            a1.setFitHeight(110);
-            a1.setFitWidth(110);
-            card.setStyle("-fx-background-color: #f5b9c2");
-            card.setGraphic(a1);
-        }
-        if(cardInfo.equals("a2")){
-            a2.setFitHeight(110);
-            a2.setFitWidth(110);
-            card.setStyle("-fx-background-color: #f5b9c2");
-            card.setGraphic(a2);
-        }
-        if(cardInfo.equals("a3")){
-            a3.setFitHeight(110);
-            a3.setFitWidth(110);
-            card.setStyle("-fx-background-color: #f5b9c2");
-            card.setGraphic(a3);
-        }
-        if(cardInfo.equals("a4")){
-            a4.setFitHeight(110);
-            a4.setFitWidth(110);
-            card.setStyle("-fx-background-color: #f5b9c2");
-            card.setGraphic(a4);
-        }
-        if(cardInfo.equals("a5")){
-            a5.setFitHeight(110);
-            a5.setFitWidth(110);
-            card.setStyle("-fx-background-color: #f5b9c2");
-            card.setGraphic(a5);
-        }
-        if(cardInfo.equals("a6")){
-            a6.setFitHeight(110);
-            a6.setFitWidth(110);
-            card.setStyle("-fx-background-color: #f5b9c2");
-            card.setGraphic(a6);
-        }
-        if(cardInfo.equals("a7")){
-            a7.setFitHeight(110);
-            a7.setFitWidth(110);
-            card.setStyle("-fx-background-color: #f5b9c2");
-            card.setGraphic(a7);
-        }
-        if(cardInfo.equals("b0")){
-            b0.setFitHeight(110);
-            b0.setFitWidth(110);
-            card.setStyle("-fx-background-color: #eee7b1");
-            card.setGraphic(b0);
-        }
-        if(cardInfo.equals("b1")){
-            b1.setFitHeight(110);
-            b1.setFitWidth(110);
-            card.setStyle("-fx-background-color: #eee7b1");
-            card.setGraphic(b1);
-        }
-        if(cardInfo.equals("b2")){
-            b2.setFitHeight(110);
-            b2.setFitWidth(110);
-            card.setStyle("-fx-background-color: #eee7b1");
-            card.setGraphic(b2);
-        }
-        if(cardInfo.equals("b3")){
-            b3.setFitHeight(110);
-            b3.setFitWidth(110);
-            card.setStyle("-fx-background-color: #eee7b1");
-            card.setGraphic(b3);
-        }
-        if(cardInfo.equals("b4")){
-            b4.setFitHeight(110);
-            b4.setFitWidth(110);
-            card.setStyle("-fx-background-color: #eee7b1");
-            card.setGraphic(b4);
-        }
-        if(cardInfo.equals("b5")){
-            b5.setFitHeight(110);
-            b5.setFitWidth(110);
-            card.setStyle("-fx-background-color: #eee7b1");
-            card.setGraphic(b5);
-        }
-        if(cardInfo.equals("b6")){
-            b6.setFitHeight(110);
-            b6.setFitWidth(110);
-            card.setStyle("-fx-background-color: #eee7b1");
-            card.setGraphic(b6);
-        }
-        if(cardInfo.equals("c0")){
-            c0.setFitHeight(110);
-            c0.setFitWidth(110);
-            card.setStyle("-fx-background-color: #a6ea99");
-            card.setGraphic(c0);
-        }
-        if(cardInfo.equals("c1")){
-            c1.setFitHeight(110);
-            c1.setFitWidth(110);
-            card.setStyle("-fx-background-color: #a6ea99");
-            card.setGraphic(c1);
-        }
-        if(cardInfo.equals("c2")){
-            c2.setFitHeight(110);
-            c2.setFitWidth(110);
-            card.setStyle("-fx-background-color: #a6ea99");
-            card.setGraphic(c2);
-        }
-        if(cardInfo.equals("c3")){
-            c3.setFitHeight(110);
-            c3.setFitWidth(110);
-            card.setStyle("-fx-background-color: #a6ea99");
-            card.setGraphic(c3);
-        }
-        if(cardInfo.equals("c4")){
-            c4.setFitHeight(110);
-            c4.setFitWidth(110);
-            card.setStyle("-fx-background-color: #a6ea99");
-            card.setGraphic(c4);
-        }
-        if(cardInfo.equals("c5")){
-            c5.setFitHeight(110);
-            c5.setFitWidth(110);
-            card.setStyle("-fx-background-color: #a6ea99");
-            card.setGraphic(c5);
-        }
-        if(cardInfo.equals("d0")){
-            d0.setFitHeight(110);
-            d0.setFitWidth(110);
-            card.setStyle("-fx-background-color: #bbeced");
-            card.setGraphic(d0);
-        }
-        if(cardInfo.equals("d1")){
-            d1.setFitHeight(110);
-            d1.setFitWidth(110);
-            card.setStyle("-fx-background-color: #bbeced");
-            card.setGraphic(d1);
-        }
-        if(cardInfo.equals("d2")){
-            d2.setFitHeight(110);
-            d2.setFitWidth(110);
-            card.setStyle("-fx-background-color: #bbeced");
-            card.setGraphic(d2);
-        }
-        if(cardInfo.equals("d3")){
-            d3.setFitHeight(110);
-            d3.setFitWidth(110);
-            card.setStyle("-fx-background-color: #bbeced");
-            card.setGraphic(d3);
-        }
-        if(cardInfo.equals("d4")){
-            d4.setFitHeight(110);
-            d4.setFitWidth(110);
-            card.setStyle("-fx-background-color: #bbeced");
-            card.setGraphic(d4);
-        }
-        if(cardInfo.equals("e0")){
-            e0.setFitHeight(110);
-            e0.setFitWidth(110);
-            card.setStyle("-fx-background-color: #8c75d4");
-            card.setGraphic(e0);
-        }
-        if(cardInfo.equals("e1")){
-            e1.setFitHeight(110);
-            e1.setFitWidth(110);
-            card.setStyle("-fx-background-color: #8c75d4");
-            card.setGraphic(e1);
-        }
-        if(cardInfo.equals("e2")){
-            e2.setFitHeight(110);
-            e2.setFitWidth(110);
-            card.setStyle("-fx-background-color: #8c75d4");
-            card.setGraphic(e2);
-        }
-        if(cardInfo.equals("e3")){
-            e3.setFitHeight(110);
-            e3.setFitWidth(110);
-            card.setStyle("-fx-background-color: #8c75d4");
-            card.setGraphic(e3);
-        }
-        if(cardInfo.equals("f0")){
-            f0.setFitHeight(110);
-            f0.setFitWidth(110);
-            card.setStyle("-fx-background-color: #f3a481");
-            card.setGraphic(f0);
-        }
-        if(cardInfo.equals("f1")){
-            f1.setFitHeight(110);
-            f1.setFitWidth(110);
-            card.setStyle("-fx-background-color: #f3a481");
-            card.setGraphic(f1);
-        }
-        if(cardInfo.equals("f2")){
-            f2.setFitHeight(110);
-            f2.setFitWidth(110);
-            card.setStyle("-fx-background-color: #f3a481");
-            card.setGraphic(f2);
-        }
-        if(cardInfo.equals("g0")){
-            g0.setFitHeight(110);
-            g0.setFitWidth(110);
-            card.setStyle("-fx-background-color: #d3d3d3");
-            card.setGraphic(g0);
-        }
-        if(cardInfo.equals("g1")){
-            g1.setFitHeight(110);
-            g1.setFitWidth(110);
-            card.setStyle("-fx-background-color: #d3d3d3");
-            card.setGraphic(g1);
-        }
-        if(cardInfo.equals("z9")){
-            z9.setFitHeight(110);
-            z9.setFitWidth(110);
-            card.setStyle("-fx-background-color: #000000");
-            card.setGraphic(z9);
-        }
-
-
-
-
-
-    }
 
 
 
@@ -600,7 +310,7 @@ public class Game extends Application {
                 933.0,700.0,
                 933.0,0.0
         );
-        rectangle.setFill(new ImagePattern(wel));
+        rectangle.setFill(new ImagePattern(CardImage.wel));
         controls.getChildren().add(rectangle);
         rectangle.setOnMouseClicked(event -> {
             controls.getChildren().clear();
@@ -617,7 +327,7 @@ public class Game extends Application {
                 933.0,700.0,
                 933.0,0.0
         );
-        rectangle.setFill(new ImagePattern(start));
+        rectangle.setFill(new ImagePattern(CardImage.start));
         controls.getChildren().add(rectangle);
         NumberOfPlayerWhenWithHuman();
         NumberOfPlayerWhenWithComputer();
@@ -735,13 +445,21 @@ public class Game extends Application {
      * @author Chucheng Qian
      */
     private void NumberofPlayerEqualto2(ArrayList<String> pb,int index,int id){
+        player0.setLayoutX(600);
+        player0.setLayoutY(340);
+        player1.setLayoutX(800);
+        player1.setLayoutY(340);
+        controls.getChildren().addAll(player0,player1);
+        showFlags(GetFlagofSepecificPlayer(0),600.0,600.0);
+        showFlags(GetFlagofSepecificPlayer(1),800.0,600.0);
         if(id==0){
-            //showFlags(GetFlagofSepecificPlayer(0),700.0,600.0);
+            System.out.println(GetFlagofSepecificPlayer(0));
 
             putPlacement(updateBoard(pb,index),1);
 
         }else{
-            //showFlags(GetFlagofSepecificPlayer(0),700.0,600.0);
+            System.out.println(GetFlagofSepecificPlayer(1));
+
             putPlacement(updateBoard(pb,index),0);
         }
 
@@ -761,8 +479,17 @@ public class Game extends Application {
      * @author Chucheng Qian
      */
     private void NumberofPlayerEqualto3(ArrayList<String> pb,int index,int id){
+        player0.setLayoutX(600);
+        player0.setLayoutY(340);
+        player1.setLayoutX(800);
+        player1.setLayoutY(340);
+        player2.setLayoutX(600);
+        player2.setLayoutY(640);
+        controls.getChildren().addAll(player0,player1,player2);
+        showFlags(GetFlagofSepecificPlayer(0),600.0,300.0);
+        showFlags(GetFlagofSepecificPlayer(1),800.0,300.0);
+        showFlags(GetFlagofSepecificPlayer(2),600.0,600.0);
         if(id==0){
-            //showFlags(GetFlagofSepecificPlayer(0),700.0,600.0);
 
             putPlacement(updateBoard(pb,index),1);
 
@@ -790,6 +517,19 @@ public class Game extends Application {
      * @author Chucheng Qian
      */
     void NumberofPlayerEqualto4(ArrayList<String> pb,int index,int id){
+        player0.setLayoutX(600);
+        player0.setLayoutY(340);
+        player1.setLayoutX(800);
+        player1.setLayoutY(340);
+        player2.setLayoutX(600);
+        player2.setLayoutY(640);
+        player3.setLayoutX(800);
+        player3.setLayoutY(640);
+        controls.getChildren().addAll(player0,player1,player2,player3);
+        showFlags(GetFlagofSepecificPlayer(0),600.0,300.0);
+        showFlags(GetFlagofSepecificPlayer(1),800.0,300.0);
+        showFlags(GetFlagofSepecificPlayer(2),600.0,600.0);
+        showFlags(GetFlagofSepecificPlayer(3),800.0,600.0);
         if(id==0){
             //showFlags(GetFlagofSepecificPlayer(0),700.0,600.0);
             putPlacement(updateBoard(pb,index),1);
@@ -826,17 +566,35 @@ public class Game extends Application {
             Polygon t = new Polygon();
             t.getPoints().addAll(new Double[]{
                     x,y,
-                    x+2, y,
-                    x, y+2,
-                    x+2, y+2
+                    x+30, y,
+                    x+30, y+30,
+                    x, y+30
 
             });
-            String flagname = list.get(i).toString();
-            Text flagName = new Text(flagname);
-            t.setLayoutX(x+i*20);
-            t.setLayoutY(y+i*20);
-            t.setFill(Color.RED);
-            stackPane.getChildren().addAll(t,flagName);
+            x+=30;
+            if(list.get(i).equals('a')){
+                t.setFill(new ImagePattern(CardImage.aa0));
+            }
+            if(list.get(i).equals('b')){
+                t.setFill(new ImagePattern(CardImage.bb0));
+            }
+            if(list.get(i).equals('c')){
+                t.setFill(new ImagePattern(CardImage.cc0));
+            }
+            if(list.get(i).equals('d')){
+                t.setFill(new ImagePattern(CardImage.dd0));
+            }
+            if(list.get(i).equals('e')){
+                t.setFill(new ImagePattern(CardImage.ee0));
+            }
+            if(list.get(i).equals('f')){
+                t.setFill(new ImagePattern(CardImage.ff0));
+            }
+            if(list.get(i).equals('g')){
+                t.setFill(new ImagePattern(CardImage.gg0));
+            }
+            controls.getChildren().add(t);
+
         }
     }
 
