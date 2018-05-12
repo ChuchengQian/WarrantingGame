@@ -3,7 +3,9 @@ package comp1110.ass2.gui;
 import javafx.scene.control.Button;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.paint.Color;
 import javafx.scene.paint.ImagePattern;
+import javafx.scene.shape.Polygon;
 
 public class CardImage {
 
@@ -304,10 +306,121 @@ public class CardImage {
         }
 
 
+    }
 
+    static final void setImageToSuppoters(Polygon card, String cardInfo) {
+
+        if(cardInfo.equals("a0")){
+            card.setFill(new ImagePattern(aa0));
+        }
+        if(cardInfo.equals("a1")){
+            card.setFill(new ImagePattern(aa1));
+        }
+        if(cardInfo.equals("a2")){
+            card.setFill(new ImagePattern(aa2));
+        }
+        if(cardInfo.equals("a3")){
+            card.setFill(new ImagePattern(aa3));
+        }
+        if(cardInfo.equals("a4")){
+            card.setFill(new ImagePattern(aa4));
+        }
+        if(cardInfo.equals("a5")){
+            card.setFill(new ImagePattern(aa5));
+        }
+        if(cardInfo.equals("a6")){
+            card.setFill(new ImagePattern(aa6));
+        }
+        if(cardInfo.equals("a7")){
+            card.setFill(new ImagePattern(aa7));
+        }
+        if(cardInfo.equals("b0")){
+            card.setFill(new ImagePattern(bb0));
+        }
+        if(cardInfo.equals("b1")){
+            card.setFill(new ImagePattern(bb1));
+        }
+        if(cardInfo.equals("b2")){
+            card.setFill(new ImagePattern(bb2));
+        }
+        if(cardInfo.equals("b3")){
+            card.setFill(new ImagePattern(bb3));
+        }
+        if(cardInfo.equals("b4")){
+            card.setFill(new ImagePattern(bb4));
+        }
+        if(cardInfo.equals("b5")){
+            card.setFill(new ImagePattern(bb5));
+        }
+        if(cardInfo.equals("b6")){
+            card.setFill(new ImagePattern(bb6));
+        }
+        if(cardInfo.equals("c0")){
+            card.setFill(new ImagePattern(cc0));
+        }
+        if(cardInfo.equals("c1")){
+            card.setFill(new ImagePattern(cc1));
+        }
+        if(cardInfo.equals("c2")){
+            card.setFill(new ImagePattern(cc2));
+        }
+        if(cardInfo.equals("c3")){
+            card.setFill(new ImagePattern(cc3));
+        }
+        if(cardInfo.equals("c4")){
+            card.setFill(new ImagePattern(cc4));
+        }
+        if(cardInfo.equals("c5")){
+            card.setFill(new ImagePattern(cc5));
+        }
+        if(cardInfo.equals("d0")){
+            card.setFill(new ImagePattern(dd0));
+        }
+        if(cardInfo.equals("d1")){
+            card.setFill(new ImagePattern(dd1));
+        }
+        if(cardInfo.equals("d2")){
+            card.setFill(new ImagePattern(dd2));
+        }
+        if(cardInfo.equals("d3")){
+            card.setFill(new ImagePattern(dd3));
+        }
+        if(cardInfo.equals("d4")){
+            card.setFill(new ImagePattern(dd4));
+        }
+        if(cardInfo.equals("e0")){
+            card.setFill(new ImagePattern(ee0));
+        }
+        if(cardInfo.equals("e1")){
+            card.setFill(new ImagePattern(ee1));
+        }
+        if(cardInfo.equals("e2")){
+            card.setFill(new ImagePattern(ee2));
+        }
+        if(cardInfo.equals("e3")){
+            card.setFill(new ImagePattern(ee3));
+        }
+        if(cardInfo.equals("f0")){
+            card.setFill(new ImagePattern(ff0));
+        }
+        if(cardInfo.equals("f1")){
+            card.setFill(new ImagePattern(ff1));
+        }
+        if(cardInfo.equals("f2")){
+            card.setFill(new ImagePattern(ff2));
+        }
+        if(cardInfo.equals("g0")){
+            card.setFill(new ImagePattern(gg0));
+        }
+        if(cardInfo.equals("g1")){
+            card.setFill(new ImagePattern(gg1));
+        }
 
 
     }
+
+
+
 
 
 }

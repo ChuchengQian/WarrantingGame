@@ -446,12 +446,14 @@ public class Game extends Application {
      */
     private void NumberofPlayerEqualto2(ArrayList<String> pb,int index,int id){
         player0.setLayoutX(600);
-        player0.setLayoutY(340);
+        player0.setLayoutY(540);
         player1.setLayoutX(800);
-        player1.setLayoutY(340);
+        player1.setLayoutY(540);
         controls.getChildren().addAll(player0,player1);
-        showFlags(GetFlagofSepecificPlayer(0),600.0,600.0);
-        showFlags(GetFlagofSepecificPlayer(1),800.0,600.0);
+        showFlags(GetFlagofSepecificPlayer(0),600.0,500.0);
+        showSupporters(WarringStatesGame.getSupporters(randomSetup,moves,4,0),600.0,415);
+        showFlags(GetFlagofSepecificPlayer(1),800.0,500.0);
+        showSupporters(WarringStatesGame.getSupporters(randomSetup,moves,4,1),800.0,415);
         if(id==0){
             System.out.println(GetFlagofSepecificPlayer(0));
 
@@ -487,8 +489,11 @@ public class Game extends Application {
         player2.setLayoutY(640);
         controls.getChildren().addAll(player0,player1,player2);
         showFlags(GetFlagofSepecificPlayer(0),600.0,300.0);
+        showSupporters(WarringStatesGame.getSupporters(randomSetup,moves,4,0),600.0,215);
         showFlags(GetFlagofSepecificPlayer(1),800.0,300.0);
+        showSupporters(WarringStatesGame.getSupporters(randomSetup,moves,4,1),800.0,215);
         showFlags(GetFlagofSepecificPlayer(2),600.0,600.0);
+        showSupporters(WarringStatesGame.getSupporters(randomSetup,moves,4,2),600.0,515);
         if(id==0){
 
             putPlacement(updateBoard(pb,index),1);
@@ -527,9 +532,13 @@ public class Game extends Application {
         player3.setLayoutY(640);
         controls.getChildren().addAll(player0,player1,player2,player3);
         showFlags(GetFlagofSepecificPlayer(0),600.0,300.0);
+        showSupporters(WarringStatesGame.getSupporters(randomSetup,moves,4,0),600.0,215);
         showFlags(GetFlagofSepecificPlayer(1),800.0,300.0);
+        showSupporters(WarringStatesGame.getSupporters(randomSetup,moves,4,1),800.0,215);
         showFlags(GetFlagofSepecificPlayer(2),600.0,600.0);
+        showSupporters(WarringStatesGame.getSupporters(randomSetup,moves,4,2),600.0,515);
         showFlags(GetFlagofSepecificPlayer(3),800.0,600.0);
+        showSupporters(WarringStatesGame.getSupporters(randomSetup,moves,4,3),800.0,515);
         if(id==0){
             //showFlags(GetFlagofSepecificPlayer(0),700.0,600.0);
             putPlacement(updateBoard(pb,index),1);
@@ -563,8 +572,8 @@ public class Game extends Application {
      */
     private void showFlags(ArrayList<Character> list,double x,double y){
         for(int i = 0; i<list.size();i++){
-            Polygon t = new Polygon();
-            t.getPoints().addAll(new Double[]{
+            Polygon s = new Polygon();
+            s.getPoints().addAll(new Double[]{
                     x,y,
                     x+30, y,
                     x+30, y+30,
@@ -573,30 +582,53 @@ public class Game extends Application {
             });
             x+=30;
             if(list.get(i).equals('a')){
-                t.setFill(new ImagePattern(CardImage.aa0));
+                s.setFill(new ImagePattern(CardImage.aa0));
             }
             if(list.get(i).equals('b')){
-                t.setFill(new ImagePattern(CardImage.bb0));
+                s.setFill(new ImagePattern(CardImage.bb0));
             }
             if(list.get(i).equals('c')){
-                t.setFill(new ImagePattern(CardImage.cc0));
+                s.setFill(new ImagePattern(CardImage.cc0));
             }
             if(list.get(i).equals('d')){
-                t.setFill(new ImagePattern(CardImage.dd0));
+                s.setFill(new ImagePattern(CardImage.dd0));
             }
             if(list.get(i).equals('e')){
-                t.setFill(new ImagePattern(CardImage.ee0));
+                s.setFill(new ImagePattern(CardImage.ee0));
             }
             if(list.get(i).equals('f')){
-                t.setFill(new ImagePattern(CardImage.ff0));
+                s.setFill(new ImagePattern(CardImage.ff0));
             }
             if(list.get(i).equals('g')){
-                t.setFill(new ImagePattern(CardImage.gg0));
+                s.setFill(new ImagePattern(CardImage.gg0));
             }
-            controls.getChildren().add(t);
+            s.setStrokeWidth(0.5);
+            s.setStroke(Color.BLACK);
+            controls.getChildren().add(s);
 
         }
     }
+
+    private void showSupporters(String supporters,double x,double y){
+        for(int i = 0; i<supporters.length();i+=2){
+            Polygon s = new Polygon();
+            s.getPoints().addAll(new Double[]{
+                    x,y,
+                    x+80, y,
+                    x+80, y+80,
+                    x, y+80
+
+            });
+            y-=12;
+            CardImage.setImageToSuppoters(s,supporters.substring(i,i+2));
+            s.setStrokeWidth(0.5);
+            s.setStroke(Color.BLACK);
+            controls.getChildren().add(s);
+    }
+    }
+
+
+
 
     /**
      * search the upper,lower,right and left side of Zhangyi to make sure the game is finished
