@@ -532,9 +532,9 @@ public class Game extends Application {
     }
 
     private void NumberofPlayerEqualto22(ArrayList<String> pb,int index){
-        if (WhetherFinished(pb)) {
-            whenFinished();}else{
         DataUtil util = new DataUtil();
+        if (WhetherFinished(util.placementSortToList(updateBoard(pb, index)))) {
+            whenFinished();}else{
         char randomLocation1 = WarringStatesGame.generateMove(updateBoard(pb,index));
         int randomIndex1 =randomLocation1 >=65 ? (int)(randomLocation1 - 'A') : (int)(randomLocation1 - 48+26);
         moves =moves+randomLocation1;
@@ -594,13 +594,17 @@ public class Game extends Application {
     }
 
     private void NumberofPlayerEqualto33(ArrayList<String> pb,int index) {
-        if (WhetherFinished(pb)) {
+        DataUtil util = new DataUtil();
+
+        if (WhetherFinished(util.placementSortToList(updateBoard(pb, index)))) {
             whenFinished();
         } else {
-            DataUtil util = new DataUtil();
             char randomLocation1 = WarringStatesGame.generateMove(updateBoard(pb, index));
             int randomIndex1 = randomLocation1 >= 65 ? (int) (randomLocation1 - 'A') : (int) (randomLocation1 - 48 + 26);
+            System.out.println(randomLocation1);
+            System.out.println(randomIndex1);
             String newBoard1 = updateBoard(util.placementSortToList(updateBoard(pb, index)), randomIndex1);
+
             if (WhetherFinished(util.placementSortToList(newBoard1))) {
                 moves = moves + randomLocation1;
                 whenFinished();
@@ -676,9 +680,9 @@ public class Game extends Application {
     }
 
     void NumberofPlayerEqualto44(ArrayList<String> pb,int index){
-        if (WhetherFinished(pb)) {
+        DataUtil util = new DataUtil();
+        if (WhetherFinished(util.placementSortToList(updateBoard(pb, index)))) {
             whenFinished();}else {
-            DataUtil util = new DataUtil();
             char randomLocation1 = WarringStatesGame.generateMove(updateBoard(pb, index));
             int randomIndex1 = randomLocation1 >= 65 ? (int) (randomLocation1 - 'A') : (int) (randomLocation1 - 48 + 26);
             String newBoard1 = updateBoard(util.placementSortToList(updateBoard(pb, index)), randomIndex1);
