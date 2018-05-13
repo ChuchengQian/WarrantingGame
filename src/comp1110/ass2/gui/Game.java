@@ -141,12 +141,7 @@ public class Game extends Application {
         cardLocalList = util.placementSortToList(placement);
 
         if (WhetherFinished(cardLocalList)) {
-            Text winMessage = new Text("Player" + Winnners() + " wins!");
-            winMessage.setFont(Font.font("Tahoma", FontWeight.BOLD, 50));
-            winMessage.setFill(Color.RED);
-            winMessage.setLayoutX(130);
-            winMessage.setLayoutY(400);
-            controls.getChildren().add(winMessage);}
+            whenFinished();}
         else{
             //clear the previous board
             grid.getChildren().clear();
@@ -187,22 +182,27 @@ public class Game extends Application {
 
     }
 
+    private void whenFinished() {
+        Text winMessage = new Text("Player" + Winnners() + " wins!");
+        winMessage.setFont(Font.font("Tahoma", FontWeight.BOLD, 50));
+        winMessage.setFill(Color.RED);
+        winMessage.setLayoutX(130);
+        winMessage.setLayoutY(400);
+        controls.getChildren().add(winMessage);
+    }
 
 
 
-    private void putPlacementForComputer(String placement,int id) {
+
+
+    private void putPlacementForComputer(String placement) {
         int num = Integer.parseInt(theNumberOfplayers);
         ArrayList<String> cardLocalList;
         DataUtil util = new DataUtil();
         cardLocalList = util.placementSortToList(placement);
 
         if (WhetherFinished(cardLocalList)) {
-            Text winMessage = new Text("Player" + Winnners() + " wins!");
-            winMessage.setFont(Font.font("Tahoma", FontWeight.BOLD, 50));
-            winMessage.setFill(Color.RED);
-            winMessage.setLayoutX(130);
-            winMessage.setLayoutY(400);
-            controls.getChildren().add(winMessage);}
+            whenFinished();}
         else{
 
             //clear the previous board
@@ -211,7 +211,6 @@ public class Game extends Application {
             int index = 0;
             for (int i = 5; i >= 0; i--){
                 for (int j = 0; j < 6; j++){
-                    int idd = id;//as varrable should be final in the lambda expression
                     //one button is one card
                     Button card = new Button(cardLocalList.get(index));
                     card.setMinSize(80,80);
@@ -224,10 +223,10 @@ public class Game extends Application {
                         if(WarringStatesGame.isMoveLegal(placement,location)){
                             moves =moves+location;
                             controls.getChildren().clear();
-                            putPlacementForComputer(placement,id);
+                            putPlacementForComputer(placement);
                             SetupGrid();
                             if(num==2){
-                                NumberofPlayerEqualto22(cardLocalList,indexx,idd);
+                                NumberofPlayerEqualto22(cardLocalList,indexx);
                                 /*char location1 = WarringStatesGame.generateMove(updateBoard(cardLocalList,indexx));//as varrable should be final in the lambda expression
                                 int lcc =location1 >=65 ? (int)(location1 - 'A') : (int)(location1 - 48);
                                 moves =moves+location1;
@@ -235,10 +234,10 @@ public class Game extends Application {
 */
                             }
                             if(num==3){
-                                NumberofPlayerEqualto33(cardLocalList,indexx,idd);
+                                NumberofPlayerEqualto33(cardLocalList,indexx);
                             }
                             if(num==4){
-                                NumberofPlayerEqualto44(cardLocalList,indexx,idd);
+                                NumberofPlayerEqualto44(cardLocalList,indexx);
                             }
                         }else { InvalidMoveNotice(); }
                     });
@@ -318,7 +317,7 @@ public class Game extends Application {
             int num = Integer.parseInt(theNumberOfplayers);
             if(num>=2 && num <=4){
                 controls.getChildren().clear();
-                putPlacementForComputer(randomSetup,50);
+                putPlacementForComputer(randomSetup);
                 SetupGrid();
             }else{
                 Text notice = new Text("Invalid players ,try again!");
@@ -532,29 +531,28 @@ public class Game extends Application {
 
     }
 
-    private void NumberofPlayerEqualto22(ArrayList<String> pb,int index,int id){
+    private void NumberofPlayerEqualto22(ArrayList<String> pb,int index){
+        if (WhetherFinished(pb)) {
+            whenFinished();}else{
         DataUtil util = new DataUtil();
         char randomLocation1 = WarringStatesGame.generateMove(updateBoard(pb,index));
-        System.out.println("rd");
-        System.out.println(randomLocation1);
-
-        int randomIndex1 =randomLocation1 >=65 ? (int)(randomLocation1 - 'A') : (int)(randomLocation1 - 48);
+        int randomIndex1 =randomLocation1 >=65 ? (int)(randomLocation1 - 'A') : (int)(randomLocation1 - 48+26);
         moves =moves+randomLocation1;
 
+
+        putPlacementForComputer(updateBoard(util.placementSortToList(updateBoard(pb,index)),randomIndex1));
+
+
+        }
         player0.setLayoutX(600);
         player0.setLayoutY(540);
         player1.setLayoutX(800);
         player1.setLayoutY(540);
         controls.getChildren().addAll(player0,player1);
-        System.out.println("g");
-        System.out.println(randomSetup);
-        System.out.println(moves);
         showFlags(GetFlagofSepecificPlayer(0),600.0,500.0);
         showSupporters(WarringStatesGame.getSupporters(randomSetup,moves,4,0),600.0,415);
         showFlags(GetFlagofSepecificPlayer(1),800.0,500.0);
         showSupporters(WarringStatesGame.getSupporters(randomSetup,moves,4,1),800.0,415);
-
-        putPlacementForComputer(updateBoard(util.placementSortToList(updateBoard(pb,index)),randomIndex1),50);
 
     }
 
@@ -571,15 +569,6 @@ public class Game extends Application {
      * @author Chucheng Qian
      */
     private void NumberofPlayerEqualto3(ArrayList<String> pb,int index,int id){
-        DataUtil util = new DataUtil();
-        char randomLocation1 = WarringStatesGame.generateMove(updateBoard(pb,index));
-        int randomIndex1 =randomLocation1 >=65 ? (int)(randomLocation1 - 'A') : (int)(randomLocation1 - 48);
-        String newBoard1= updateBoard(util.placementSortToList(updateBoard(pb,index)),randomIndex1);
-        char randomLocation2 = WarringStatesGame.generateMove(newBoard1);
-        int randomIndex2 =randomLocation2 >=65 ? (int)(randomLocation1 - 'A') : (int)(randomLocation2 - 48);
-
-        moves =moves+randomLocation1+randomLocation2;
-
         player0.setLayoutX(600);
         player0.setLayoutY(340);
         player1.setLayoutX(800);
@@ -593,9 +582,6 @@ public class Game extends Application {
         showSupporters(WarringStatesGame.getSupporters(randomSetup,moves,4,1),800.0,215);
         showFlags(GetFlagofSepecificPlayer(2),600.0,600.0);
         showSupporters(WarringStatesGame.getSupporters(randomSetup,moves,4,2),600.0,515);
-        if(id==50){
-            putPlacementForComputer(updateBoard(util.placementSortToList(newBoard1),randomIndex2),50);
-        }
         if(id==0){
             putPlacement(updateBoard(pb,index),1);
         }
@@ -607,15 +593,27 @@ public class Game extends Application {
         }
     }
 
-    private void NumberofPlayerEqualto33(ArrayList<String> pb,int index,int id){
-        DataUtil util = new DataUtil();
-        char randomLocation1 = WarringStatesGame.generateMove(updateBoard(pb,index));
-        int randomIndex1 =randomLocation1 >=65 ? (int)(randomLocation1 - 'A') : (int)(randomLocation1 - 48);
-        String newBoard1= updateBoard(util.placementSortToList(updateBoard(pb,index)),randomIndex1);
-        char randomLocation2 = WarringStatesGame.generateMove(newBoard1);
-        int randomIndex2 =randomLocation2 >=65 ? (int)(randomLocation1 - 'A') : (int)(randomLocation2 - 48);
+    private void NumberofPlayerEqualto33(ArrayList<String> pb,int index) {
+        if (WhetherFinished(pb)) {
+            whenFinished();
+        } else {
+            DataUtil util = new DataUtil();
+            char randomLocation1 = WarringStatesGame.generateMove(updateBoard(pb, index));
+            int randomIndex1 = randomLocation1 >= 65 ? (int) (randomLocation1 - 'A') : (int) (randomLocation1 - 48 + 26);
+            String newBoard1 = updateBoard(util.placementSortToList(updateBoard(pb, index)), randomIndex1);
+            if (WhetherFinished(util.placementSortToList(newBoard1))) {
+                moves = moves + randomLocation1;
+                whenFinished();
+            } else {
+                char randomLocation2 = WarringStatesGame.generateMove(newBoard1);
+                int randomIndex2 = randomLocation2 >= 65 ? (int) (randomLocation2 - 'A') : (int) (randomLocation2 - 48 + 26);
+                String newBoard2 = updateBoard(util.placementSortToList(newBoard1), randomIndex2);
+                moves = moves + randomLocation1 + randomLocation2;
 
-        moves =moves+randomLocation1+randomLocation2;
+                putPlacementForComputer(updateBoard(util.placementSortToList(newBoard2), randomIndex2));
+
+            }
+        }
 
         player0.setLayoutX(600);
         player0.setLayoutY(340);
@@ -630,8 +628,6 @@ public class Game extends Application {
         showSupporters(WarringStatesGame.getSupporters(randomSetup,moves,4,1),800.0,215);
         showFlags(GetFlagofSepecificPlayer(2),600.0,600.0);
         showSupporters(WarringStatesGame.getSupporters(randomSetup,moves,4,2),600.0,515);
-
-        putPlacementForComputer(updateBoard(util.placementSortToList(newBoard1),randomIndex2),50);
 
     }
 
@@ -647,17 +643,6 @@ public class Game extends Application {
      * @author Chucheng Qian
      */
     void NumberofPlayerEqualto4(ArrayList<String> pb,int index,int id){
-        DataUtil util = new DataUtil();
-        char randomLocation1 = WarringStatesGame.generateMove(updateBoard(pb,index));
-        int randomIndex1 =randomLocation1 >=65 ? (int)(randomLocation1 - 'A') : (int)(randomLocation1 - 48);
-        String newBoard1= updateBoard(util.placementSortToList(updateBoard(pb,index)),randomIndex1);
-        char randomLocation2 = WarringStatesGame.generateMove(newBoard1);
-        int randomIndex2 =randomLocation2 >=65 ? (int)(randomLocation1 - 'A') : (int)(randomLocation2 - 48);
-        String newBoard2=updateBoard(util.placementSortToList(newBoard1),randomIndex2);
-        char randomLocation3 = WarringStatesGame.generateMove(newBoard2);
-        int randomIndex3 =randomLocation3 >=65 ? (int)(randomLocation1 - 'A') : (int)(randomLocation3 - 48);
-        moves=moves+randomLocation1+randomLocation2+randomLocation3;
-
         player0.setLayoutX(600);
         player0.setLayoutY(340);
         player1.setLayoutX(800);
@@ -675,10 +660,6 @@ public class Game extends Application {
         showSupporters(WarringStatesGame.getSupporters(randomSetup,moves,4,2),600.0,515);
         showFlags(GetFlagofSepecificPlayer(3),800.0,600.0);
         showSupporters(WarringStatesGame.getSupporters(randomSetup,moves,4,3),800.0,515);
-        if(id==50){
-            putPlacementForComputer(updateBoard(util.placementSortToList(newBoard2),randomIndex3),50);
-
-        }
         if(id==0){
             putPlacement(updateBoard(pb,index),1);
 
@@ -694,18 +675,34 @@ public class Game extends Application {
         }
     }
 
-    void NumberofPlayerEqualto44(ArrayList<String> pb,int index,int id){
-        DataUtil util = new DataUtil();
-        char randomLocation1 = WarringStatesGame.generateMove(updateBoard(pb,index));
-        int randomIndex1 =randomLocation1 >=65 ? (int)(randomLocation1 - 'A') : (int)(randomLocation1 - 48);
-        String newBoard1= updateBoard(util.placementSortToList(updateBoard(pb,index)),randomIndex1);
-        char randomLocation2 = WarringStatesGame.generateMove(newBoard1);
-        int randomIndex2 =randomLocation2 >=65 ? (int)(randomLocation1 - 'A') : (int)(randomLocation2 - 48);
-        String newBoard2=updateBoard(util.placementSortToList(newBoard1),randomIndex2);
-        char randomLocation3 = WarringStatesGame.generateMove(newBoard2);
-        int randomIndex3 =randomLocation3 >=65 ? (int)(randomLocation1 - 'A') : (int)(randomLocation3 - 48);
-        moves=moves+randomLocation1+randomLocation2+randomLocation3;
+    void NumberofPlayerEqualto44(ArrayList<String> pb,int index){
+        if (WhetherFinished(pb)) {
+            whenFinished();}else {
+            DataUtil util = new DataUtil();
+            char randomLocation1 = WarringStatesGame.generateMove(updateBoard(pb, index));
+            int randomIndex1 = randomLocation1 >= 65 ? (int) (randomLocation1 - 'A') : (int) (randomLocation1 - 48 + 26);
+            String newBoard1 = updateBoard(util.placementSortToList(updateBoard(pb, index)), randomIndex1);
+            if (WhetherFinished(util.placementSortToList(newBoard1))) {
+                moves = moves + randomLocation1;
+                whenFinished();
+            }else{
+                char randomLocation2 = WarringStatesGame.generateMove(newBoard1);
+                int randomIndex2 = randomLocation2 >= 65 ? (int) (randomLocation2 - 'A') : (int) (randomLocation2 - 48 + 26);
+                String newBoard2 = updateBoard(util.placementSortToList(newBoard1), randomIndex2);
+                if(WhetherFinished(util.placementSortToList(newBoard2))){
+                    moves = moves + randomLocation1 + randomLocation2;
+                    whenFinished();
+                }else {
+                    char randomLocation3 = WarringStatesGame.generateMove(newBoard2);
+                    int randomIndex3 = randomLocation3 >= 65 ? (int) (randomLocation3 - 'A') : (int) (randomLocation3 - 48 + 26);
+                    moves = moves + randomLocation1 + randomLocation2 + randomLocation3;
 
+
+                    putPlacementForComputer(updateBoard(util.placementSortToList(newBoard2), randomIndex3));
+
+                }
+            }
+        }
         player0.setLayoutX(600);
         player0.setLayoutY(340);
         player1.setLayoutX(800);
@@ -714,17 +711,15 @@ public class Game extends Application {
         player2.setLayoutY(640);
         player3.setLayoutX(800);
         player3.setLayoutY(640);
-        controls.getChildren().addAll(player0,player1,player2,player3);
-        showFlags(GetFlagofSepecificPlayer(0),600.0,300.0);
-        showSupporters(WarringStatesGame.getSupporters(randomSetup,moves,4,0),600.0,215);
-        showFlags(GetFlagofSepecificPlayer(1),800.0,300.0);
-        showSupporters(WarringStatesGame.getSupporters(randomSetup,moves,4,1),800.0,215);
-        showFlags(GetFlagofSepecificPlayer(2),600.0,600.0);
-        showSupporters(WarringStatesGame.getSupporters(randomSetup,moves,4,2),600.0,515);
-        showFlags(GetFlagofSepecificPlayer(3),800.0,600.0);
-        showSupporters(WarringStatesGame.getSupporters(randomSetup,moves,4,3),800.0,515);
-
-        putPlacementForComputer(updateBoard(util.placementSortToList(newBoard2),randomIndex3),50);
+        controls.getChildren().addAll(player0, player1, player2, player3);
+        showFlags(GetFlagofSepecificPlayer(0), 600.0, 300.0);
+        showSupporters(WarringStatesGame.getSupporters(randomSetup, moves, 4, 0), 600.0, 215);
+        showFlags(GetFlagofSepecificPlayer(1), 800.0, 300.0);
+        showSupporters(WarringStatesGame.getSupporters(randomSetup, moves, 4, 1), 800.0, 215);
+        showFlags(GetFlagofSepecificPlayer(2), 600.0, 600.0);
+        showSupporters(WarringStatesGame.getSupporters(randomSetup, moves, 4, 2), 600.0, 515);
+        showFlags(GetFlagofSepecificPlayer(3), 800.0, 600.0);
+        showSupporters(WarringStatesGame.getSupporters(randomSetup, moves, 4, 3), 800.0, 515);
 
     }
 
