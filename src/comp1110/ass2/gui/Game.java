@@ -516,9 +516,9 @@ public class Game extends Application {
         player1.setLayoutY(540);
         controls.getChildren().addAll(player0,player1);
         showFlags(GetFlagofSepecificPlayer(0),600.0,500.0);
-        showSupporters(WarringStatesGame.getSupporters(randomSetup,moves,4,0),600.0,415);
+        showSupporters(WarringStatesGame.getSupporters(randomSetup,moves,2,0),600.0,415);
         showFlags(GetFlagofSepecificPlayer(1),800.0,500.0);
-        showSupporters(WarringStatesGame.getSupporters(randomSetup,moves,4,1),800.0,415);
+        showSupporters(WarringStatesGame.getSupporters(randomSetup,moves,2,1),800.0,415);
         if(id==0){
 
             putPlacement(updateBoard(pb,index),1);
@@ -550,9 +550,9 @@ public class Game extends Application {
         player1.setLayoutY(540);
         controls.getChildren().addAll(player0,player1);
         showFlags(GetFlagofSepecificPlayer(0),600.0,500.0);
-        showSupporters(WarringStatesGame.getSupporters(randomSetup,moves,4,0),600.0,415);
+        showSupporters(WarringStatesGame.getSupporters(randomSetup,moves,2,0),600.0,415);
         showFlags(GetFlagofSepecificPlayer(1),800.0,500.0);
-        showSupporters(WarringStatesGame.getSupporters(randomSetup,moves,4,1),800.0,415);
+        showSupporters(WarringStatesGame.getSupporters(randomSetup,moves,2,1),800.0,415);
 
     }
 
@@ -577,11 +577,11 @@ public class Game extends Application {
         player2.setLayoutY(640);
         controls.getChildren().addAll(player0,player1,player2);
         showFlags(GetFlagofSepecificPlayer(0),600.0,300.0);
-        showSupporters(WarringStatesGame.getSupporters(randomSetup,moves,4,0),600.0,215);
+        showSupporters(WarringStatesGame.getSupporters(randomSetup,moves,3,0),600.0,215);
         showFlags(GetFlagofSepecificPlayer(1),800.0,300.0);
-        showSupporters(WarringStatesGame.getSupporters(randomSetup,moves,4,1),800.0,215);
+        showSupporters(WarringStatesGame.getSupporters(randomSetup,moves,3,1),800.0,215);
         showFlags(GetFlagofSepecificPlayer(2),600.0,600.0);
-        showSupporters(WarringStatesGame.getSupporters(randomSetup,moves,4,2),600.0,515);
+        showSupporters(WarringStatesGame.getSupporters(randomSetup,moves,3,2),600.0,515);
         if(id==0){
             putPlacement(updateBoard(pb,index),1);
         }
@@ -627,11 +627,11 @@ public class Game extends Application {
         player2.setLayoutY(640);
         controls.getChildren().addAll(player0,player1,player2);
         showFlags(GetFlagofSepecificPlayer(0),600.0,300.0);
-        showSupporters(WarringStatesGame.getSupporters(randomSetup,moves,4,0),600.0,215);
+        showSupporters(WarringStatesGame.getSupporters(randomSetup,moves,3,0),600.0,215);
         showFlags(GetFlagofSepecificPlayer(1),800.0,300.0);
-        showSupporters(WarringStatesGame.getSupporters(randomSetup,moves,4,1),800.0,215);
+        showSupporters(WarringStatesGame.getSupporters(randomSetup,moves,3,1),800.0,215);
         showFlags(GetFlagofSepecificPlayer(2),600.0,600.0);
-        showSupporters(WarringStatesGame.getSupporters(randomSetup,moves,4,2),600.0,515);
+        showSupporters(WarringStatesGame.getSupporters(randomSetup,moves,3,2),600.0,515);
 
     }
 
