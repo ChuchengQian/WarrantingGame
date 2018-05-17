@@ -22,10 +22,12 @@ public class WarringStatesGame {
      * @param cardPlacement A string describing a card placement
      * @return true if the card placement is well-formed
      * @author Jiayang Li & chunxiang Song
+     *
+     * Dividing cardPlacement into 3 char types, and judge the cardPlacement based on the rules of game.
      */
     static boolean isCardPlacementWellFormed(String cardPlacement) {
-        System.out.println("!!!"+cardPlacement);
         // FIXME Task 2: determine whether a card placement is well-formed
+        //dividing the cardPlacement into 3 char types
         char character1 = cardPlacement.charAt(0);
         char character2 = cardPlacement.charAt(1);
         char character3 = cardPlacement.charAt(2);
@@ -52,6 +54,9 @@ public class WarringStatesGame {
      * @param placement A string describing a placement of one or more cards
      * @return true if the placement is well-formed
      * @author Jiayang Li
+     *
+     * Firstly, checking if each 3 of char in the placement is correct,
+     * then testing the characters and locations separately in two for loop
      */
     static boolean isPlacementWellFormed(String placement) {
         // FIXME Task 3: determine whether a placement is well-formed
@@ -59,9 +64,9 @@ public class WarringStatesGame {
         boolean check = true;
         if (placement == null || placement.length() <= 0) { //testEmpty
             return false;
-        } else if (placement.length() % 3 != 0 ) { //testIncomplete
+        } else if (placement.length() % 3 != 0 ) { //testIncomplete(the length of correct placement should be the times of three)
             return false;
-        } else { //testGood
+        } else { //testGood (use task2 to check if  each three of the placement is correct)
             for (int i = 0; i < placement.length(); i = i + 3) {
                 if (isCardPlacementWellFormed(placement.substring(i, i+3))) {
                     count++;
@@ -72,6 +77,7 @@ public class WarringStatesGame {
             check = false;
         }
         //testDuplicate
+        //testing if the character is duplicate
         int count2 = 0;
         int locationCheck = 0;
         for(int i = 0; i < placement.length(); i = i + 3) {
@@ -81,6 +87,7 @@ public class WarringStatesGame {
                 }
             }
         }
+        //testing if the location is duplicate
         for (int i = 2; i< placement.length(); i = i + 3) {
             for (int j = 2; j < placement.length(); j = j + 3) {
                 if (placement.charAt(i) == placement.charAt(j)) {
@@ -91,7 +98,6 @@ public class WarringStatesGame {
         if(count2 > placement.length() / 3 || locationCheck > placement.length() / 3) {
             check = false;
         }
-
         return check;
     }
 
@@ -377,7 +383,7 @@ public class WarringStatesGame {
      */
     public static String getSupporters(String setup, String moveSequence, int numPlayers, int playerId) {
         // FIXME Task 7: get the list of supporters for a given player after a sequence of moves
-//        System.out.println("setup "+setup+" \nmoveSequence " + moveSequence+ " \nnumPlayers "+ numPlayers+"\nplayerId "+playerId);
+        System.out.println("setup "+setup+" \nmoveSequence " + moveSequence+ " \nnumPlayers "+ numPlayers+"\nplayerId "+playerId);
         int paceCount = moveSequence.length();
         String supporters1 = "";
         String supporters2 = "";
