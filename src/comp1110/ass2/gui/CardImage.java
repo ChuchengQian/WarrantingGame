@@ -3,12 +3,19 @@ package comp1110.ass2.gui;
 import javafx.scene.control.Button;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.paint.Color;
 import javafx.scene.paint.ImagePattern;
 import javafx.scene.shape.Polygon;
 
 public class CardImage {
-
+    /**
+     * This class contains some Image and ImageView to be fill to the cards and square figures represents the supporters.
+     * It also contains two methods which set images to cards and supporters respectively
+     *
+     * Show the flags owned by each player.
+     * Show the supporters owned by each player.
+     *
+     * @author Chucheng Qian
+     */
 
     static Image wel=new Image("comp1110/ass2/gui/pics/Welcome.JPG");
     static Image start=new Image("comp1110/ass2/gui/pics/Starting.JPG");
@@ -86,7 +93,16 @@ public class CardImage {
     static Image zz9=new Image("comp1110/ass2/gui/pics/z9Zhang Yi.jpg");
     static ImageView z9 = new ImageView(zz9);
 
-    static final void setImageToButton(Button card, String cardInfo) {
+
+    /**
+     * set images to cards
+     *
+     * @param card  a card object which extends button
+     * @param cardInfo a String which first character represents the state and the second represents the number
+     *
+     * @author Chucheng Qian
+     */
+    static final void setImageToCard(Game.Card card, String cardInfo) {
 
         if(cardInfo.equals("a0")){
             a0.setFitHeight(70);
@@ -308,6 +324,14 @@ public class CardImage {
 
     }
 
+    /**
+     * set images to supporters
+     *
+     * @param card  a Polygon object which is a square figure represents the supporter
+     * @param cardInfo a String which first character represents the state and the second represents the number
+     *
+     * @author Chucheng Qian
+     */
     static final void setImageToSuppoters(Polygon card, String cardInfo) {
 
         if(cardInfo.equals("a0")){

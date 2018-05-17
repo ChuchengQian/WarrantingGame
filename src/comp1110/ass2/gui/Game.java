@@ -11,7 +11,6 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
-import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.ImagePattern;
 import javafx.scene.text.Font;
@@ -31,7 +30,6 @@ public class Game extends Application  {
     /* node groups */
     private final Group root = new Group();
     private final Group controls = new Group();
-    StackPane stackPane= new StackPane();
 
 
     GridPane grid = new GridPane();
@@ -50,7 +48,10 @@ public class Game extends Application  {
     Label you= new Label("You");
 
 
-
+    /**
+     * This class extends Button with the capacity for it to be clicked.
+     * @author Chucheng Qian
+     */
     class Card extends Button {
         String placement;
         int id;
@@ -62,23 +63,25 @@ public class Game extends Application  {
             this.index=index;
             this.placement=placement;
 
-            char location =index < 26 ? (char)(index + 'A') : (char)(index - 26 + '0');
+            char location =index < 26 ? (char)(index + 'A') : (char)(index - 26 + '0');// the loaction of this card on the board
             int num = Integer.parseInt(theNumberOfplayers);
             ArrayList<String> cardLocalList;
             DataUtil util = new DataUtil();
             cardLocalList = util.placementSortToList(placement);
 
 
-            this.setMinSize(80,80);
+            this.setMinSize(80,80);//set the size of the card
             this.setMaxSize(80,80);
+            CardImage.setImageToCard(this,cardLocalList.get(index));
 
-            //event handler ,inited when user click the card button
+            //event handler ,inited when the mouse click the card
             this.setOnMousePressed(event -> {
                 if(WarringStatesGame.isMoveLegal(placement,location)){
                     moves =moves+location;
                     controls.getChildren().clear();
                     putPlacement(placement,id);
                     SetupGrid();
+                    //all human players
                     if(num==2 && id!=50){
                         NumberofPlayerEqualto2(cardLocalList,index,id);
                     }
@@ -88,6 +91,7 @@ public class Game extends Application  {
                     if(num==4 && id!=50){
                         NumberofPlayerEqualto4(cardLocalList,index,id);
                     }
+                    //when id =50 ,it means there is only one human player
                     if(num==2 && id==50){
                         NumberofPlayerEqualto2WhenComputet(cardLocalList,index);
                     }
@@ -108,7 +112,7 @@ public class Game extends Application  {
 
 
     /**
-     * generate  a random setup for the game
+     * Generate  a random setup for the game
      * @return a string of placement
      * @author taken from the generateRandomSetup() from TestUtility.java，with little bit of change by Chucheng Qian
      */
@@ -200,6 +204,7 @@ public class Game extends Application  {
                 }
             }
         }
+        //turn the board setup from its "ArrayList<String>" form to the "String"
         String newSetup  = WarringStatesGame.GetNewSetup(cardLocalList1);
         return newSetup;
     }
@@ -208,8 +213,8 @@ public class Game extends Application  {
 
 
     /**
-     * search the upper,lower,right and left side of Zhangyi to make sure the game is finished
-     * (no valid moves can be done)
+     * Search the upper,lower,right and left side of Zhangyi to make sure the game is finished
+     * When no valid moves can be done
      * @param presentBoard  an Arraylist of string representing the card placement
      * @return a boolean represents whether the game is finished
      * @author Chucheng Qian
@@ -223,42 +228,31 @@ public class Game extends Application  {
         }
         int coltmp = ZYlocal / 6;
         int rowtmp = ZYlocal % 6;
+        // upper part of ZhangYi
         for(int i =coltmp*6;i<=ZYlocal;i++){
             if((!presentBoard.get(i).equals(" ")) && (!presentBoard.get(i).equals("z9"))){
                 return false;
             }
         }
+        // lower part of ZhangYi
         for(int i =(coltmp+1)*6-1;i>=ZYlocal;i--){
             if((!presentBoard.get(i).equals(" ")) && (!presentBoard.get(i).equals("z9"))){
                 return false;
             }
         }
+        // left part of ZhangYi
         for(int i =(ZYlocal + (6 - coltmp - 1) * 6);i>=ZYlocal;i-=6){
             if((!presentBoard.get(i).equals(" ")) && (!presentBoard.get(i).equals("z9"))){
                 return false;
             }
         }
+        // right part of ZhangYi
         for(int i = rowtmp;i<=ZYlocal;i+=6){
             if((!presentBoard.get(i).equals(" ")) && (!presentBoard.get(i).equals("z9"))){
                 return false;
             }
         }
         return true;
-    }
-
-
-    /**
-     * add the notice message to the root
-     * eg:when the move is invalid/when some players win
-     * @author Chucheng Qian
-     */
-    private void Notice(String theNotice){
-        Text notice = new Text(theNotice);
-        notice.setFont(Font.font("Tahoma", FontWeight.BOLD,50));
-        notice.setFill(Color.RED);
-        notice.setLayoutX(130);
-        notice.setLayoutY(400);
-        controls.getChildren().add(notice);
     }
 
 
@@ -295,6 +289,20 @@ public class Game extends Application  {
         return winners;
     }
 
+    /**
+     * add the notice message to the root
+     * eg:when the move is invalid/when some players win
+     * @author Chucheng Qian
+     */
+    private void Notice(String theNotice){
+        Text notice = new Text(theNotice);
+        notice.setFont(Font.font("Tahoma", FontWeight.BOLD,50));
+        notice.setFill(Color.RED);
+        notice.setLayoutX(130);
+        notice.setLayoutY(400);
+        controls.getChildren().add(notice);
+    }
+
 
 
 
@@ -312,12 +320,11 @@ public class Game extends Application  {
         DataUtil util = new DataUtil();
         cardLocalList = util.placementSortToList(placement);
 
-        grid.getChildren().clear();
+        grid.getChildren().clear();//clear the current grid for new grid
         int index = 0;
         for (int i = 5; i >= 0; i--){
             for (int j = 0; j < 6; j++){
                 Card card = new Card(index,cardLocalList.get(index),placement,id);
-                CardImage.setImageToButton(card,cardLocalList.get(index));
                 grid.add(card, i, j);
                 index ++;
             }
@@ -336,14 +343,16 @@ public class Game extends Application  {
 
 
     /**
-     * update the scene accoroding to the player id when the number of players are 2
+     * update the board with the user's move accoroding to the player id
+     * when the number of players are 2.
      *
-     * show the flags owned bu each player
-     *
-     * * It is a draft ,upgrade required
+     * Show the flags owned by each player.
+     * Show the supporters owned by each player.
      *
      * @param pb  an Arraylist of string representing the card placement
+     * @param index the index of the target location
      * @param id the id of current player
+     *
      * @author Chucheng Qian
      */
     private void NumberofPlayerEqualto2(ArrayList<String> pb,int index,int id){
@@ -358,30 +367,42 @@ public class Game extends Application  {
         showSupporters(WarringStatesGame.getSupporters(randomSetup,moves,2,1),800.0,415);
         if(id==0){
 
-            putPlacement(updateBoard(pb,index),1);
+            putPlacement(updateBoard(pb,index),1);//now it's player 1's turn
 
         }else{
 
-            putPlacement(updateBoard(pb,index),0);
+            putPlacement(updateBoard(pb,index),0);//now it's player 0's turn
         }
 
 
     }
 
+    /**
+     * update the board with the user's move and one randomly generated move
+     * when the number of players are 2.
+     *
+     * Show the flags owned by each player.
+     * Show the supporters owned by each player.
+     *
+     * @param pb  an Arraylist of string representing the card placement
+     * @param index the index of the target location
+     * @author Chucheng Qian
+     */
     private void NumberofPlayerEqualto2WhenComputet(ArrayList<String> pb,int index){
         DataUtil util = new DataUtil();
+        //check whether there are valid moves after the user's click
         if (WhetherFinished(util.placementSortToList(updateBoard(pb, index)))) {
             putPlacement(updateBoard(pb, index),50);}
-        else{
+        else{//generate a random move for robotA
             char randomLocation1 = WarringStatesGame.generateMove(updateBoard(pb,index));
-            int randomIndex1 =randomLocation1 >=65 ? (int)(randomLocation1 - 'A') : (int)(randomLocation1 - 48+26);
+            int randomIndex1 =randomLocation1 >=65 ? (randomLocation1 - 'A') : (randomLocation1 - 48+26);
             moves =moves+randomLocation1;
             putPlacement(updateBoard(util.placementSortToList(updateBoard(pb,index)),randomIndex1),50);
         }
         player0.setLayoutX(600);
         player0.setLayoutY(540);
         you.setLayoutX(607);
-        you.setLayoutY(553);
+        you.setLayoutY(553);//tell the user that player1 represents the human player
         player1.setLayoutX(800);
         player1.setLayoutY(540);
         controls.getChildren().addAll(player0,player1,you);
@@ -393,14 +414,16 @@ public class Game extends Application  {
 
 
     /**
-     * update the scene seperately accoroding to the player id when the number of players are 3
+     * update the board with the user's move accoroding to the player id
+     * when the number of players are 3.
      *
-     * show the flags owned bu each player
-     *
-     * * It is a draft ,upgrade required
+     * Show the flags owned by each player.
+     * Show the supporters owned by each player.
      *
      * @param pb  an Arraylist of string representing the card placement
+     * @param index the index of the target location
      * @param id the id of current player
+     *
      * @author Chucheng Qian
      */
     private void NumberofPlayerEqualto3(ArrayList<String> pb,int index,int id){
@@ -418,32 +441,42 @@ public class Game extends Application  {
         showFlags(GetFlagofSepecificPlayer(2),600.0,600.0);
         showSupporters(WarringStatesGame.getSupporters(randomSetup,moves,3,2),600.0,515);
         if(id==0){
-            putPlacement(updateBoard(pb,index),1);
+            putPlacement(updateBoard(pb,index),1);//now it's player 1's turn
         }
         if(id==1){
-            putPlacement(updateBoard(pb,index),2);
+            putPlacement(updateBoard(pb,index),2);//now it's player 2's turn
         }
         if(id==2){
-            putPlacement(updateBoard(pb,index),0);
+            putPlacement(updateBoard(pb,index),0);//now it's player 0's turn
         }
     }
-
+    /**
+     * update the board with the user's move and two randomly generated move
+     * when the number of players are 3.
+     *
+     * Show the flags owned by each player.
+     * Show the supporters owned by each player.
+     *
+     * @param pb  an Arraylist of string representing the card placement
+     * @param index the index of the target location
+     * @author Chucheng Qian
+     */
     private void NumberofPlayerEqualto3WhenComputet(ArrayList<String> pb,int index) {
         DataUtil util = new DataUtil();
-
+        //check whether there are valid moves after the user's click
         if (WhetherFinished(util.placementSortToList(updateBoard(pb, index)))) {
             putPlacement(updateBoard(pb, index),50);
-        } else {
+        } else {//generate a random move for robotA
             char randomLocation1 = WarringStatesGame.generateMove(updateBoard(pb, index));
-            int randomIndex1 = randomLocation1 >= 65 ? (int) (randomLocation1 - 'A') : (int) (randomLocation1 - 48 + 26);
+            int randomIndex1 = randomLocation1 >= 65 ?  (randomLocation1 - 'A') : (randomLocation1 - 48 + 26);
             String newBoard1 = updateBoard(util.placementSortToList(updateBoard(pb, index)), randomIndex1);
-
+            //check whether there are valid moves after the random move for robotA
             if (WhetherFinished(util.placementSortToList(newBoard1))) {
                 moves = moves + randomLocation1;
                 putPlacement(newBoard1,50);
-            } else {
+            } else {//generate a random move for robotB
                 char randomLocation2 = WarringStatesGame.generateMove(newBoard1);
-                int randomIndex2 = randomLocation2 >= 65 ? (int) (randomLocation2 - 'A') : (int) (randomLocation2 - 48 + 26);
+                int randomIndex2 = randomLocation2 >= 65 ?  (randomLocation2 - 'A') :  (randomLocation2 - 48 + 26);
                 String newBoard2 = updateBoard(util.placementSortToList(newBoard1), randomIndex2);
                 moves = moves + randomLocation1 + randomLocation2;
 
@@ -454,7 +487,7 @@ public class Game extends Application  {
 
         player0.setLayoutX(600);
         player0.setLayoutY(340);
-        you.setLayoutX(607);
+        you.setLayoutX(607);//tell the user that player1 represents the human player
         you.setLayoutY(353);
         player1.setLayoutX(800);
         player1.setLayoutY(340);
@@ -471,14 +504,16 @@ public class Game extends Application  {
     }
 
     /**
-     * update the scene seperately accoroding to the player id when the number of players are 4
+     * update the board with the user's move accoroding to the player id
+     * when the number of players are 4.
      *
-     * show the flags owned bu each player
-     *
-     * It is a draft ,upgrade required
+     * Show the flags owned by each player.
+     * Show the supporters owned by each player.
      *
      * @param pb  an Arraylist of string representing the card placement
+     * @param index the index of the target location
      * @param id the id of current player
+     *
      * @author Chucheng Qian
      */
     void NumberofPlayerEqualto4(ArrayList<String> pb,int index,int id){
@@ -500,39 +535,52 @@ public class Game extends Application  {
         showFlags(GetFlagofSepecificPlayer(3),800.0,600.0);
         showSupporters(WarringStatesGame.getSupporters(randomSetup,moves,4,3),800.0,515);
         if(id==0){
-            putPlacement(updateBoard(pb,index),1);
-
+            putPlacement(updateBoard(pb,index),1);//now it's player 1's turn
         }
         if(id==1){
-            putPlacement(updateBoard(pb,index),2);
+            putPlacement(updateBoard(pb,index),2);//now it's player 2's turn
         }
         if(id==2){
-            putPlacement(updateBoard(pb,index),3);
+            putPlacement(updateBoard(pb,index),3);//now it's player 3's turn
         }
         if(id==3){
-            putPlacement(updateBoard(pb,index),0);
+            putPlacement(updateBoard(pb,index),0);//now it's player 0's turn
         }
     }
 
+    /**
+     * update the board with the user's move and tree randomly generated move
+     * when the number of players are 4.
+     *
+     * Show the flags owned by each player.
+     * Show the supporters owned by each player.
+     *
+     * @param pb  an Arraylist of string representing the card placement
+     * @param index the index of the target location
+     * @author Chucheng Qian
+     */
     void NumberofPlayerEqualto4WhenComputet(ArrayList<String> pb,int index){
         DataUtil util = new DataUtil();
+        //check whether there are valid moves after the user's click
         if (WhetherFinished(util.placementSortToList(updateBoard(pb, index)))) {
             putPlacement(updateBoard(pb, index),50);
-        }else {
+        }else {//generate a random move for robotA
             char randomLocation1 = WarringStatesGame.generateMove(updateBoard(pb, index));
             int randomIndex1 = randomLocation1 >= 65 ? (int) (randomLocation1 - 'A') : (int) (randomLocation1 - 48 + 26);
             String newBoard1 = updateBoard(util.placementSortToList(updateBoard(pb, index)), randomIndex1);
+            //check whether there are valid moves after the random move for robotA
             if (WhetherFinished(util.placementSortToList(newBoard1))) {
                 moves = moves + randomLocation1;
                 putPlacement(newBoard1,50);
-            }else{
+            }else{//generate a random move for robotB
                 char randomLocation2 = WarringStatesGame.generateMove(newBoard1);
                 int randomIndex2 = randomLocation2 >= 65 ? (int) (randomLocation2 - 'A') : (int) (randomLocation2 - 48 + 26);
                 String newBoard2 = updateBoard(util.placementSortToList(newBoard1), randomIndex2);
+                //check whether there are valid moves after the random move for robotB
                 if(WhetherFinished(util.placementSortToList(newBoard2))){
                     moves = moves + randomLocation1 + randomLocation2;
                     putPlacement(newBoard2,50);
-                }else {
+                }else {//generate a random move for robotC
                     char randomLocation3 = WarringStatesGame.generateMove(newBoard2);
                     int randomIndex3 = randomLocation3 >= 65 ? (int) (randomLocation3 - 'A') : (int) (randomLocation3 - 48 + 26);
                     moves = moves + randomLocation1 + randomLocation2 + randomLocation3;
@@ -544,7 +592,7 @@ public class Game extends Application  {
         }
         player0.setLayoutX(600);
         player0.setLayoutY(340);
-        you.setLayoutX(607);
+        you.setLayoutX(607);//tell the user that player1 represents the human player
         you.setLayoutY(353);
         player1.setLayoutX(800);
         player1.setLayoutY(340);
@@ -567,8 +615,11 @@ public class Game extends Application  {
 
 
 
-
-
+    /**
+     * Show welcome view.
+     *
+     * @author Chucheng Qian
+     */
     private void WelcomeView() {
         Polygon rectangle=new Polygon();
         rectangle.getPoints().addAll(
@@ -579,6 +630,7 @@ public class Game extends Application  {
         );
         rectangle.setFill(new ImagePattern(CardImage.wel));
         controls.getChildren().add(rectangle);
+        //event handler,init when click any place on the board
         rectangle.setOnMouseClicked(event -> {
             controls.getChildren().clear();
             StartingView();
@@ -586,6 +638,12 @@ public class Game extends Application  {
 
     }
 
+
+    /**
+     * Show start view with .
+     *
+     * @author Chucheng Qian
+     */
     private void StartingView() {
         Polygon rectangle=new Polygon();
         rectangle.getPoints().addAll(
@@ -596,6 +654,7 @@ public class Game extends Application  {
         );
         rectangle.setFill(new ImagePattern(CardImage.start));
         controls.getChildren().add(rectangle);
+        //show the textfield which the user can enter the number of players and buttons which the user can choose to play with human or computer
         NumberOfPlayerWhenWithHuman();
         NumberOfPlayerWhenWithComputer();
     }
@@ -628,6 +687,7 @@ public class Game extends Application  {
         numberOfplayersforH = new TextField();
         numberOfplayersforH.setPrefWidth(50);
         Button button1 = new Button("Start");
+        //event handler,init when click the button
         button1.setOnAction(event -> {
             theNumberOfplayers = numberOfplayersforH.getText();
             int num = Integer.parseInt(theNumberOfplayers);
@@ -670,11 +730,14 @@ public class Game extends Application  {
         numberOfplayersforC = new TextField();
         numberOfplayersforC.setPrefWidth(50);
         Button button1 = new Button("Start");
+        //event handler,init when click the button
         button1.setOnAction(event -> {
             theNumberOfplayers = numberOfplayersforC.getText();
             int num = Integer.parseInt(theNumberOfplayers);
             if(num>=2 && num <=4){
                 controls.getChildren().clear();
+                //set the id to be 50 to represent the only human player
+                //make this situation which playing with computers be separated when updating the board and setting flags and supporters.
                 putPlacement(randomSetup,50);
                 SetupGrid();
             }else{
@@ -704,10 +767,10 @@ public class Game extends Application  {
     /**
      * get all the flags owned by one sepecific player
      * @param id the id of current player
+     * @return ArrayList<Character> an Arraylist of character representing all the flags owned by one user
      * @author Chucheng Qian
      *
-     * *used when intended to show the flags of each player on the scene
-     *
+     **
      */
     private ArrayList<Character> GetFlagofSepecificPlayer(int id){
         ArrayList<Character> flags = new ArrayList<>();
@@ -725,11 +788,10 @@ public class Game extends Application  {
 
 
     /**
-     * show flags owned one player on the scene
+     * show flags owned one player on the board
      *
-     * It is a draft ,upgrade required
      *
-     * @param list  an Arraylist of string representing all the flags owned by one user
+     * @param list  an Arraylist of character representing all the flags owned by one user
      * @param x the x-coodinate
      * @param y the y-coodinate
      * @author Chucheng Qian
@@ -745,6 +807,7 @@ public class Game extends Application  {
 
             });
             x+=30;
+            //set image to the square figure which shows supporters
             if(list.get(i).equals('a')){
                 s.setFill(new ImagePattern(CardImage.aa0));
             }
@@ -773,6 +836,15 @@ public class Game extends Application  {
         }
     }
 
+    /**
+     * show supporters owned one player on the board
+     *
+     *
+     * @param supporters  an string consists of all the supporters owned by one user
+     * @param x the x-coodinate
+     * @param y the y-coodinate
+     * @author Chucheng Qian
+     */
     private void showSupporters(String supporters,double x,double y){
         for(int i = 0; i<supporters.length();i+=2){
             Polygon s = new Polygon();

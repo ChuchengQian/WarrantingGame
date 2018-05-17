@@ -24,7 +24,6 @@ public class WarringStatesGame {
      * @author Jiayang Li & chunxiang Song
      */
     static boolean isCardPlacementWellFormed(String cardPlacement) {
-        System.out.println("!!!"+cardPlacement);
         // FIXME Task 2: determine whether a card placement is well-formed
         char character1 = cardPlacement.charAt(0);
         char character2 = cardPlacement.charAt(1);
@@ -742,7 +741,8 @@ public class WarringStatesGame {
         DataUtil util = new DataUtil();
         cardLocalList1 = util.placementSortToList(setup);
 
-
+        //two entries for a state ,the first is the owner of the flag for this state
+        // and the second one is number of supporters he hold for for this state
         char record[]= {'0','0','0','0','0','0','0','0','0','0','0','0','0','0'};
 
         String supporterof0="";
@@ -751,6 +751,9 @@ public class WarringStatesGame {
         String supporterof3="";
 
         String newSetup = setup;
+        //check the flag of each Kingdom and then
+        //store the owner of each flag followed by the number of supporters of this owner for this Kingdom in the record char list step by step
+        //each step uses one move
         for(int paceNum1=0;paceNum1<moveSequence.length();paceNum1++) {
             char locationChar = moveSequence.charAt(paceNum1);
             //i represents the id of current player
@@ -798,7 +801,6 @@ public class WarringStatesGame {
 
                     char count1 = (char) (count + 48);
                     int  index = (country-'a')*2;
-
                     if (count1 >= record[index + 1]) {
                         record[index] = (char) (i + 48);
 
@@ -895,6 +897,7 @@ public class WarringStatesGame {
 
         }
 
+        //get the optput from the final record list
         int output[] = {-1,-1,-1,-1,-1,-1,-1};
         int o=0;
         for(int iiii=0;iiii<output.length;iiii++){
