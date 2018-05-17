@@ -2,6 +2,13 @@ package comp1110.util;
 
 import java.util.ArrayList;
 
+/**
+ * placement  It must be in accordance with A...Z or 0...9.
+ * There may be an empty card.
+ *
+ * @author Chunxiang Song
+ */
+
 public class DataUtil {
     public ArrayList<String> placementSortToList(String placement){
         String [] pos = new String[36];
