@@ -378,18 +378,17 @@ public class WarringStatesGame {
      * @param playerId     the player number for which to get the list of supporters, [0..(numPlayers-1)]
      * @return the list of supporters for the given player
      * @author Jiayang Li
+     *
      * Finding out all the supporters at a time based on the moveSequence, and save them separately into different String
      *  on the basis of the number of the players. Then return the supporters based on the playerId.
      */
     public static String getSupporters(String setup, String moveSequence, int numPlayers, int playerId) {
         // FIXME Task 7: get the list of supporters for a given player after a sequence of moves
-        System.out.println("setup "+setup+" \nmoveSequence " + moveSequence+ " \nnumPlayers "+ numPlayers+"\nplayerId "+playerId);
         int paceCount = moveSequence.length();
         String supporters1 = "";
         String supporters2 = "";
         String supporters3 = "";
         String supporters4 = "";
-//        System.out.println("paceCount "+paceCount);
 
         ArrayList<String> cardLocalList;
         DataUtil util = new DataUtil();
@@ -401,7 +400,6 @@ public class WarringStatesGame {
         for (int i = 0; i < paceCount; i++) {
             if (moveSequence.charAt(i) <= 'Z' && moveSequence.charAt(i) >= 'A') {
                 target = moveSequence.charAt(i) - 'A';
-//                System.out.println("A~Z " + target+" chart "+moveSequence.charAt(i));
             } else if (moveSequence.charAt(i) <= '9' && moveSequence.charAt(i) >= '0') {
                 target = moveSequence.charAt(i) - '0';
                 target = target + 26;
@@ -411,7 +409,6 @@ public class WarringStatesGame {
                 for (int j = 0; j < 36; j++) {
                     if (cardLocalList.get(j).equals("z9")) {
                         ZYLocation = j;
-//                        System.out.println(ZYLocation+" ZYLocation");
                     }
                 }
                 colTmp = ZYLocation / 6;
@@ -424,11 +421,9 @@ public class WarringStatesGame {
                 } else if (moveSequence.charAt(i - 1) <= '9' && moveSequence.charAt(i - 1) >= '0') {
                     ZYLocation = moveSequence.charAt(i - 1) - '0';
                     ZYLocation = ZYLocation + 26;
-//                    System.out.println("ZYLocation "+ZYLocation+" "+moveSequence.charAt(i-1));
                 }
                 colTmp = ZYLocation / 6;
                 rowTmp = ZYLocation % 6;
-//                System.out.println("colTmp "+colTmp+" rowTmp "+rowTmp);
             }
             //judge the direction of the target to ZYLocation
             if (target >= colTmp * 6 && target < (colTmp + 1) * 6) {
@@ -436,7 +431,6 @@ public class WarringStatesGame {
                     char targetTmp = cardLocalList.get(target).charAt(0);
                     for (int k = target; k < ZYLocation; k++) {
                         if (targetTmp == cardLocalList.get(k).charAt(0)) {
-//                            System.out.println(targetTmp+" target "+ cardLocalList.get(k).substring(0, 2));
                             if (numPlayers == 4) { //different situations to different numPlayers
                                 if(i % 4 == 0) {
                                     supporters1 = supporters1 + cardLocalList.get(k);
@@ -470,7 +464,6 @@ public class WarringStatesGame {
                     char targetTmp = cardLocalList.get(target).charAt(0);
                     for (int k = target; k > ZYLocation; k--) {
                         if (targetTmp == cardLocalList.get(k).charAt(0)) {
-//                            System.out.println(targetTmp+" target "+ cardLocalList.get(k).substring(0, 2));
                             if (numPlayers == 4) { //different situations to different numPlayers
                                 if(i % 4 == 0) {
                                     supporters1 = supporters1 + cardLocalList.get(k);
@@ -506,7 +499,6 @@ public class WarringStatesGame {
                     char targetTmp = cardLocalList.get(target).charAt(0);
                     for (int k = target; k > ZYLocation; k = k - 6) {
                         if (targetTmp == cardLocalList.get(k).charAt(0)) {
-//                            System.out.println(targetTmp+" target "+ cardLocalList.get(k).substring(0, 2));
                             if (numPlayers == 4) { //different situations to different numPlayers
                                 if(i % 4 == 0) {
                                     supporters1 = supporters1 + cardLocalList.get(k);
@@ -540,7 +532,6 @@ public class WarringStatesGame {
                     char targetTmp = cardLocalList.get(target).charAt(0);
                     for (int k = target; k < ZYLocation; k = k + 6) {
                         if (targetTmp == cardLocalList.get(k).charAt(0)) {
-//                            System.out.println(targetTmp+" target "+ cardLocalList.get(k).substring(0, 2));
                             if (numPlayers == 4) { //different situations to different numPlayers
                                 if(i % 4 == 0) {
                                     supporters1 = supporters1 + cardLocalList.get(k);
@@ -571,7 +562,6 @@ public class WarringStatesGame {
                     }
                 }
             }
-//            System.out.println("next");
         }
         //output the supporters based on the playerId & numPlayers
         String supporters = "";
