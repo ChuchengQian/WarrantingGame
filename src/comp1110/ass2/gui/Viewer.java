@@ -35,7 +35,6 @@ public class Viewer extends Application {
 
     private static final String URI_BASE = "assets/";
 
-    private static ArrayList<CardInfo> cardInit = new ArrayList<>();
 
     private final Group root = new Group();
     private final Group controls = new Group();

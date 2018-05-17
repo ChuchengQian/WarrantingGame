@@ -343,7 +343,7 @@ public class Game extends Application  {
 
 
     /**
-     * update the board with the user's move accoroding to the player id
+     * Update the board with the user's move accoroding to the player id
      * when the number of players are 2.
      *
      * Show the flags owned by each player.
@@ -378,7 +378,7 @@ public class Game extends Application  {
     }
 
     /**
-     * update the board with the user's move and one randomly generated move
+     * Update the board with the user's move and one randomly generated move
      * when the number of players are 2.
      *
      * Show the flags owned by each player.
@@ -414,7 +414,7 @@ public class Game extends Application  {
 
 
     /**
-     * update the board with the user's move accoroding to the player id
+     * Update the board with the user's move accoroding to the player id
      * when the number of players are 3.
      *
      * Show the flags owned by each player.
@@ -451,7 +451,7 @@ public class Game extends Application  {
         }
     }
     /**
-     * update the board with the user's move and two randomly generated move
+     * Update the board with the user's move and two randomly generated move
      * when the number of players are 3.
      *
      * Show the flags owned by each player.
@@ -504,7 +504,7 @@ public class Game extends Application  {
     }
 
     /**
-     * update the board with the user's move accoroding to the player id
+     *Update the board with the user's move accoroding to the player id
      * when the number of players are 4.
      *
      * Show the flags owned by each player.
@@ -549,7 +549,7 @@ public class Game extends Application  {
     }
 
     /**
-     * update the board with the user's move and tree randomly generated move
+     * Update the board with the user's move and tree randomly generated move
      * when the number of players are 4.
      *
      * Show the flags owned by each player.
