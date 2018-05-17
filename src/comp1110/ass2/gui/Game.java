@@ -1,7 +1,6 @@
 package comp1110.ass2.gui;
 
 import comp1110.ass2.WarringStatesGame;
-import comp1110.ass2.gui.CardImage;
 import comp1110.util.DataUtil;
 import javafx.application.Application;
 import javafx.geometry.Insets;
@@ -10,8 +9,6 @@ import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
-import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
@@ -21,25 +18,92 @@ import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.stage.Stage;
 import javafx.scene.shape.Polygon;
-
-import javafx.fxml.FXML;
-import javafx.scene.Node;
-import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.GridPane;
-
-
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.util.Collections;
-import comp1110.ass2.gui.Viewer;
 
 import javafx.scene.text.Text;
 
-public class Game extends Application {
+public class Game extends Application  {
     private static final int BOARD_WIDTH = 933;
     private static final int BOARD_HEIGHT = 700;
+
+    /* node groups */
+    private final Group root = new Group();
+    private final Group controls = new Group();
+    StackPane stackPane= new StackPane();
+
+
+    GridPane grid = new GridPane();
+    String moves="";
+    String randomSetup = generateRandomSetup();
+
+    TextField numberOfplayersforH;
+    TextField numberOfplayersforC;
+    String theNumberOfplayers;
+
+    /* label used to specify player */
+    Label player0= new Label("Player0");
+    Label player1= new Label("Player1");
+    Label player2= new Label("Player2");
+    Label player3= new Label("Player3");
+    Label you= new Label("You");
+
+
+
+    class Card extends Button {
+        String placement;
+        int id;
+        int index ;
+
+        public Card(int index,String cardInfo,String placement,int id){
+            super(cardInfo);
+            this.id=id;
+            this.index=index;
+            this.placement=placement;
+
+            char location =index < 26 ? (char)(index + 'A') : (char)(index - 26 + '0');
+            int num = Integer.parseInt(theNumberOfplayers);
+            ArrayList<String> cardLocalList;
+            DataUtil util = new DataUtil();
+            cardLocalList = util.placementSortToList(placement);
+
+
+            this.setMinSize(80,80);
+            this.setMaxSize(80,80);
+
+            //event handler ,inited when user click the card button
+            this.setOnMousePressed(event -> {
+                if(WarringStatesGame.isMoveLegal(placement,location)){
+                    moves =moves+location;
+                    controls.getChildren().clear();
+                    putPlacement(placement,id);
+                    SetupGrid();
+                    if(num==2 && id!=50){
+                        NumberofPlayerEqualto2(cardLocalList,index,id);
+                    }
+                    if(num==3 && id!=50){
+                        NumberofPlayerEqualto3(cardLocalList,index,id);
+                    }
+                    if(num==4 && id!=50){
+                        NumberofPlayerEqualto4(cardLocalList,index,id);
+                    }
+                    if(num==2 && id==50){
+                        NumberofPlayerEqualto2WhenComputet(cardLocalList,index);
+                    }
+                    if(num==3 && id==50){
+                        NumberofPlayerEqualto3WhenComputet(cardLocalList,index);
+                    }
+                    if(num==4 && id==50){
+                        System.out.println("g");
+                        NumberofPlayerEqualto4WhenComputet(cardLocalList,index);
+                    }
+                }else { Notice("Invalid move ,try again!"); }
+            });
+        }
+
+    }
+
 
 
 
@@ -65,364 +129,6 @@ public class Game extends Application {
         }
         return sb.toString();
     }
-
-    /* node groups */
-    private final Group root = new Group();
-    private final Group controls = new Group();
-    StackPane stackPane= new StackPane();
-
-
-    GridPane grid = new GridPane();
-    String moves="";
-    String randomSetup = generateRandomSetup();
-
-    TextField numberOfplayersforH;
-    TextField numberOfplayersforC;
-    String theNumberOfplayers;
-
-    /* label used to specify player */
-    Label player0= new Label("Player0");
-    Label player1= new Label("Player1");
-    Label player2= new Label("Player2");
-    Label player3= new Label("Player3");
-
-
-
-
-
-
-
-
-    /**
-     * find the winners when the game is finished
-     * @return a string which each element represents the id of winner,the length of string may be one or more.
-     * @author Chucheng Qian
-     */
-    public String Winnners(){
-        //num is the number of players involved
-        int num = Integer.parseInt(theNumberOfplayers);
-        int allFlags[]=WarringStatesGame.getFlags(randomSetup,moves,num);
-        ArrayList<Integer> store = new ArrayList<>();
-        String winners="";
-
-        for (int ii = 0; ii < num; ii++){
-            store.add(0);
-            int x=0;
-
-            for (int iii=0;iii<allFlags.length;iii++){
-                if (ii==allFlags[iii]) {
-                    x++;
-                    store.set(ii,x);
-                } }
-        }
-        //the number of flags owned by a winner
-        int maxFlag =Collections.max(store);
-        for(int i=0;i<store.size();i++){
-            if(store.get(i)==maxFlag){
-                winners=winners+" "+i;
-            }
-        }
-        return winners;
-    }
-
-    /**
-     * show the current board
-     * allow user to click on the button which represents the cards
-     * when the game is finished,show the winner
-     * when the move is invalid,notice the user
-     * @param placement  A placement string representing the board setup
-     * @param id the id of current player
-     * @author Chucheng Qian with some structures from Task4 by Chunxiang Song
-     */
-    private void putPlacement(String placement,int id) {
-        int num = Integer.parseInt(theNumberOfplayers);
-        ArrayList<String> cardLocalList;
-        DataUtil util = new DataUtil();
-        cardLocalList = util.placementSortToList(placement);
-
-        if (WhetherFinished(cardLocalList)) {
-            whenFinished();}
-        else{
-            //clear the previous board
-            grid.getChildren().clear();
-            int index = 0;
-            for (int i = 5; i >= 0; i--){
-                for (int j = 0; j < 6; j++){
-                    int idd = id;//as varrable should be final in the lambda expression
-                    //one button is one card
-                    Button card = new Button(cardLocalList.get(index));
-                    card.setMinSize(80,80);
-                    card.setMaxSize(80,80);
-                    int indexx = index;//as varrable should be final in the lambda expression
-                    char location =indexx < 26 ? (char)(indexx + 'A') : (char)(indexx - 26 + '0');
-                    //event handler ,inited when user click the card button
-                    card.setOnMousePressed(event -> {
-                        if(WarringStatesGame.isMoveLegal(placement,location)){
-                            moves =moves+location;
-                            controls.getChildren().clear();
-                            putPlacement(placement,id);
-                            SetupGrid();
-                            if(num==2){
-                                 NumberofPlayerEqualto2(cardLocalList,indexx,idd);
-                            }
-                            if(num==3){
-                                NumberofPlayerEqualto3(cardLocalList,indexx,idd);
-                            }
-                            if(num==4){
-                                NumberofPlayerEqualto4(cardLocalList,indexx,idd);
-                            }
-                        }else { InvalidMoveNotice(); }
-                    });
-                    CardImage.setImageToButton(card,cardLocalList.get(index));
-                    grid.add(card, i, j);
-                    index ++;
-                }
-            }
-        }
-
-    }
-
-    private void whenFinished() {
-        Text winMessage = new Text("Player" + Winnners() + " wins!");
-        winMessage.setFont(Font.font("Tahoma", FontWeight.BOLD, 50));
-        winMessage.setFill(Color.RED);
-        winMessage.setLayoutX(130);
-        winMessage.setLayoutY(400);
-        controls.getChildren().add(winMessage);
-    }
-
-
-
-
-
-    private void putPlacementForComputer(String placement) {
-        int num = Integer.parseInt(theNumberOfplayers);
-        ArrayList<String> cardLocalList;
-        DataUtil util = new DataUtil();
-        cardLocalList = util.placementSortToList(placement);
-
-        if (WhetherFinished(cardLocalList)) {
-            whenFinished();}
-        else{
-
-            //clear the previous board
-            grid.getChildren().clear();
-
-            int index = 0;
-            for (int i = 5; i >= 0; i--){
-                for (int j = 0; j < 6; j++){
-                    //one button is one card
-                    Button card = new Button(cardLocalList.get(index));
-                    card.setMinSize(80,80);
-                    card.setMaxSize(80,80);
-                    int indexx = index;//as varrable should be final in the lambda expression
-                    char location =indexx < 26 ? (char)(indexx + 'A') : (char)(indexx - 26 + '0');
-
-                    //event handler ,inited when user click the card button
-                    card.setOnMousePressed(event -> {
-                        if(WarringStatesGame.isMoveLegal(placement,location)){
-                            moves =moves+location;
-                            controls.getChildren().clear();
-                            putPlacementForComputer(placement);
-                            SetupGrid();
-                            if(num==2){
-                                NumberofPlayerEqualto22(cardLocalList,indexx);
-                                /*char location1 = WarringStatesGame.generateMove(updateBoard(cardLocalList,indexx));//as varrable should be final in the lambda expression
-                                int lcc =location1 >=65 ? (int)(location1 - 'A') : (int)(location1 - 48);
-                                moves =moves+location1;
-                                NumberofPlayerEqualto2(util.placementSortToList(updateBoard(cardLocalList,indexx)),lcc,1);
-*/
-                            }
-                            if(num==3){
-                                NumberofPlayerEqualto33(cardLocalList,indexx);
-                            }
-                            if(num==4){
-                                NumberofPlayerEqualto44(cardLocalList,indexx);
-                            }
-                        }else { InvalidMoveNotice(); }
-                    });
-
-                    CardImage.setImageToButton(card,cardLocalList.get(index));
-                    grid.add(card, i, j);
-                    index ++;
-                }
-            }
-        }
-
-    }
-
-
-
-
-
-    /**used when play with human
-     * allow user to type in the number of players
-     * allow user to click on the button "Start" to start the game
-     * Ensure that the game can be played by 2-4 human players.
-     * when the number of players are invalid,notice the user
-     * @author Chucheng Qian
-     */
-    private void NumberOfPlayerWhenWithHuman() {
-        Label others = new Label("Play with Others:");
-        others.setFont(Font.font("Tahoma", FontWeight.BOLD,20));
-        Label label0 = new Label("Number of Players:");
-        label0.setFont(Font.font("Tahoma", FontWeight.BOLD,20));
-        numberOfplayersforH = new TextField();
-        numberOfplayersforH.setPrefWidth(50);
-        Button button1 = new Button("Start");
-        button1.setOnAction(event -> {
-            theNumberOfplayers = numberOfplayersforH.getText();
-            int num = Integer.parseInt(theNumberOfplayers);
-            if(num>=2 && num <=4){
-                controls.getChildren().clear();
-                SetupGrid();
-                putPlacement(randomSetup,0);
-
-            }else{
-                Text notice = new Text("Invalid players ,try again!");
-                notice.setFont(Font.font("Tahoma", FontWeight.BOLD,50));
-                notice.setFill(Color.RED);
-                notice.setLayoutX(130);
-                notice.setLayoutY(400);
-                controls.getChildren().add(notice);
-
-            }
-
-        });
-        HBox hb1 = new HBox();
-        hb1.getChildren().addAll(others,label0, numberOfplayersforH, button1);
-        hb1.setSpacing(10);
-        hb1.setLayoutX(200);
-        hb1.setLayoutY(350);
-        controls.getChildren().add(hb1);
-    }
-    /**
-     * used when play with Computer
-     * allow user to type in the number of players
-     * allow user to click on the button "Start" to start the game
-     * Ensure that the game can be played by 2-4 human players.
-     * when the number of players are invalid,notice the user
-     * @author Chucheng Qian
-     */
-    private void NumberOfPlayerWhenWithComputer() {
-        Label computer = new Label("Play with Computer:");
-        computer.setFont(Font.font("Tahoma", FontWeight.BOLD,20));
-        Label label0 = new Label("Number of Players:");
-        label0.setFont(Font.font("Tahoma", FontWeight.BOLD,20));
-        numberOfplayersforC = new TextField();
-        numberOfplayersforC.setPrefWidth(50);
-        Button button1 = new Button("Start");
-        button1.setOnAction(event -> {
-            theNumberOfplayers = numberOfplayersforC.getText();
-            int num = Integer.parseInt(theNumberOfplayers);
-            if(num>=2 && num <=4){
-                controls.getChildren().clear();
-                putPlacementForComputer(randomSetup);
-                SetupGrid();
-            }else{
-                Text notice = new Text("Invalid players ,try again!");
-                notice.setFont(Font.font("Tahoma", FontWeight.BOLD,50));
-                notice.setFill(Color.RED);
-                notice.setLayoutX(130);
-                notice.setLayoutY(400);
-                controls.getChildren().add(notice);
-
-            }
-
-        });
-        HBox hb1 = new HBox();
-        hb1.getChildren().addAll(computer,label0, numberOfplayersforC, button1);
-        hb1.setSpacing(10);
-        hb1.setLayoutX(200);
-        hb1.setLayoutY(450);
-        controls.getChildren().add(hb1);
-    }
-
-
-    /**
-     * add the notice message to the root when the move is invalid
-     * @author Chucheng Qian
-     */
-    private void InvalidMoveNotice(){
-        Text notice = new Text("Invalid move ,try again!");
-        notice.setFont(Font.font("Tahoma", FontWeight.BOLD,50));
-        notice.setFill(Color.RED);
-        notice.setLayoutX(130);
-        notice.setLayoutY(400);
-        controls.getChildren().add(notice);
-    }
-
-
-
-
-    /**
-     * set up the card grid
-     * @author Chucheng Qian
-     */
-    private void SetupGrid() {
-        grid.setHgap(10);
-        grid.setVgap(10);
-        grid.setPadding(new Insets(40, 0, 0, 40));
-        controls.getChildren().add(grid);
-    }
-
-
-    private void WelcomeView() {
-        Polygon rectangle=new Polygon();
-        rectangle.getPoints().addAll(
-                0.0,0.0,
-                0.0,700.0,
-                933.0,700.0,
-                933.0,0.0
-        );
-        rectangle.setFill(new ImagePattern(CardImage.wel));
-        controls.getChildren().add(rectangle);
-        rectangle.setOnMouseClicked(event -> {
-            controls.getChildren().clear();
-            StartingView();
-        });
-
-    }
-
-    private void StartingView() {
-        Polygon rectangle=new Polygon();
-        rectangle.getPoints().addAll(
-                0.0,0.0,
-                0.0,700.0,
-                933.0,700.0,
-                933.0,0.0
-        );
-        rectangle.setFill(new ImagePattern(CardImage.start));
-        controls.getChildren().add(rectangle);
-        NumberOfPlayerWhenWithHuman();
-        NumberOfPlayerWhenWithComputer();
-    }
-
-
-
-
-    /**
-     * get all the flags owned by one sepecific player
-     * @param id the id of current player
-     * @author Chucheng Qian
-     *
-     * *used when intended to show the flags of each player on the scene
-     *
-     */
-    private ArrayList<Character> GetFlagofSepecificPlayer(int id){
-        ArrayList<Character> flags = new ArrayList<>();
-        int num = Integer.parseInt(theNumberOfplayers);
-        int allFlags[]=WarringStatesGame.getFlags(randomSetup,moves,num);
-        for(int i = 0;i < allFlags.length;i++){
-            if(allFlags[i]==id){
-                flags.add((char)(i+'a'));
-            }
-
-        }
-        return flags;
-    }
-
-
 
 
     /**
@@ -498,6 +204,137 @@ public class Game extends Application {
         return newSetup;
     }
 
+
+
+
+    /**
+     * search the upper,lower,right and left side of Zhangyi to make sure the game is finished
+     * (no valid moves can be done)
+     * @param presentBoard  an Arraylist of string representing the card placement
+     * @return a boolean represents whether the game is finished
+     * @author Chucheng Qian
+     */
+    Boolean WhetherFinished(ArrayList<String> presentBoard){
+        int ZYlocal = -1;
+        for (int i = 0; i < 36; i++) {
+            if (presentBoard.get(i).equals("z9")) {
+                ZYlocal = i;
+            }
+        }
+        int coltmp = ZYlocal / 6;
+        int rowtmp = ZYlocal % 6;
+        for(int i =coltmp*6;i<=ZYlocal;i++){
+            if((!presentBoard.get(i).equals(" ")) && (!presentBoard.get(i).equals("z9"))){
+                return false;
+            }
+        }
+        for(int i =(coltmp+1)*6-1;i>=ZYlocal;i--){
+            if((!presentBoard.get(i).equals(" ")) && (!presentBoard.get(i).equals("z9"))){
+                return false;
+            }
+        }
+        for(int i =(ZYlocal + (6 - coltmp - 1) * 6);i>=ZYlocal;i-=6){
+            if((!presentBoard.get(i).equals(" ")) && (!presentBoard.get(i).equals("z9"))){
+                return false;
+            }
+        }
+        for(int i = rowtmp;i<=ZYlocal;i+=6){
+            if((!presentBoard.get(i).equals(" ")) && (!presentBoard.get(i).equals("z9"))){
+                return false;
+            }
+        }
+        return true;
+    }
+
+
+    /**
+     * add the notice message to the root
+     * eg:when the move is invalid/when some players win
+     * @author Chucheng Qian
+     */
+    private void Notice(String theNotice){
+        Text notice = new Text(theNotice);
+        notice.setFont(Font.font("Tahoma", FontWeight.BOLD,50));
+        notice.setFill(Color.RED);
+        notice.setLayoutX(130);
+        notice.setLayoutY(400);
+        controls.getChildren().add(notice);
+    }
+
+
+
+    /**
+     * find the winners when the game is finished
+     * @return a string which each element represents the id of winner,the length of string may be one or more.
+     * @author Chucheng Qian
+     */
+    public String Winnners(){
+        //num is the number of players involved
+        int num = Integer.parseInt(theNumberOfplayers);
+        int allFlags[]=WarringStatesGame.getFlags(randomSetup,moves,num);
+        ArrayList<Integer> store = new ArrayList<>();
+        String winners="";
+
+        for (int ii = 0; ii < num; ii++){
+            store.add(0);
+            int x=0;
+
+            for (int iii=0;iii<allFlags.length;iii++){
+                if (ii==allFlags[iii]) {
+                    x++;
+                    store.set(ii,x);
+                } }
+        }
+        //the number of flags owned by a winner
+        int maxFlag =Collections.max(store);
+        for(int i=0;i<store.size();i++){
+            if(store.get(i)==maxFlag){
+                winners=winners+" "+i;
+            }
+        }
+        return winners;
+    }
+
+
+
+
+    /**
+     * show the current board
+     * allow user to click on the button which represents the cards
+     * when the game is finished,show the winner
+     * when the move is invalid,notice the user
+     * @param placement  A placement string representing the board setup
+     * @param id the id of current player
+     * @author Chucheng Qian with some structures from Task4 by Chunxiang Song
+     */
+    private void putPlacement(String placement,int id) {
+        ArrayList<String> cardLocalList;
+        DataUtil util = new DataUtil();
+        cardLocalList = util.placementSortToList(placement);
+
+        grid.getChildren().clear();
+        int index = 0;
+        for (int i = 5; i >= 0; i--){
+            for (int j = 0; j < 6; j++){
+                Card card = new Card(index,cardLocalList.get(index),placement,id);
+                CardImage.setImageToButton(card,cardLocalList.get(index));
+                grid.add(card, i, j);
+                index ++;
+            }
+        }
+
+        if (WhetherFinished(cardLocalList)) {
+            Notice("PLAYER" + Winnners() + " WIN!");}
+
+    }
+
+
+
+
+
+
+
+
     /**
      * update the scene accoroding to the player id when the number of players are 2
      *
@@ -531,29 +368,27 @@ public class Game extends Application {
 
     }
 
-    private void NumberofPlayerEqualto22(ArrayList<String> pb,int index){
+    private void NumberofPlayerEqualto2WhenComputet(ArrayList<String> pb,int index){
         DataUtil util = new DataUtil();
         if (WhetherFinished(util.placementSortToList(updateBoard(pb, index)))) {
-            whenFinished();}else{
-        char randomLocation1 = WarringStatesGame.generateMove(updateBoard(pb,index));
-        int randomIndex1 =randomLocation1 >=65 ? (int)(randomLocation1 - 'A') : (int)(randomLocation1 - 48+26);
-        moves =moves+randomLocation1;
-
-
-        putPlacementForComputer(updateBoard(util.placementSortToList(updateBoard(pb,index)),randomIndex1));
-
-
+            putPlacement(updateBoard(pb, index),50);}
+        else{
+            char randomLocation1 = WarringStatesGame.generateMove(updateBoard(pb,index));
+            int randomIndex1 =randomLocation1 >=65 ? (int)(randomLocation1 - 'A') : (int)(randomLocation1 - 48+26);
+            moves =moves+randomLocation1;
+            putPlacement(updateBoard(util.placementSortToList(updateBoard(pb,index)),randomIndex1),50);
         }
         player0.setLayoutX(600);
         player0.setLayoutY(540);
+        you.setLayoutX(607);
+        you.setLayoutY(553);
         player1.setLayoutX(800);
         player1.setLayoutY(540);
-        controls.getChildren().addAll(player0,player1);
+        controls.getChildren().addAll(player0,player1,you);
         showFlags(GetFlagofSepecificPlayer(0),600.0,500.0);
         showSupporters(WarringStatesGame.getSupporters(randomSetup,moves,2,0),600.0,415);
         showFlags(GetFlagofSepecificPlayer(1),800.0,500.0);
         showSupporters(WarringStatesGame.getSupporters(randomSetup,moves,2,1),800.0,415);
-
     }
 
 
@@ -593,39 +428,39 @@ public class Game extends Application {
         }
     }
 
-    private void NumberofPlayerEqualto33(ArrayList<String> pb,int index) {
+    private void NumberofPlayerEqualto3WhenComputet(ArrayList<String> pb,int index) {
         DataUtil util = new DataUtil();
 
         if (WhetherFinished(util.placementSortToList(updateBoard(pb, index)))) {
-            whenFinished();
+            putPlacement(updateBoard(pb, index),50);
         } else {
             char randomLocation1 = WarringStatesGame.generateMove(updateBoard(pb, index));
             int randomIndex1 = randomLocation1 >= 65 ? (int) (randomLocation1 - 'A') : (int) (randomLocation1 - 48 + 26);
-            System.out.println(randomLocation1);
-            System.out.println(randomIndex1);
             String newBoard1 = updateBoard(util.placementSortToList(updateBoard(pb, index)), randomIndex1);
 
             if (WhetherFinished(util.placementSortToList(newBoard1))) {
                 moves = moves + randomLocation1;
-                whenFinished();
+                putPlacement(newBoard1,50);
             } else {
                 char randomLocation2 = WarringStatesGame.generateMove(newBoard1);
                 int randomIndex2 = randomLocation2 >= 65 ? (int) (randomLocation2 - 'A') : (int) (randomLocation2 - 48 + 26);
                 String newBoard2 = updateBoard(util.placementSortToList(newBoard1), randomIndex2);
                 moves = moves + randomLocation1 + randomLocation2;
 
-                putPlacementForComputer(updateBoard(util.placementSortToList(newBoard2), randomIndex2));
+                putPlacement(updateBoard(util.placementSortToList(newBoard2), randomIndex2),50);
 
             }
         }
 
         player0.setLayoutX(600);
         player0.setLayoutY(340);
+        you.setLayoutX(607);
+        you.setLayoutY(353);
         player1.setLayoutX(800);
         player1.setLayoutY(340);
         player2.setLayoutX(600);
         player2.setLayoutY(640);
-        controls.getChildren().addAll(player0,player1,player2);
+        controls.getChildren().addAll(player0,player1,player2,you);
         showFlags(GetFlagofSepecificPlayer(0),600.0,300.0);
         showSupporters(WarringStatesGame.getSupporters(randomSetup,moves,3,0),600.0,215);
         showFlags(GetFlagofSepecificPlayer(1),800.0,300.0);
@@ -679,43 +514,45 @@ public class Game extends Application {
         }
     }
 
-    void NumberofPlayerEqualto44(ArrayList<String> pb,int index){
+    void NumberofPlayerEqualto4WhenComputet(ArrayList<String> pb,int index){
         DataUtil util = new DataUtil();
         if (WhetherFinished(util.placementSortToList(updateBoard(pb, index)))) {
-            whenFinished();}else {
+            putPlacement(updateBoard(pb, index),50);
+        }else {
             char randomLocation1 = WarringStatesGame.generateMove(updateBoard(pb, index));
             int randomIndex1 = randomLocation1 >= 65 ? (int) (randomLocation1 - 'A') : (int) (randomLocation1 - 48 + 26);
             String newBoard1 = updateBoard(util.placementSortToList(updateBoard(pb, index)), randomIndex1);
             if (WhetherFinished(util.placementSortToList(newBoard1))) {
                 moves = moves + randomLocation1;
-                whenFinished();
+                putPlacement(newBoard1,50);
             }else{
                 char randomLocation2 = WarringStatesGame.generateMove(newBoard1);
                 int randomIndex2 = randomLocation2 >= 65 ? (int) (randomLocation2 - 'A') : (int) (randomLocation2 - 48 + 26);
                 String newBoard2 = updateBoard(util.placementSortToList(newBoard1), randomIndex2);
                 if(WhetherFinished(util.placementSortToList(newBoard2))){
                     moves = moves + randomLocation1 + randomLocation2;
-                    whenFinished();
+                    putPlacement(newBoard2,50);
                 }else {
                     char randomLocation3 = WarringStatesGame.generateMove(newBoard2);
                     int randomIndex3 = randomLocation3 >= 65 ? (int) (randomLocation3 - 'A') : (int) (randomLocation3 - 48 + 26);
                     moves = moves + randomLocation1 + randomLocation2 + randomLocation3;
 
-
-                    putPlacementForComputer(updateBoard(util.placementSortToList(newBoard2), randomIndex3));
+                    putPlacement(updateBoard(util.placementSortToList(newBoard2), randomIndex3),50);
 
                 }
             }
         }
         player0.setLayoutX(600);
         player0.setLayoutY(340);
+        you.setLayoutX(607);
+        you.setLayoutY(353);
         player1.setLayoutX(800);
         player1.setLayoutY(340);
         player2.setLayoutX(600);
         player2.setLayoutY(640);
         player3.setLayoutX(800);
         player3.setLayoutY(640);
-        controls.getChildren().addAll(player0, player1, player2, player3);
+        controls.getChildren().addAll(player0, player1, player2, player3,you);
         showFlags(GetFlagofSepecificPlayer(0), 600.0, 300.0);
         showSupporters(WarringStatesGame.getSupporters(randomSetup, moves, 4, 0), 600.0, 215);
         showFlags(GetFlagofSepecificPlayer(1), 800.0, 300.0);
@@ -726,6 +563,166 @@ public class Game extends Application {
         showSupporters(WarringStatesGame.getSupporters(randomSetup, moves, 4, 3), 800.0, 515);
 
     }
+
+
+
+
+
+
+    private void WelcomeView() {
+        Polygon rectangle=new Polygon();
+        rectangle.getPoints().addAll(
+                0.0,0.0,
+                0.0,700.0,
+                933.0,700.0,
+                933.0,0.0
+        );
+        rectangle.setFill(new ImagePattern(CardImage.wel));
+        controls.getChildren().add(rectangle);
+        rectangle.setOnMouseClicked(event -> {
+            controls.getChildren().clear();
+            StartingView();
+        });
+
+    }
+
+    private void StartingView() {
+        Polygon rectangle=new Polygon();
+        rectangle.getPoints().addAll(
+                0.0,0.0,
+                0.0,700.0,
+                933.0,700.0,
+                933.0,0.0
+        );
+        rectangle.setFill(new ImagePattern(CardImage.start));
+        controls.getChildren().add(rectangle);
+        NumberOfPlayerWhenWithHuman();
+        NumberOfPlayerWhenWithComputer();
+    }
+
+
+    /**
+     * set up the card grid
+     * @author Chucheng Qian
+     */
+    private void SetupGrid() {
+        grid.setHgap(10);
+        grid.setVgap(10);
+        grid.setPadding(new Insets(40, 0, 0, 40));
+        controls.getChildren().add(grid);
+    }
+
+
+    /**used when play with human
+     * allow user to type in the number of players
+     * allow user to click on the button "Start" to start the game
+     * Ensure that the game can be played by 2-4 human players.
+     * when the number of players are invalid,notice the user
+     * @author Chucheng Qian
+     */
+    private void NumberOfPlayerWhenWithHuman() {
+        Label others = new Label("Play with Others:");
+        others.setFont(Font.font("Tahoma", FontWeight.BOLD,20));
+        Label label0 = new Label("Number of Players:");
+        label0.setFont(Font.font("Tahoma", FontWeight.BOLD,20));
+        numberOfplayersforH = new TextField();
+        numberOfplayersforH.setPrefWidth(50);
+        Button button1 = new Button("Start");
+        button1.setOnAction(event -> {
+            theNumberOfplayers = numberOfplayersforH.getText();
+            int num = Integer.parseInt(theNumberOfplayers);
+            if(num>=2 && num <=4){
+                controls.getChildren().clear();
+                SetupGrid();
+                putPlacement(randomSetup,0);
+
+            }else{
+                Text notice = new Text("Invalid players ,try again!");
+                notice.setFont(Font.font("Tahoma", FontWeight.BOLD,50));
+                notice.setFill(Color.RED);
+                notice.setLayoutX(130);
+                notice.setLayoutY(400);
+                controls.getChildren().add(notice);
+
+            }
+
+        });
+        HBox hb1 = new HBox();
+        hb1.getChildren().addAll(others,label0, numberOfplayersforH, button1);
+        hb1.setSpacing(10);
+        hb1.setLayoutX(200);
+        hb1.setLayoutY(350);
+        controls.getChildren().add(hb1);
+    }
+    /**
+     * used when play with Computer
+     * allow user to type in the number of players
+     * allow user to click on the button "Start" to start the game
+     * Ensure that the game can be played by 2-4 human players.
+     * when the number of players are invalid,notice the user
+     * @author Chucheng Qian
+     */
+    private void NumberOfPlayerWhenWithComputer() {
+        Label computer = new Label("Play with Computer:");
+        computer.setFont(Font.font("Tahoma", FontWeight.BOLD,20));
+        Label label0 = new Label("Number of Players:");
+        label0.setFont(Font.font("Tahoma", FontWeight.BOLD,20));
+        numberOfplayersforC = new TextField();
+        numberOfplayersforC.setPrefWidth(50);
+        Button button1 = new Button("Start");
+        button1.setOnAction(event -> {
+            theNumberOfplayers = numberOfplayersforC.getText();
+            int num = Integer.parseInt(theNumberOfplayers);
+            if(num>=2 && num <=4){
+                controls.getChildren().clear();
+                putPlacement(randomSetup,50);
+                SetupGrid();
+            }else{
+                Text notice = new Text("Invalid players ,try again!");
+                notice.setFont(Font.font("Tahoma", FontWeight.BOLD,50));
+                notice.setFill(Color.RED);
+                notice.setLayoutX(130);
+                notice.setLayoutY(400);
+                controls.getChildren().add(notice);
+
+            }
+
+        });
+        HBox hb1 = new HBox();
+        hb1.getChildren().addAll(computer,label0, numberOfplayersforC, button1);
+        hb1.setSpacing(10);
+        hb1.setLayoutX(200);
+        hb1.setLayoutY(450);
+        controls.getChildren().add(hb1);
+    }
+
+
+
+
+
+
+    /**
+     * get all the flags owned by one sepecific player
+     * @param id the id of current player
+     * @author Chucheng Qian
+     *
+     * *used when intended to show the flags of each player on the scene
+     *
+     */
+    private ArrayList<Character> GetFlagofSepecificPlayer(int id){
+        ArrayList<Character> flags = new ArrayList<>();
+        int num = Integer.parseInt(theNumberOfplayers);
+        int allFlags[]=WarringStatesGame.getFlags(randomSetup,moves,num);
+        for(int i = 0;i < allFlags.length;i++){
+            if(allFlags[i]==id){
+                flags.add((char)(i+'a'));
+            }
+
+        }
+        return flags;
+    }
+
+
 
     /**
      * show flags owned one player on the scene
@@ -797,44 +794,6 @@ public class Game extends Application {
 
 
 
-    /**
-     * search the upper,lower,right and left side of Zhangyi to make sure the game is finished
-     * (no valid moves can be done)
-     * @param presentBoard  an Arraylist of string representing the card placement
-     * @return a boolean represents whether the game is finished
-     * @author Chucheng Qian
-     */
-    Boolean WhetherFinished(ArrayList<String> presentBoard){
-        int ZYlocal = -1;
-        for (int i = 0; i < 36; i++) {
-            if (presentBoard.get(i).equals("z9")) {
-                ZYlocal = i;
-            }
-        }
-        int coltmp = ZYlocal / 6;
-        int rowtmp = ZYlocal % 6;
-        for(int i =coltmp*6;i<=ZYlocal;i++){
-            if((!presentBoard.get(i).equals(" ")) && (!presentBoard.get(i).equals("z9"))){
-                return false;
-            }
-        }
-        for(int i =(coltmp+1)*6-1;i>=ZYlocal;i--){
-            if((!presentBoard.get(i).equals(" ")) && (!presentBoard.get(i).equals("z9"))){
-                return false;
-            }
-        }
-        for(int i =(ZYlocal + (6 - coltmp - 1) * 6);i>=ZYlocal;i-=6){
-            if((!presentBoard.get(i).equals(" ")) && (!presentBoard.get(i).equals("z9"))){
-                return false;
-            }
-        }
-        for(int i = rowtmp;i<=ZYlocal;i+=6){
-            if((!presentBoard.get(i).equals(" ")) && (!presentBoard.get(i).equals("z9"))){
-                return false;
-            }
-        }
-        return true;
-    }
 
 
 
