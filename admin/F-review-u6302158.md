@@ -8,7 +8,7 @@ Review Comments:
 2. WarringStateGame Task3: the code is well-documented.
 3. WarringStateGame Task3: the program decomposition is appropriate.
 4. WarringStateGame Task3:it follow java code conventions.
-5. WarringStateGame:60 Do not need to consider the placement length < 0.
+5. WarringStateGame:60 Do not need to consider the placement length < 0£¬ it can be placement.length() = 0.
 6. WarringStateGame:77-83 Comments should be more detailed such as "check same card".
 7. WarringStateGame:84-93 Comments should be more detailed such as "check same position".
 
